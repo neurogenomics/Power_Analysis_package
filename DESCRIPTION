@@ -1,0 +1,33 @@
+Package: poweranalysis
+Title: Carry out Power Analysis for Differential Expression in single-cell RNA-sequencing data
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Salman", "Fawad", email = "salman.fawad16@imperial.ac.uk", role = c("aut", "cre")),
+    person())
+Description: A pipeline for carrying out end-to-end Power Analysis for differential expression in scRNA-seq data.
+             Allows the user to carry out sum-pseudobulk DGE analysis (implemented in edgeR), which can then be used
+             as part of the main power analysis. A down-sampling approach is used, and the % of True Positive DEGs detected
+             are reported (with many layers of complexity). Other complementary analyses may also be carried out
+             using this package.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports:
+        qs,
+        SingleCellExperiment,
+        biomaRt,
+        ggplot2,
+        cowplot,
+        viridis,
+        ggrepel,
+        Hmisc,
+        edgeR,
+        stats,
+        data.table,
+        reshape2,
+        EnsDb.Hsapiens.v79
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
