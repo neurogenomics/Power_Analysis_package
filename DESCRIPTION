@@ -26,7 +26,8 @@ Imports:
         stats,
         data.table,
         reshape2,
-        EnsDb.Hsapiens.v79
+        EnsDb.Hsapiens.v79,
+        SummarizedExperiment 
 Suggests: 
     knitr,
     rmarkdown
