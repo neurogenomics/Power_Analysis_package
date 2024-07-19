@@ -59,6 +59,7 @@
 #' our_degs[chromosome_name %in% c("X","Y"),
 #'          .N,by=.(celltype,chromosome_name)]
 #'}
+#' @export
 
 sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
                             region="single_region", coef=NULL, control=NULL,
