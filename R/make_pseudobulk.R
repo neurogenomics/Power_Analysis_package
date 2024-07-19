@@ -10,6 +10,7 @@
 #' @return a list containing:
 #'              sumDat: matrix of the summed pseudobulk count values
 #'              annot_pb: dataframe of the annotation data from the SCE rolled up based on the pseudobulk aggregation.
+#' @importFrom SummarizedExperiment colData
 
 make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                             region="single_region",rmv_zero_count_genes=TRUE){
