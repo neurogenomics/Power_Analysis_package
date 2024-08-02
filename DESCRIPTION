@@ -27,7 +27,7 @@ Imports:
         data.table,
         reshape2,
         EnsDb.Hsapiens.v79,
-        SummarizedExperiment 
+        grid
 Suggests: 
     knitr,
     rmarkdown
