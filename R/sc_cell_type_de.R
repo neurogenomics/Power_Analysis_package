@@ -59,7 +59,6 @@
 #' our_degs[chromosome_name %in% c("X","Y"),
 #'          .N,by=.(celltype,chromosome_name)]
 #'}
-#' @export
 
 sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
                             region="single_region", coef=NULL, control=NULL,
@@ -143,10 +142,10 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     if(isTRUE(verbose))
         message(length(unique_degs)," unique DEGs foundacross all cell types")
     
-    celltype_all_genes_dt <- rbindlist(celltype_de,idcol = T)
-    setnames(celltype_all_genes_dt,".id","celltype")
-    celltype_DEGs_dt <- rbindlist(celltype_DEGs,idcol = T)
-    setnames(celltype_DEGs_dt,".id","celltype")
+    celltype_all_genes_dt <- data.table::rbindlist(celltype_de,idcol = T)
+    data.table::setnames(celltype_all_genes_dt,".id","celltype")
+    celltype_DEGs_dt <- data.table::rbindlist(celltype_DEGs,idcol = T)
+    data.table::setnames(celltype_DEGs_dt,".id","celltype")
     
     
     if(!isFALSE(folder)){

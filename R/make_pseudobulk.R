@@ -10,11 +10,10 @@
 #' @return a list containing:
 #'              sumDat: matrix of the summed pseudobulk count values
 #'              annot_pb: dataframe of the annotation data from the SCE rolled up based on the pseudobulk aggregation.
-#' @importFrom SummarizedExperiment colData
 
 make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                             region="single_region",rmv_zero_count_genes=TRUE){
-    allAnnot <- colData(data)
+    allAnnot <- SingleCellExperiment::colData(data)
     if(region=="single_region") # constant value for all samples
         allAnnot[[region]] <- "one_region"
     indvs <- as.character(unique(allAnnot[[pseudobulk_ID]]))
@@ -39,7 +38,7 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
             # get annotation data
             print_warning <- FALSE
             if(!is.null(pb_columns)){
-                annot_i <- colData(theData)
+                annot_i <- SingleCellExperiment::colData(theData)
                 # there should only be a single value for each variable since this is single cell type, brain region and person
                 # throw warning if not the case for numeric & aggregate accordingly. Throw error if categorical
                 # first restrict data to just those from the design formula
