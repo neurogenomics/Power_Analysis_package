@@ -4,6 +4,8 @@
 #' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
 #' @import ggplot2
 #' @import Hmisc
+#' @import reshape2
+#' @import ensembldb
 #' @importFrom cowplot theme_cowplot
 #' @importFrom viridis scale_colour_viridis scale_fill_viridis
 #' @importFrom ggrepel geom_text_repel
@@ -43,7 +45,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         # filter and melt to get long DF of genes of interest
         #/sum(pb_dat$Micro$sumDat)
         top_degs_pseudobulk_exp[[ct_i]] <-
-            reshape2::melt(top_degs_pseudobulk_exp[[ct_i]]$sumDat[ct_genes,,drop=FALSE])
+            melt(top_degs_pseudobulk_exp[[ct_i]]$sumDat[ct_genes,,drop=FALSE])
     }
     # combine
     top_degs_pseudobulk_exp <-
@@ -60,7 +62,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                             on=c("group_sample","celltype")]
     # add in gene names
     genes <- unique(as.character(top_degs_pseudobulk_exp$name))
-    gene_IDs <- ensembldb::select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
+    gene_IDs <- select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
     colnames(gene_IDs) <- c("ensembl_gene_id","hgnc_symbol")
     gene_IDs <- as.data.table(gene_IDs)
     data.table::setnames(gene_IDs,"ensembl_gene_id","name")
@@ -195,7 +197,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     # plot volcano plots
     # get gene names - for sig genes
     genes <- unique(celltype_all_genes_dt[adj_pval<0.05,]$name)
-    gene_IDs <- ensembldb::select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
+    gene_IDs <- select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
     colnames(gene_IDs) <- c("ensembl_gene_id","hgnc_symbol")
     gene_IDs <- as.data.table(gene_IDs)
     data.table::setnames(gene_IDs,"ensembl_gene_id","name")

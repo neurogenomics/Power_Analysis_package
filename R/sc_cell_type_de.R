@@ -1,5 +1,8 @@
 #' Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis
 
+#' @import data.table
+#' @import qs
+
 #' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments. A location of an R, rds or qs file to be loaded can also be passed. If using R objects make sure SCE object saved with the name SCE
 #' @param design Design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease.
 #' @param pseudobulk_ID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
@@ -74,7 +77,7 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
         # load the dataset
         if(substr(SCE,nchar(SCE)-2,nchar(SCE))==".qs"){
             # load QS objects
-            SCE <- qs::qread(SCE)
+            SCE <- qread(SCE)
         }else if (substr(SCE,nchar(SCE)-3,nchar(SCE))==".rds"){
             # rds object
             SCE <- readRDS(SCE)
@@ -143,10 +146,10 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     if(isTRUE(verbose))
         message(length(unique_degs)," unique DEGs foundacross all cell types")
 
-    celltype_all_genes_dt <- data.table::rbindlist(celltype_de,idcol = T)
-    data.table::setnames(celltype_all_genes_dt,".id","celltype")
-    celltype_DEGs_dt <- data.table::rbindlist(celltype_DEGs,idcol = T)
-    data.table::setnames(celltype_DEGs_dt,".id","celltype")
+    celltype_all_genes_dt <- rbindlist(celltype_de,idcol = T)
+    setnames(celltype_all_genes_dt,".id","celltype")
+    celltype_DEGs_dt <- rbindlist(celltype_DEGs,idcol = T)
+    setnames(celltype_DEGs_dt,".id","celltype")
 
     if(!isFALSE(folder)){
       if(isTRUE(verbose))
