@@ -1,5 +1,13 @@
 #' Create differential expression analysis plots. Run by sc_cell_type_de()
 
+#' @import data.table
+#' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
+#' @import ggplot2
+#' @import Hmisc
+#' @importFrom cowplot theme_cowplot
+#' @importFrom viridis scale_colour_viridis scale_fill_viridis
+#' @importFrom ggrepel geom_text_repel
+
 #' @param pb_dat A list containing
 #'     sumDat: matrix of the summed pseudobulk count values
 #'     annot_pb: dataframe of the annotation data from the SCE rolled up based on the pseudobulk aggregation.
