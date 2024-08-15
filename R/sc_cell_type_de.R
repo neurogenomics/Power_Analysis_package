@@ -148,6 +148,13 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     celltype_DEGs_dt <- data.table::rbindlist(celltype_DEGs,idcol = T)
     data.table::setnames(celltype_DEGs_dt,".id","celltype")
 
+    if(!isFALSE(folder)){
+      if(isTRUE(verbose))
+        message("Plotting the results of differential expression analysis")
+      #make plots for DE analysis
+      plot_de_analysis(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
+                       counts_celltypes,folder)
+    }
 
     return(list("celltype_DEGs"=celltype_DEGs,
                 "celltype_all_genes"=celltype_de,

@@ -9,25 +9,28 @@ Description: A pipeline for carrying out end-to-end Power Analysis for different
              as part of the main power analysis. A down-sampling approach is used, and the % of True Positive DEGs detected
              are reported (with many layers of complexity). Other complementary analyses may also be carried out
              using this package.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a license
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
-        qs,
-        SingleCellExperiment,
-        biomaRt,
-        ggplot2,
-        cowplot,
-        viridis,
-        ggrepel,
-        Hmisc,
-        edgeR,
-        stats,
-        data.table,
-        reshape2,
-        EnsDb.Hsapiens.v79,
-        grid
+    qs,
+    SingleCellExperiment,
+    biomaRt,
+    ggplot2,
+    cowplot,
+    viridis,
+    ggrepel,
+    Hmisc,
+    edgeR,
+    stats,
+    data.table,
+    reshape2,
+    EnsDb.Hsapiens.v79,
+    grid,
+    Matrix,
+    ensembldb,
+    scales
 Suggests: 
     knitr,
     rmarkdown

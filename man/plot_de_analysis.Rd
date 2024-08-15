@@ -24,7 +24,8 @@ annot_pb: dataframe of the annotation data from the SCE rolled up based on the p
 
 \item{celltype_all_genes_dt}{data table containing the all genes for each cell type with their differential expression data}
 
-\item{folder}{the folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.}
+\item{folder}{the folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.
+Creates and saves plot in relevant directory}
 
 \item{celltype_counts}{vector with the counts of cells after QC in each cell type}
 }

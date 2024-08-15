@@ -1,5 +1,8 @@
 #' Differential Expression Analysis using edgeR LRT on pseudobulk data
 
+#' @import edgeR
+#' @importFrom stats p.adjust
+
 #' @param pb_dat A list containing
 #'     sumDat: matrix of the summed pseudobulk count values
 #'     annot_pb: dataframe of the annotation data from the SCE rolled up based on the pseudobulk aggregation.
@@ -37,13 +40,13 @@ de_analysis <- function(pb_dat,formula,y_name,y_contin,coef, control,
                 if(!is.null(coef)){# if user inputted value for case samples
                     if(is.null(control)){
                         message("WARNING: No control passed so coef may not be compared against desired variable")
-                        new_levels <- 
+                        new_levels <-
                             c(old_levels[which(coef!=old_levels)],coef)
                     }
                     else{
-                        new_levels <- 
+                        new_levels <-
                             c(control,
-                              old_levels[which(coef!=old_levels & 
+                              old_levels[which(coef!=old_levels &
                                                    control!=old_levels)],coef)
                     }
                 }
@@ -53,9 +56,9 @@ de_analysis <- function(pb_dat,formula,y_name,y_contin,coef, control,
                         new_levels <- old_levels # do nothing no coef or control
                     }
                     else{
-                        new_levels <- 
+                        new_levels <-
                             c(control,old_levels[which(control!=old_levels)])
-                    }  
+                    }
                 }
             }
             else{
@@ -70,7 +73,7 @@ de_analysis <- function(pb_dat,formula,y_name,y_contin,coef, control,
             targets[[y_name]] <- factor(targets[[y_name]],levels=new_levels)
         }
         # create design
-        design <- model.matrix(formula, data = targets)   
+        design <- model.matrix(formula, data = targets)
         # slight diff approach for contin or cat
         if(y_contin){
             y <- edgeR::DGEList(counts = pb_dat[[ct_i]]$sumDat)
@@ -100,7 +103,7 @@ de_analysis <- function(pb_dat,formula,y_name,y_contin,coef, control,
         }
         pvals <- test$table
         # add adj p-values
-        pvals$adj_pval <- stats::p.adjust(pvals$PValue, 
+        pvals$adj_pval <- stats::p.adjust(pvals$PValue,
                                           method = pval_adjust_method)
         pvals$name <- rownames(pvals)
         rownames(pvals) <- NULL

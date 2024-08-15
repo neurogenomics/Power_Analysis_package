@@ -1,6 +1,9 @@
 #' Calculate the summed pseudobulk values for an SCE object based on one single cell type only. Ensure to filter SCE to pass one cell type's data.
 
-#' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments. 
+#' @importFrom Matrix rowSums
+#' @importFrom SingleCellExperiment colData
+
+#' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.
 #' @param design Design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model.
 #' @param pseudobulk_ID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
 #' @param pb_columns Vector, list of annotation column names in the SCE object to be returned in annot_pb rolled up to pseudobulk level. Default is NULL which won't return any information in annot_pb.
@@ -18,18 +21,18 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
         allAnnot[[region]] <- "one_region"
     indvs <- as.character(unique(allAnnot[[pseudobulk_ID]]))
     regions <- as.character(unique(allAnnot[[region]]))
-    sumDat <- 
+    sumDat <-
         matrix(0,nrow=dim(data)[1],
                ncol=length(indvs)*length(regions))
     colnames(sumDat) <- rep(indvs,length(regions))
     rownames(sumDat) <- rownames(data)
     count=0
-    # for a single cell type, look at a single individual in single brain region, create list to hold annot values for each region, individual combination 
+    # for a single cell type, look at a single individual in single brain region, create list to hold annot values for each region, individual combination
     annot_list <- vector(mode="list",length=length(regions)*length(indvs))
     names(annot_list) <- paste0(indvs,"_",regions)
     for(region_i in regions){
         for(indv in indvs){
-            whichCells = 
+            whichCells =
                 allAnnot[[pseudobulk_ID]]==indv & allAnnot[[region]]==region_i
             theData <- data[,whichCells]
             count <- count+1
@@ -47,18 +50,18 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                 facts <- sapply(annot_i, is.factor)
                 annot_i[facts] <- lapply(annot_i[facts], as.character)
                 # check if values are unique
-                cols_sum <- 
-                    names(annot_i)[sapply(annot_i, 
+                cols_sum <-
+                    names(annot_i)[sapply(annot_i,
                                           function(x) length(unique(x))>1)]
                 if(length(cols_sum)>=1){
                     print_warning <- TRUE
                     cols_sum_warn <- cols_sum
-                    # get numeric columns and categorical separately to deal with 
-                    num_cols <- 
-                        unlist(lapply(annot_i[,cols_sum,drop = FALSE], 
-                                        is.numeric))  
+                    # get numeric columns and categorical separately to deal with
+                    num_cols <-
+                        unlist(lapply(annot_i[,cols_sum,drop = FALSE],
+                                        is.numeric))
                     # if any categorical throw error, shouldn't be lower level
-                    cat_cols <- 
+                    cat_cols <-
                         names(annot_i[,cols_sum,drop=FALSE][,!num_cols,drop=FALSE])
                     if(length(cat_cols)>0)
                         stop(paste0(c("Your design for the DE analysis contain",
@@ -68,9 +71,9 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                                       "l level. The non-unique column(s) are: ",
                                       cat_cols)))
                     annot_i_pb <- c(
-                        as.list(unique(annot_i[,!(names(annot_i) %in% 
+                        as.list(unique(annot_i[,!(names(annot_i) %in%
                                                         cols_sum)])),
-                        sapply(annot_i[,cols_sum][,num_cols], 
+                        sapply(annot_i[,cols_sum][,num_cols],
                                 function(x) mean(x))
                     )
                     # rearrange order to input order
@@ -81,11 +84,11 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                     annot_i_pb <- as.list(unique(annot_i))
                 }
                 annot_list[[paste0(indv,"_",region_i)]] <- unlist(annot_i_pb)
-            }    
+            }
         }
     }
     if(print_warning){
-        print(paste0("Warning: The following cell level data were aggregated ", 
+        print(paste0("Warning: The following cell level data were aggregated ",
                      "to brain region, cell type, individual level where ",
                      "the mean for these numeric values will be ",
                      "taken:"))
@@ -98,6 +101,6 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
     # remove genes with 0 counts
     if(rmv_zero_count_genes)
         sumDat <- sumDat[rowSums(sumDat)!=0,]
-    
+
     return(list("sumDat"=sumDat,"annot_pb"=annot_df))
 }
