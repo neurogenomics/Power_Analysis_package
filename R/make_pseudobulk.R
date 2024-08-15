@@ -100,7 +100,7 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
     rownames(annot_df) <- NULL
     # remove genes with 0 counts
     if(rmv_zero_count_genes)
-        sumDat <- sumDat[rowSums(sumDat)!=0,]
+        sumDat <- sumDat[Matrix::rowSums(sumDat)!=0,]
 
     return(list("sumDat"=sumDat,"annot_pb"=annot_df))
 }
