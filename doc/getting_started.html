@@ -12,7 +12,7 @@
 
 
 
-<title>Getting Started</title>
+<title>getting_started</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -336,37 +336,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Getting Started</h1>
+<h1 class="title toc-ignore">getting_started</h1>
 
 
 
-<hr />
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>The <em>poweranalysis</em> R package is designed to run robust power
-analysis for differential gene expression in scRNA-seq studies,
-addressing the challenge of low statistical power due to small sample
-sizes. It provides tools to estimate the optimal number of samples and
-cells needed to achieve reliable power levels. <br> <br> Using
-<em>poweranalysis</em> involves four steps: <br> <strong>1. Differential
-Expression (DE) Analysis:</strong> Import your SCE object and perform DE
-analysis using a pseudobulking approach, allowing for the robust
-identification of differentially expressed genes (DEGs) across
-conditions or groups. <br> <strong>2. Correlation Analysis:</strong>
-Assess the consistency of DEG effect sizes across random permutations,
-subsets of your data, and different studies by computing correlation
-matrices. <br> <strong>3. Downsampling and Power Analysis:</strong> Test
-the robustness of your findings by downsampling both individuals and
-cells, then analyze the effect on DEG detection power. <br> <strong>4.
-Visualisation:</strong> Generate comprehensive power plots and visual
-summaries of the power analysis results, including DEG detection rates,
-false discovery rates, and mean LogFC correlation between down-sampled
-subsets. <br></p>
-</div>
-<div id="setup" class="section level1">
-<h1>Setup</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(poweranalysis)</span></code></pre></div>
-</div>
 
 
 
