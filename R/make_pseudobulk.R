@@ -16,7 +16,7 @@
 
 make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                             region="single_region",rmv_zero_count_genes=TRUE){
-    allAnnot <- SingleCellExperiment::colData(data)
+    allAnnot <- colData(data)
     if(region=="single_region") # constant value for all samples
         allAnnot[[region]] <- "one_region"
     indvs <- as.character(unique(allAnnot[[pseudobulk_ID]]))
@@ -36,12 +36,12 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                 allAnnot[[pseudobulk_ID]]==indv & allAnnot[[region]]==region_i
             theData <- data[,whichCells]
             count <- count+1
-            sumDat[,count] <- Matrix::rowSums(counts(theData))
+            sumDat[,count] <- rowSums(counts(theData))
             colnames(sumDat)[count] = sprintf("%s_%s",indv,region_i)
             # get annotation data
             print_warning <- FALSE
             if(!is.null(pb_columns)){
-                annot_i <- SingleCellExperiment::colData(theData)
+                annot_i <- colData(theData)
                 # there should only be a single value for each variable since this is single cell type, brain region and person
                 # throw warning if not the case for numeric & aggregate accordingly. Throw error if categorical
                 # first restrict data to just those from the design formula
@@ -100,7 +100,7 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
     rownames(annot_df) <- NULL
     # remove genes with 0 counts
     if(rmv_zero_count_genes)
-        sumDat <- sumDat[Matrix::rowSums(sumDat)!=0,]
+        sumDat <- sumDat[rowSums(sumDat)!=0,]
 
     return(list("sumDat"=sumDat,"annot_pb"=annot_df))
 }
