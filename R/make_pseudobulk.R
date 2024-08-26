@@ -1,7 +1,7 @@
 #' Calculate the summed pseudobulk values for an SCE object based on one single cell type only. Ensure to filter SCE to pass one cell type's data.
 
+#' @import SingleCellExperiment
 #' @importFrom Matrix rowSums
-#' @importFrom SingleCellExperiment colData
 
 #' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.
 #' @param design Design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model.
