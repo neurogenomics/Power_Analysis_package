@@ -15,6 +15,7 @@
 #' @param adj_pval Adjusted p-value cut-off for the differential expression analysis, 0-1 range
 #' @param folder Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.
 #' @param verbose Logical indicating if extra information about the differential expression analysis should be printed
+#' @param rmv_zero_count_genes Whether genes with no count values in any cell should be removed. Default is TRUE
 
 #' @return A list containing:
 #'             celltype_DEGs: list with the differentially expressed genes (DEGs) for each cell type
@@ -29,7 +30,7 @@
 #'# firstly load  your SCE object (can otherwise specify location)
 #' library(qs)
 #' library(SingleCellExperiment)
-#' SCE <- qread("sce.qs")
+#' SCE <- qs::qread("sce.qs")
 #' sc.cell.type.de.return_incl_sex<- sc.cell.type.de(SCE_small,design= ~ sex + pathological_diagnosis_original,
 #' pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
 #' # If you only want to also account for other variables as well as sex, such as postmortem interval (PMI)
@@ -51,7 +52,7 @@
 #'                   values = genes, mart= mart,useCache = FALSE)
 #' gene_IDs <- as.data.table(gene_IDs)
 #' setnames(gene_IDs,"ensembl_gene_id","name")
-#' DEGs <- rbindlist(sc.cell.type.de.return$celltype_DEGs,idcol="celltype")
+#' DEGs <- data.table::rbindlist(sc.cell.type.de.return$celltype_DEGs,idcol="celltype")
 #' setkey(DEGs,name)
 #' #append gene names
 #' DEGs[, gene_name := gene_IDs[DEGs, on=.(name), x.hgnc_symbol]]
@@ -77,7 +78,7 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
         # load the dataset
         if(substr(SCE,nchar(SCE)-2,nchar(SCE))==".qs"){
             # load QS objects
-            SCE <- qread(SCE)
+            SCE <- qs::qread(SCE)
         }else if (substr(SCE,nchar(SCE)-3,nchar(SCE))==".rds"){
             # rds object
             SCE <- readRDS(SCE)
@@ -96,7 +97,7 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     # get counts of each cell type
     #counts(SCE) <- as.matrix(counts(SCE))
     counts_celltypes <- SCE[[celltype_ID]]
-    counts_celltypes <-as.vector(table(counts_celltypes))
+    counts_celltypes <- as.vector(table(counts_celltypes))
     names(counts_celltypes) <- names(table(SCE[[celltype_ID]]))
 
     # first format formula
@@ -146,9 +147,9 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     if(isTRUE(verbose))
         message(length(unique_degs)," unique DEGs foundacross all cell types")
 
-    celltype_all_genes_dt <- rbindlist(celltype_de,idcol = T)
+    celltype_all_genes_dt <- data.table::rbindlist(celltype_de,idcol = T)
     setnames(celltype_all_genes_dt,".id","celltype")
-    celltype_DEGs_dt <- rbindlist(celltype_DEGs,idcol = T)
+    celltype_DEGs_dt <- data.table::rbindlist(celltype_DEGs,idcol = T)
     setnames(celltype_DEGs_dt,".id","celltype")
 
     if(!isFALSE(folder)){

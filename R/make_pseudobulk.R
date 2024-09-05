@@ -1,10 +1,9 @@
 #' Calculate the summed pseudobulk values for an SCE object based on one single cell type only. Ensure to filter SCE to pass one cell type's data.
 
 #' @import SingleCellExperiment
-#' @importFrom Matrix rowSums
+#' @import Matrix
 
-#' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.
-#' @param design Design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model.
+#' @param data SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.
 #' @param pseudobulk_ID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
 #' @param pb_columns Vector, list of annotation column names in the SCE object to be returned in annot_pb rolled up to pseudobulk level. Default is NULL which won't return any information in annot_pb.
 #' @param region Column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
@@ -16,7 +15,7 @@
 
 make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                             region="single_region",rmv_zero_count_genes=TRUE){
-    allAnnot <- colData(data)
+    allAnnot <- SingleCellExperiment::colData(data)
     if(region=="single_region") # constant value for all samples
         allAnnot[[region]] <- "one_region"
     indvs <- as.character(unique(allAnnot[[pseudobulk_ID]]))
@@ -36,12 +35,12 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                 allAnnot[[pseudobulk_ID]]==indv & allAnnot[[region]]==region_i
             theData <- data[,whichCells]
             count <- count+1
-            sumDat[,count] <- rowSums(counts(theData))
+            sumDat[,count] <- rowSums(SingleCellExperiment::counts(theData))
             colnames(sumDat)[count] = sprintf("%s_%s",indv,region_i)
             # get annotation data
             print_warning <- FALSE
             if(!is.null(pb_columns)){
-                annot_i <- colData(theData)
+                annot_i <- SingleCellExperiment::colData(theData)
                 # there should only be a single value for each variable since this is single cell type, brain region and person
                 # throw warning if not the case for numeric & aggregate accordingly. Throw error if categorical
                 # first restrict data to just those from the design formula
