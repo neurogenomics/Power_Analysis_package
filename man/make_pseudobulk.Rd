@@ -13,6 +13,8 @@ make_pseudobulk(
 )
 }
 \arguments{
+\item{data}{SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.}
+
 \item{pseudobulk_ID}{Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach}
 
 \item{pb_columns}{Vector, list of annotation column names in the SCE object to be returned in annot_pb rolled up to pseudobulk level. Default is NULL which won't return any information in annot_pb.}
@@ -20,10 +22,6 @@ make_pseudobulk(
 \item{region}{Column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.}
 
 \item{rmv_zero_count_genes}{Whether genes with no count values in any cell should be removed. Default is TRUE}
-
-\item{SCE}{SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.}
-
-\item{design}{Design formula of class type \code{formula}. Equation used to fit the model- data for the generalised linear model.}
 }
 \value{
 a list containing:
