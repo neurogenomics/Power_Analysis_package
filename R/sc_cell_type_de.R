@@ -2,6 +2,7 @@
 
 #' @import data.table
 #' @import qs
+#' @import stats
 
 #' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments. A location of an R, rds or qs file to be loaded can also be passed. If using R objects make sure SCE object saved with the name SCE
 #' @param design Design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease.
@@ -103,7 +104,7 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     # first format formula
     design_txt <- paste0(deparse(design,width.cutoff = 500),collapse=',')
     # make design formula minus anything before ~
-    formula <- as.formula(gsub(".*~","~",design_txt))
+    formula <- stats::as.formula(gsub(".*~","~",design_txt))
     # if exists remove everything before ~ this format is necessary for glm_gp()
     design_txt <- gsub(".*~","",design_txt)
     # split design by "+" to get components to bring forward for pseudobulk, add in pseudobulk by column

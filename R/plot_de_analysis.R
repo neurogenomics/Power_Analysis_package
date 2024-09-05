@@ -273,7 +273,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         coef <- 1.5
         n <- sum(!is.na(x))
         # calculate quantiles
-        stats <- quantile(x, probs = c(0.0, 0.25, 0.5, 0.75, 1.0))
+        stats <- stats::quantile(x, probs = c(0.0, 0.25, 0.5, 0.75, 1.0))
         names(stats) <- c("ymin", "lower", "middle", "upper", "ymax")
         iqr <- diff(stats[c(2, 4)])
         # set whiskers
