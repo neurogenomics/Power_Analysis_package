@@ -43,6 +43,8 @@ sc_cell_type_de(
 
 \item{folder}{Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.}
 
+\item{rmv_zero_count_genes}{Whether genes with no count values in any cell should be removed. Default is TRUE}
+
 \item{verbose}{Logical indicating if extra information about the differential expression analysis should be printed}
 }
 \value{
@@ -61,7 +63,7 @@ Perform differential expression analysis across cell types based on single cell 
 # firstly load  your SCE object (can otherwise specify location)
 library(qs)
 library(SingleCellExperiment)
-SCE <- qread("sce.qs")
+SCE <- qs::qread("sce.qs")
 sc.cell.type.de.return_incl_sex<- sc.cell.type.de(SCE_small,design= ~ sex + pathological_diagnosis_original,
 pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
 # If you only want to also account for other variables as well as sex, such as postmortem interval (PMI)
@@ -83,7 +85,7 @@ gene_IDs <- getBM(filters= "ensembl_gene_id",
                   values = genes, mart= mart,useCache = FALSE)
 gene_IDs <- as.data.table(gene_IDs)
 setnames(gene_IDs,"ensembl_gene_id","name")
-DEGs <- rbindlist(sc.cell.type.de.return$celltype_DEGs,idcol="celltype")
+DEGs <- data.table::rbindlist(sc.cell.type.de.return$celltype_DEGs,idcol="celltype")
 setkey(DEGs,name)
 #append gene names
 DEGs[, gene_name := gene_IDs[DEGs, on=.(name), x.hgnc_symbol]]
