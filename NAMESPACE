@@ -3,7 +3,6 @@
 export(sc_cell_type_de)
 import(ensembldb)
 importFrom(EnsDb.Hsapiens.v79,EnsDb.Hsapiens.v79)
-importFrom(Hmisc,select)
 importFrom(Matrix,rowSums)
 importFrom(SingleCellExperiment,colData)
 importFrom(SingleCellExperiment,counts)
