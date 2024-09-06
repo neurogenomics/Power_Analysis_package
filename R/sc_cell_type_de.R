@@ -1,8 +1,8 @@
 #' Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis
 
-#' @import data.table
-#' @import qs
-#' @import stats
+#' @importFrom data.table rbindlist
+#' @importFrom qs qread
+#' @importFrom stats as.formula
 
 #' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments. A location of an R, rds or qs file to be loaded can also be passed. If using R objects make sure SCE object saved with the name SCE
 #' @param design Design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease.

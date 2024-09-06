@@ -1,7 +1,7 @@
 #' Calculate the summed pseudobulk values for an SCE object based on one single cell type only. Ensure to filter SCE to pass one cell type's data.
 
-#' @import SingleCellExperiment
-#' @import Matrix
+#' @importFrom SingleCellExperiment colData, counts
+#' @importFrom Matrix rowSums
 
 #' @param data SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.
 #' @param pseudobulk_ID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
@@ -35,7 +35,7 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
                 allAnnot[[pseudobulk_ID]]==indv & allAnnot[[region]]==region_i
             theData <- data[,whichCells]
             count <- count+1
-            sumDat[,count] <- rowSums(SingleCellExperiment::counts(theData))
+            sumDat[,count] <- Matrix::rowSums(SingleCellExperiment::counts(theData))
             colnames(sumDat)[count] = sprintf("%s_%s",indv,region_i)
             # get annotation data
             print_warning <- FALSE
@@ -99,7 +99,7 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
     rownames(annot_df) <- NULL
     # remove genes with 0 counts
     if(rmv_zero_count_genes)
-        sumDat <- sumDat[rowSums(sumDat)!=0,]
+        sumDat <- sumDat[Matrix::rowSums(sumDat)!=0,]
 
     return(list("sumDat"=sumDat,"annot_pb"=annot_df))
 }
