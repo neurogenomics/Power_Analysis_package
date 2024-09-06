@@ -1,13 +1,13 @@
 #' Create differential expression analysis plots. Run by sc_cell_type_de()
 
 #' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
-#' @importFrom data.table rbindlist, setnames, as.data.table, setkey, data.table, setorder
-#' @importFrom ggplot2 ggplot, geom_jitter, stat_summary, scale_shape_manual, labs, facet_wrap, theme, ggsave, geom_bar, ggtitle, geom_hline, scale_colour_manual, aes, element_text
+#' @importFrom data.table rbindlist setnames as.data.table setkey data.table setorder
+#' @importFrom ggplot2 ggplot geom_jitter stat_summary scale_shape_manual labs facet_wrap theme ggsave geom_bar ggtitle geom_hline scale_colour_manual aes element_text
 #' @importFrom Hmisc select
 #' @importFrom reshape2 melt
 #' @import ensembldb
 #' @importFrom cowplot theme_cowplot
-#' @importFrom viridis scale_colour_viridis, scale_fill_viridis
+#' @importFrom viridis scale_colour_viridis scale_fill_viridis
 #' @importFrom ggrepel geom_bar_repel
 
 #' @param pb_dat A list containing
