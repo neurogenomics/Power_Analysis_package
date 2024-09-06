@@ -8,7 +8,7 @@
 #' @import ensembldb
 #' @importFrom cowplot theme_cowplot
 #' @importFrom viridis scale_colour_viridis scale_fill_viridis
-#' @importFrom ggrepel geom_bar_repel
+#' @importFrom ggrepel geom_text_repel
 
 #' @param pb_dat A list containing
 #'     sumDat: matrix of the summed pseudobulk count values
@@ -232,7 +232,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         ggplot2::theme(axis.text = ggplot2::element_text(size=9),axis.text.x=element_blank(),
               legend.text=ggplot2::element_text(size=10))+
         ggplot2::scale_colour_manual(values = cols)+
-        ggrepel::geom_bar_repel( #give top three genes per cell type by adjusted p value
+        ggrepel::geom_text_repel( #give top three genes per cell type by adjusted p value
             data = celltype_all_genes_dt[
                 celltype_all_genes_dt[,.I[adj_pval %in%
                                               sort(adj_pval)[1:3]][1:3],
