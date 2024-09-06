@@ -1,7 +1,7 @@
 #' Differential Expression Analysis using edgeR LRT on pseudobulk data
 
 #' @importFrom edgeR DGEList calcNormFactors estimateDisp glmFit glmLRT
-#' @import stats model.matrix p.adjust
+#' @importFrom stats model.matrix p.adjust
 
 #' @param pb_dat A list containing
 #'     sumDat: matrix of the summed pseudobulk count values
