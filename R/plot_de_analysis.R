@@ -1,14 +1,14 @@
 #' Create differential expression analysis plots. Run by sc_cell_type_de()
 
 #' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
-#' @import data.table
-#' @import ggplot2
-#' @import Hmisc
-#' @import reshape2
-#' @import ensembldb
-#' @import cowplot
-#' @import viridis
-#' @import ggrepel
+#' @importFrom data.table rbindlist, setnames, as.data.table, setkey, data.table, setorder
+#' @importFrom ggplot2 ggplot, geom_jitter, stat_summary, scale_shape_manual, labs, facet_wrap, theme, ggsave, geom_bar, ggtitle, geom_hline, scale_colour_manual, aes, element_text
+#' @importFrom Hmisc select
+#' @importFrom reshape2 melt
+#' @importFrom ensembldb
+#' @importFrom cowplot theme_cowplot
+#' @importFrom viridis scale_colour_viridis, scale_fill_viridis
+#' @importFrom ggrepel geom_bar_repel
 
 #' @param pb_dat A list containing
 #'     sumDat: matrix of the summed pseudobulk count values
@@ -59,7 +59,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                             on=c("group_sample","celltype")]
     #add in gene names
     genes <- unique(as.character(top_degs_pseudobulk_exp$name))
-    gene_IDs <- select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
+    gene_IDs <- Hmisc::select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
     colnames(gene_IDs) <- c("ensembl_gene_id","hgnc_symbol")
     gene_IDs <- data.table::as.data.table(gene_IDs)
     data.table::setnames(gene_IDs,"ensembl_gene_id","name")
@@ -73,10 +73,10 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     #plot increase size A4
     top_degs_pseudobulk_exp_plot <-
         ggplot2::ggplot(top_degs_pseudobulk_exp[gene_name!=""&!is.na(deg_direction),],
-               aes(x = phenotype, y = expression,colour=deg_direction)) +
+               ggplot2::aes(x = phenotype, y = expression,colour=deg_direction)) +
         ggplot2::geom_jitter(height=0) +
         ggplot2::stat_summary(fun.data = "mean_cl_normal",
-                     #aes(shape="mean"),
+                     #ggplot2::aes(shape="mean"),
                      colour = "grey",
                      geom = "crossbar",
                      show.legend = T)+
@@ -86,8 +86,8 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
              colour="DEG direction") +
         ggplot2::facet_wrap(~ celltype+gene_name, scales = "free_y")+
         cowplot::theme_cowplot()+
-        ggplot2::theme(strip.text.x = element_text(size = 6),
-              axis.text = element_text(size=6))+
+        ggplot2::theme(strip.text.x = ggplot2::element_text(size = 6),
+              axis.text = ggplot2::element_text(size=6))+
         viridis::scale_colour_viridis(discrete = T)
     #save the graph to folder
     suppressMessages(ggplot2::ggsave(path = folder,
@@ -104,13 +104,13 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                                       counts=counts_celltypes)
     cell_counts_plot <-
         ggplot2::ggplot(data=counts_celltypes_dt,
-               aes(x=factor(celltype),y = counts, fill=factor(celltype)))+
+               ggplot2::aes(x=factor(celltype),y = counts, fill=factor(celltype)))+
         ggplot2::geom_bar(stat="identity")+
         ggplot2::labs(y= "Number of cells after QC", x = "Cell Type",fill="Cell Type") +
-        ggplot2::geom_bar(aes(x = celltype, y = counts, label = counts),
+        ggplot2::geom_bar(ggplot2::aes(x = celltype, y = counts, label = counts),
                   vjust=-0.25,size=3) +
         cowplot::theme_cowplot()+
-        ggplot2::theme(axis.text = element_text(size=6))+
+        ggplot2::theme(axis.text = ggplot2::element_text(size=6))+
         viridis::scale_fill_viridis(discrete = T)
     #save the graph to folder
     suppressMessages(ggplot2::ggsave(path = folder,
@@ -123,13 +123,13 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     #plot DEGs per cell type
     deg_per_cell_type_plot <-
         ggplot2::ggplot(data=celltype_DEGs_dt[,.N,by=celltype],
-               aes(x=factor(celltype),y = N, fill=factor(celltype)))+
+               ggplot2::aes(x=factor(celltype),y = N, fill=factor(celltype)))+
         ggplot2::geom_bar(stat="identity")+
         ggplot2::labs(y= "Number of DEGs identified", x = "Cell Type",fill="Cell Type") +
-        ggplot2::geom_bar(aes(x = celltype, y = N, label = N),
+        ggplot2::geom_bar(ggplot2::aes(x = celltype, y = N, label = N),
                   vjust=-0.25,size=3) +
         cowplot::theme_cowplot()+
-        ggplot2::theme(axis.text = element_text(size=9))+
+        ggplot2::theme(axis.text = ggplot2::element_text(size=9))+
         viridis::scale_fill_viridis(discrete = T)
     #save the graph to folder
     suppressMessages(ggplot2::ggsave(path = folder,
@@ -148,15 +148,15 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
 
     deg_prop_plot <-
         ggplot2::ggplot(data=degs_prop,
-               aes(x=factor(celltype)))+
-        ggplot2::geom_bar(aes(y = prop,fill=factor(celltype)),stat="identity")+
+               ggplot2::aes(x=factor(celltype)))+
+        ggplot2::geom_bar(ggplot2::aes(y = prop,fill=factor(celltype)),stat="identity")+
         ggplot2::labs(y= "Proportion of DEGs identified", x = "Cell Type",
                 fill="Cell Type") +
-        ggplot2::geom_bar(aes(x = factor(celltype), y=prop,
+        ggplot2::geom_bar(ggplot2::aes(x = factor(celltype), y=prop,
                         label = scales::percent(prop)),
                   vjust=-0.25,size=3) +
         cowplot::theme_cowplot()+
-        ggplot2::theme(axis.text = element_text(size=9))+
+        ggplot2::theme(axis.text = ggplot2::element_text(size=9))+
         viridis::scale_fill_viridis(discrete = T)
     #save the graph to folder
     suppressMessages(ggplot2::ggsave(path = folder,
@@ -173,13 +173,13 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     #count
     count_deg_direction_plot<-
         ggplot2::ggplot(data=celltype_DEGs_dt[,.N,by=.(celltype,deg_direction)],
-               aes(x = factor(deg_direction), y = N, fill=factor(celltype)))+
+               ggplot2::aes(x = factor(deg_direction), y = N, fill=factor(celltype)))+
         ggplot2::geom_bar(stat="identity") +
         ggplot2::facet_wrap(~factor(celltype))+
         ggplot2::ggtitle("Cell type counts of DEGs")+
         ggplot2::labs(y= "Number of DEGs", x = "DEG direction", fill="Cell Type") +
         cowplot::theme_cowplot()+
-        ggplot2::theme(axis.text = element_text(size=9))+
+        ggplot2::theme(axis.text = ggplot2::element_text(size=9))+
         viridis::scale_fill_viridis(discrete = T)
     #save the graph to folder
     suppressMessages(
@@ -194,7 +194,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     #plot volcano plots
     #get gene names - for sig genes
     genes <- unique(celltype_all_genes_dt[adj_pval<0.05,]$name)
-    gene_IDs <- select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
+    gene_IDs <- Hmisc::select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
     colnames(gene_IDs) <- c("ensembl_gene_id","hgnc_symbol")
     gene_IDs <- data.table::as.data.table(gene_IDs)
     data.table::setnames(gene_IDs,"ensembl_gene_id","name")
@@ -221,23 +221,23 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
 
     volcano_plot<-
         ggplot2::ggplot(data=celltype_all_genes_dt,
-               aes(x = logFC, y = -log10(adj_pval)))+ #scale FDR by log10
-        ggplot2::geom_point(aes(colour=colour_ident),stat="identity",size=.2) +
+               ggplot2::aes(x = logFC, y = -log10(adj_pval)))+ #scale FDR by log10
+        ggplot2::geom_point(ggplot2::aes(colour=colour_ident),stat="identity",size=.2) +
         ggplot2::facet_wrap(~factor(celltype),scales = "free")+
         ggplot2::geom_hline(yintercept = -log10(0.05), colour="#990000",
                    linetype="dashed",size=.3) +
         #geom_vline(xintercept = 0, colour="black", size=.3) +
         ggplot2::labs(y= "-log10(FDR)", x = "Log2 Fold Change", colour="") +
         cowplot::theme_cowplot()+
-        ggplot2::theme(axis.text = element_text(size=9),axis.text.x=element_blank(),
-              legend.text=element_text(size=10))+
+        ggplot2::theme(axis.text = ggplot2::element_text(size=9),axis.text.x=element_blank(),
+              legend.text=ggplot2::element_text(size=10))+
         ggplot2::scale_colour_manual(values = cols)+
         ggrepel::geom_bar_repel( #give top three genes per cell type by adjusted p value
             data = celltype_all_genes_dt[
                 celltype_all_genes_dt[,.I[adj_pval %in%
                                               sort(adj_pval)[1:3]][1:3],
                                       by=celltype]$V1],
-            aes(label = gene_name),
+            ggplot2::aes(label = gene_name),
             size = 3,
             box.padding = unit(0.35, "lines"),
             point.padding = unit(0.3, "lines")
@@ -286,7 +286,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
 
     degs_boxplot_plots<-
         ggplot2::ggplot(data=celltype_DEGs_dt,
-               aes(x = factor(deg_direction), y = abs(logFC),
+               ggplot2::aes(x = factor(deg_direction), y = abs(logFC),
                     fill=factor(celltype)))+
         ggplot2::stat_summary(fun.data = calc_boxplot_stat, geom="boxplot") +
         ggplot2::facet_wrap(~factor(celltype),scales="free")+
@@ -296,7 +296,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                                   round(degs_median_lfc$V1[[1]],2)))+
         ggplot2::labs(y= "Log2 Fold Change", x = "DEG direction", fill="Cell Type") +
         cowplot::theme_cowplot()+
-        ggplot2::theme( axis.text = element_text(size=9))+
+        ggplot2::theme( axis.text = ggplot2::element_text(size=9))+
         viridis::scale_fill_viridis(discrete = T)
     #save the graph to folder
     suppressMessages(ggplot2::ggsave(path = folder,
