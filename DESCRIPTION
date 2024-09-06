@@ -21,7 +21,6 @@ Imports:
     cowplot,
     viridis,
     ggrepel,
-    Hmisc,
     edgeR,
     stats,
     data.table,

@@ -1,14 +1,13 @@
 #' Create differential expression analysis plots. Run by sc_cell_type_de()
 
 #' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
-#' @importFrom data.table rbindlist, setnames, as.data.table, setkey, data.table, setorder
-#' @importFrom ggplot2 ggplot, geom_jitter, stat_summary, scale_shape_manual, labs, facet_wrap, theme, ggsave, geom_bar, ggtitle, geom_hline, scale_colour_manual, aes, element_text
-#' @importFrom Hmisc select
+#' @importFrom data.table rbindlist setnames as.data.table setkey data.table setorder
+#' @importFrom ggplot2 ggplot geom_jitter stat_summary scale_shape_manual labs facet_wrap theme ggsave geom_bar ggtitle geom_hline scale_colour_manual aes element_text
 #' @importFrom reshape2 melt
-#' @importFrom ensembldb
+#' @import ensembldb
 #' @importFrom cowplot theme_cowplot
-#' @importFrom viridis scale_colour_viridis, scale_fill_viridis
-#' @importFrom ggrepel geom_bar_repel
+#' @importFrom viridis scale_colour_viridis scale_fill_viridis
+#' @importFrom ggrepel geom_text_repel
 
 #' @param pb_dat A list containing
 #'     sumDat: matrix of the summed pseudobulk count values
@@ -59,7 +58,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                             on=c("group_sample","celltype")]
     #add in gene names
     genes <- unique(as.character(top_degs_pseudobulk_exp$name))
-    gene_IDs <- Hmisc::select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
+    gene_IDs <- select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
     colnames(gene_IDs) <- c("ensembl_gene_id","hgnc_symbol")
     gene_IDs <- data.table::as.data.table(gene_IDs)
     data.table::setnames(gene_IDs,"ensembl_gene_id","name")
@@ -194,7 +193,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     #plot volcano plots
     #get gene names - for sig genes
     genes <- unique(celltype_all_genes_dt[adj_pval<0.05,]$name)
-    gene_IDs <- Hmisc::select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
+    gene_IDs <- select(EnsDb.Hsapiens.v79, keys= genes, keytype = "GENEID", columns = c("GENEID","SYMBOL"))
     colnames(gene_IDs) <- c("ensembl_gene_id","hgnc_symbol")
     gene_IDs <- data.table::as.data.table(gene_IDs)
     data.table::setnames(gene_IDs,"ensembl_gene_id","name")
@@ -232,7 +231,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         ggplot2::theme(axis.text = ggplot2::element_text(size=9),axis.text.x=element_blank(),
               legend.text=ggplot2::element_text(size=10))+
         ggplot2::scale_colour_manual(values = cols)+
-        ggrepel::geom_bar_repel( #give top three genes per cell type by adjusted p value
+        ggrepel::geom_text_repel( #give top three genes per cell type by adjusted p value
             data = celltype_all_genes_dt[
                 celltype_all_genes_dt[,.I[adj_pval %in%
                                               sort(adj_pval)[1:3]][1:3],
