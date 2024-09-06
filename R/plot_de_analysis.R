@@ -5,7 +5,7 @@
 #' @importFrom ggplot2 ggplot, geom_jitter, stat_summary, scale_shape_manual, labs, facet_wrap, theme, ggsave, geom_bar, ggtitle, geom_hline, scale_colour_manual, aes, element_text
 #' @importFrom Hmisc select
 #' @importFrom reshape2 melt
-#' @importFrom ensembldb
+#' @import ensembldb
 #' @importFrom cowplot theme_cowplot
 #' @importFrom viridis scale_colour_viridis, scale_fill_viridis
 #' @importFrom ggrepel geom_bar_repel
