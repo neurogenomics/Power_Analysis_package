@@ -29,7 +29,8 @@ Imports:
     grid,
     Matrix,
     ensembldb,
-    scales
+    scales,
+    utils
 Suggests: 
     knitr,
     rmarkdown

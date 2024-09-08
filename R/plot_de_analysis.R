@@ -1,13 +1,15 @@
 #' Create differential expression analysis plots. Run by sc_cell_type_de()
 
 #' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
-#' @importFrom data.table rbindlist setnames as.data.table setkey data.table setorder
+#' @importFrom data.table rbindlist setnames as.data.table setkey data.table setorder :=
 #' @importFrom ggplot2 ggplot geom_jitter stat_summary scale_shape_manual labs facet_wrap theme ggsave geom_bar ggtitle geom_hline scale_colour_manual aes element_text
 #' @importFrom reshape2 melt
 #' @import ensembldb
 #' @importFrom cowplot theme_cowplot
 #' @importFrom viridis scale_colour_viridis scale_fill_viridis
 #' @importFrom ggrepel geom_text_repel
+#' @importFrom stats median
+#' @importFrom utils globalVariables
 
 #' @param pb_dat A list containing
 #'     sumDat: matrix of the summed pseudobulk count values
@@ -22,6 +24,8 @@
 
 plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                              counts_celltypes,folder){
+    #define global variables
+    utils::globalVariables(c("deg_direction",".I","adj_pval","celltype","i.deg_direction","phenotype","gene_name","x.hgnc_symbol",".N","N","num_cells","prop","N_prop","colour_ident","."))
     save(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
          counts_celltypes,folder, file="temp.RData")
     logFC = name = NULL
@@ -228,7 +232,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         #geom_vline(xintercept = 0, colour="black", size=.3) +
         ggplot2::labs(y= "-log10(FDR)", x = "Log2 Fold Change", colour="") +
         cowplot::theme_cowplot()+
-        ggplot2::theme(axis.text = ggplot2::element_text(size=9),axis.text.x=element_blank(),
+        ggplot2::theme(axis.text = ggplot2::element_text(size=9),axis.text.x=ggplot2::element_blank(),
               legend.text=ggplot2::element_text(size=10))+
         ggplot2::scale_colour_manual(values = cols)+
         ggrepel::geom_text_repel( #give top three genes per cell type by adjusted p value
@@ -238,8 +242,8 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                                       by=celltype]$V1],
             ggplot2::aes(label = gene_name),
             size = 3,
-            box.padding = unit(0.35, "lines"),
-            point.padding = unit(0.3, "lines")
+            box.padding = ggplot2::unit(0.35, "lines"),
+            point.padding = ggplot2::unit(0.3, "lines")
         )
     #save the graph to folder - increase size A4
     suppressMessages(ggplot2::ggsave(path = folder,
@@ -254,7 +258,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     #plot boxplots of DEGs
     #check median log2 fold change for both up and down regulated genes
     #This will give a sense of directional effect size
-    degs_median_lfc<-celltype_DEGs_dt[,median(logFC),by=deg_direction]
+    degs_median_lfc<-celltype_DEGs_dt[,stats::median(logFC),by=deg_direction]
     #if only up or down reg DEGs add 0 for other
     if(nrow(degs_median_lfc)<2){
         dir <- c("Up","Down")
