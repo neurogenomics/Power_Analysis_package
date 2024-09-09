@@ -73,37 +73,37 @@ de_analysis <- function(pb_dat,formula,y_name,y_contin,coef, control,
             targets[[y_name]] <- factor(targets[[y_name]],levels=new_levels)
         }
         # create design
-        design <- stats::model.matrix(formula, data = targets)
+        design <- model.matrix(formula, data = targets)
         # slight diff approach for contin or cat
         if(y_contin){
-            y <- edgeR::DGEList(counts = pb_dat[[ct_i]]$sumDat)
+            y <- DGEList(counts = pb_dat[[ct_i]]$sumDat)
         }
         else{# categorical i.e. case/control
-            y <- edgeR::DGEList(counts = pb_dat[[ct_i]]$sumDat,
+            y <- DGEList(counts = pb_dat[[ct_i]]$sumDat,
                                     group = targets[[y_name]])
         }
         # calculate normalization factors to scale the raw library sizes.
-        y <- edgeR::calcNormFactors(y,method = 'TMM')
+        y <- calcNormFactors(y,method = 'TMM')
         # maximizes the negative binomial likelihood to give the estimate of the common, trended and tagwise dispersions across all tags
-        y <- edgeR::estimateDisp(y, design)
+        y <- estimateDisp(y, design)
         # LRT
-        fit <- edgeR::glmFit(y, design = design)
+        fit <- glmFit(y, design = design)
         # slight diff approach for contin or cat
         if(y_contin){# need to specify coefficient target as not done in design
-            test <- edgeR::glmLRT(fit,coef=y_name)
+            test <- glmLRT(fit,coef=y_name)
         }
         else{# categorical i.e. case/control, no need
             if(!is.null(coef)){# if user inputted value for case samples
-                test <- edgeR::glmLRT(fit,coef=length(new_levels))
+                test <- glmLRT(fit,coef=length(new_levels))
             }
             else{# they didn't direction may not be as they expect
                 message("WARNING: No coefficient passed so direction may not relate to desired variable")
-                test <- edgeR::glmLRT(fit)
+                test <- glmLRT(fit)
             }
         }
         pvals <- test$table
         # add adj p-values
-        pvals$adj_pval <- stats::p.adjust(pvals$PValue,
+        pvals$adj_pval <- p.adjust(pvals$PValue,
                                           method = pval_adjust_method)
         pvals$name <- rownames(pvals)
         rownames(pvals) <- NULL

@@ -79,7 +79,7 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
         # load the dataset
         if(substr(SCE,nchar(SCE)-2,nchar(SCE))==".qs"){
             # load QS objects
-            SCE <- qs::qread(SCE)
+            SCE <- qread(SCE)
         }else if (substr(SCE,nchar(SCE)-3,nchar(SCE))==".rds"){
             # rds object
             SCE <- readRDS(SCE)
@@ -104,7 +104,7 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     # first format formula
     design_txt <- paste0(deparse(design,width.cutoff = 500),collapse=',')
     # make design formula minus anything before ~
-    formula <- stats::as.formula(gsub(".*~","~",design_txt))
+    formula <- as.formula(gsub(".*~","~",design_txt))
     # if exists remove everything before ~ this format is necessary for glm_gp()
     design_txt <- gsub(".*~","",design_txt)
     # split design by "+" to get components to bring forward for pseudobulk, add in pseudobulk by column
