@@ -1,0 +1,16 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/poweranalysis.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/de_analysis.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/make_pseudobulk.html</loc></url>
+<url><loc>/reference/plot_de_analysis.html</loc></url>
+<url><loc>/reference/sc_cell_type_de.html</loc></url>
+<url><loc>/reference/validate_input_parameters_de.html</loc></url>
+</urlset>
+
