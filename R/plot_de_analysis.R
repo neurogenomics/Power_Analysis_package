@@ -1,3 +1,6 @@
+# Define global variables
+utils::globalVariables(c("deg_direction",".I","adj_pval","celltype","i.deg_direction","phenotype","gene_name","x.hgnc_symbol",".N","N","num_cells","prop","N_prop","colour_ident","."))
+
 #' Create differential expression analysis plots. Run by sc_cell_type_de()
 
 #' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
@@ -24,8 +27,6 @@
 
 plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                              counts_celltypes,folder){
-    #define global variables
-    utils::globalVariables(c("deg_direction",".I","adj_pval","celltype","i.deg_direction","phenotype","gene_name","x.hgnc_symbol",".N","N","num_cells","prop","N_prop","colour_ident","."))
     save(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
          counts_celltypes,folder, file="temp.RData")
     logFC = name = NULL
