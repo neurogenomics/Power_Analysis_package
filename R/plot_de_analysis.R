@@ -52,7 +52,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     }
     #combine
     top_degs_pseudobulk_exp <-
-        rbindlist(top_degs_pseudobulk_exp,id="celltype")
+        rbindlist(top_degs_pseudobulk_exp,idcol="celltype")
     setnames(top_degs_pseudobulk_exp,c("celltype","name","group_sample",
                                         "expression"))
     #add on DEG direction
@@ -60,7 +60,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                                 on=c("name","celltype")]
     #add in y - first get annotation data in single datatable
     annot_dt <- lapply(pb_dat, function(x) x$annot_pb)
-    annot_dt <- rbindlist(annot_dt,id="celltype")
+    annot_dt <- rbindlist(annot_dt,idcol="celltype")
     top_degs_pseudobulk_exp[annot_dt,phenotype:=get(y),
                             on=c("group_sample","celltype")]
     #add in gene names
