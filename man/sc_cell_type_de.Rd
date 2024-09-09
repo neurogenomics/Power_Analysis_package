@@ -58,18 +58,22 @@ Perform differential expression analysis across cell types based on single cell 
 }
 \examples{
 \dontrun{
-# To use the function input the formula of the comparison you want to make along with the names of the pseudobulk ID and celltype ID
-# If you want to compare disease and control across cell types, taking into account sex use formula = ~ sex + disease
-# firstly load  your SCE object (can otherwise specify location)
+# To use the function input the formula of the comparison you want to make along with the names
+# of the pseudobulk ID and celltype ID
+# If you want to compare disease and control across cell types, taking into account sex use:
+#  formula = ~ sex + disease. Firstly load  your SCE object (can otherwise specify location)
 library(qs)
 library(SingleCellExperiment)
 SCE <- qs::qread("sce.qs")
-sc.cell.type.de.return_incl_sex<- sc.cell.type.de(SCE_small,design= ~ sex + pathological_diagnosis_original,
+sc.cell.type.de.return_incl_sex<- sc.cell.type.de(SCE_small,
+design= ~ sex + pathological_diagnosis_original,
 pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
-# If you only want to also account for other variables as well as sex, such as postmortem interval (PMI)
-sc.cell.type.de.return_sex_pmi<- sc.cell.type.de(SCE_small,design= ~ sex + PMI + pathological_diagnosis_original,
+# If you only want to also account for other variables as well as sex, such as
+# postmortem interval (PMI):
+sc.cell.type.de.return_sex_pmi<- sc.cell.type.de(SCE_small,
+design= ~ sex + PMI + pathological_diagnosis_original,
 pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
-# If you only want to compare disease and control across cell types without any other constraints
+# If you only want to compare disease and control across cell types w/o any other constraints:
 sc.cell.type.de.return<- sc.cell.type.de(SCE_small,design= ~ pathological_diagnosis_original,
 pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
 # A good way to validate the DEG analysis approach is to run a sex comparison
