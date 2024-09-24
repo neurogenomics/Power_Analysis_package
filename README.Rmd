@@ -1,0 +1,28 @@
+---
+output:
+  github_document
+---
+
+```{r, echo = FALSE, include = FALSE}
+pkg <- read.dcf("DESCRIPTION", fields = "Package")[1]
+title <- gsub("\n"," ",read.dcf("DESCRIPTION", fields = "Title")[1])
+description <- gsub("\n"," ",read.dcf("DESCRIPTION", fields = "Description")[1])
+URL <- read.dcf('DESCRIPTION', fields = 'URL')[1]
+owner <- strsplit(URL,"/")[[1]][4]
+repo <- strsplit(URL,"/")[[1]][5]
+```
+
+# <code>Power Analysis</code><br>Power Analysis for Differential Expression in scRNA-seq data  
+
+`r rworkflows::use_badges(add_hex = FALSE, add_authors = FALSE)`
+
+**Authors:** ***Salman Fawad, Alan Murphy, Nathan Skene***  
+**Updated:** ***`r format(Sys.Date(), '%b-%d-%Y')`***  
+
+
+## Introduction
+
+Wraps work from [this](https://github.com/neurogenomics/scRNA-seq_Power_Analysis) repository into an R package.
+
+To install (once made public), run:
+`devtools::install_github("neurogenomics/Power_Analysis")`
