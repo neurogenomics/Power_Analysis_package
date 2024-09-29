@@ -33,5 +33,6 @@ Imports:
     utils
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    rworkflows
 VignetteBuilder: knitr
