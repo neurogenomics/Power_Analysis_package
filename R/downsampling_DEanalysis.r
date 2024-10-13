@@ -1,3 +1,6 @@
+# Define global variables
+utils::globalVariables(c("PValue","name"))
+
 #' Downsample the dataset, based either on the individuals or cells, and run DE analysis on each downsampled output. Save results in a dataframe
 
 #' @importFrom stats as.formula

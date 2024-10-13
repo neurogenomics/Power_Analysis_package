@@ -1,3 +1,6 @@
+# Define global variables
+utils::globalVariables(c("design","PValue","logFC","name","variable"))
+
 #' Create plots for power analysis, with down-sampling based either on the individuals or cells
 
 #' @importFrom reshape2 melt
