@@ -30,7 +30,10 @@ Imports:
     Matrix,
     ensembldb,
     scales,
-    utils
+    utils,
+    gtools,
+    stringr,
+    gridExtra
 Suggests: 
     knitr,
     rmarkdown,
