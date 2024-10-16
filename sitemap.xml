@@ -7,10 +7,16 @@
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/reference/de_analysis.html</loc></url>
+<url><loc>/reference/downsampling_DEanalysis.html</loc></url>
+<url><loc>/reference/downsampling_range.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
 <url><loc>/reference/make_pseudobulk.html</loc></url>
 <url><loc>/reference/plot_de_analysis.html</loc></url>
+<url><loc>/reference/power_plots.html</loc></url>
+<url><loc>/reference/sample_cells.html</loc></url>
+<url><loc>/reference/sample_individuals.html</loc></url>
 <url><loc>/reference/sc_cell_type_de.html</loc></url>
 <url><loc>/reference/validate_input_parameters_de.html</loc></url>
+<url><loc>/reference/validate_input_parameters_power.html</loc></url>
 </urlset>
 
