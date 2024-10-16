@@ -1,15 +1,20 @@
+Type: Package
 Package: poweranalysis
 Title: Carry out Power Analysis for Differential Expression in single-cell RNA-sequencing data
 Version: 0.0.0.9000
 Authors@R: c(
     person("Salman", "Fawad", email = "salman.fawad16@imperial.ac.uk", role = c("aut", "cre")),
-    person("Yunning", "Yuan", email = "yunning.yuan.21@ucl.ac.uk", role = c("aut")))
+    person("Yunning", "Yuan", email = "yunning.yuan.21@ucl.ac.uk", role = c("aut")),
+    person("Hiranyamaya", "Dash", email = "hdash.work@gmail.com", role = c("ctb"),
+    comment = c(ORCID = "0009-0005-5514-505X")))
 Description: A pipeline for carrying out end-to-end Power Analysis for differential expression in scRNA-seq data.
              Allows the user to carry out sum-pseudobulk DGE analysis (implemented in edgeR), which can then be used
              as part of the main power analysis. A down-sampling approach is used, and the % of True Positive DEGs detected
              are reported (with many layers of complexity). Other complementary analyses may also be carried out
              using this package.
 License: MIT + file LICENSE
+URL: https://github.com/neurogenomics/Power_Analysis_package
+BugReports: https://github.com/neurogenomics/Power_Analysis_package/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -37,5 +42,6 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    rworkflows
+    rworkflows,
+    badger
 VignetteBuilder: knitr
