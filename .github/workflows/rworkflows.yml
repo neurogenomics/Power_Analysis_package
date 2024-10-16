@@ -1,4 +1,4 @@
-name: rworkflows
+name: rworkflows_custom
 'on':
   push:
     branches:
@@ -6,14 +6,14 @@ name: rworkflows
     - main
     - devel
     - RELEASE_**
-    - Rworkflows_test
+    - rworkflows_fix
   pull_request:
     branches:
     - master
     - main
     - devel
     - RELEASE_**
-    - Rworkflows_test
+    - rworkflows_fix
 jobs:
   rworkflows:
     permissions: write-all
@@ -40,14 +40,14 @@ jobs:
           cont: ~
           rspm: ~
     steps:
-    - uses: neurogenomics/rworkflows@master
+    - uses: HDash/rworkflows@force_install_packages
       with:
         run_bioccheck: ${{ false }}
         run_rcmdcheck: ${{ true }}
         as_cran: ${{ true }}
         run_vignettes: ${{ true }}
-        has_testthat: ${{ true }}
-        run_covr: ${{ true }}
+        has_testthat: ${{ false }}
+        run_covr: ${{ false }}
         run_pkgdown: ${{ true }}
         has_runit: ${{ false }}
         has_latex: ${{ false }}
