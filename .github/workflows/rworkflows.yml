@@ -1,4 +1,4 @@
-name: rworkflows_custom
+name: rworkflows
 'on':
   push:
     branches:
