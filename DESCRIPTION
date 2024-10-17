@@ -38,7 +38,8 @@ Imports:
     utils,
     gtools,
     stringr,
-    gridExtra
+    gridExtra,
+    ggcorrplot
 Suggests: 
     knitr,
     rmarkdown,

@@ -57,10 +57,8 @@ downsampling_DEanalysis(
 
 \item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
 
-\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE}
-}
-\value{
-saves all DE outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells
+\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
+Saves all DE outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells}
 }
 \description{
 Downsample the dataset, based either on the individuals or cells, and run DE analysis on each downsampled output. Save results in a dataframe

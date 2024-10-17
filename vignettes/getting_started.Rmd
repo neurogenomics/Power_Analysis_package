@@ -1,8 +1,8 @@
 ---
-title: "Power Analysis"
+title: "Getting Started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{poweranalysis}
+  %\VignetteIndexEntry{getting_started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,10 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 ***
-### Authors: *Salman Fawad*, *Yunning Yuan*, *Nathan Skene* <br>
-### README updated: *Aug-09-2024* <br>
-<br>
-
 # Introduction
 
 The *poweranalysis* R package is designed to run robust power analysis for differential gene expression in scRNA-seq studies, addressing the challenge of low statistical power due to small sample sizes. It provides tools to estimate the optimal number of samples and cells needed to achieve reliable power levels.
@@ -27,41 +23,11 @@ Using *poweranalysis* involves four steps: <br>
 **1. Differential Expression (DE) Analysis:** Import your SCE object and perform DE analysis using a pseudobulking approach, allowing for the robust identification of differentially expressed genes (DEGs) across conditions or groups. <br>
 **2. Correlation Analysis:** Assess the consistency of DEG effect sizes across random permutations, subsets of your data, and different studies by computing correlation matrices. <br>
 **3. Downsampling and Power Analysis:** Test the robustness of your findings by downsampling both individuals and cells, then analyze the effect on DEG detection power. <br>
-**4. Visualisation:** Generate comprehensive power plots and visual summaries of the power analysis results, including DEG detection rates, false discovery rates, and mean LogFC correlation between down-sampled subsets.  
-
-
-# Installation  
+**4. Visualisation:** Generate comprehensive power plots and visual summaries of the power analysis results, including DEG detection rates, false discovery rates, and mean LogFC correlation between down-sampled subsets. 
 <br>
 
 # Setup
+
 ```{r setup}
 library(poweranalysis)
 ```
-<br>
-
-# Documentation  
-## [Getting Started](http://127.0.0.1:18836/library/poweranalysis/doc/getting_started.html)
-<br>
-
-# Troubleshooting
-If you have any problems, please do submit an [Issue here on GitHub](https://github.com/neurogenomics/Power_Analysis_package) with a reproducible example.  
-<br>
-
-# Citation  
-
-<br>
-***
-<br>
-
-# Contact  
-## [Neurogenomis Lab](https://www.neurogenomics.co.uk/)
-UK Dementia Research Institute <br>
-Department of Brain Sciences <br>
-Faculty of Medicine <br>
-Imperial College London <br>
-[GitHub](https://github.com/neurogenomics)
-[DockerHub](https://hub.docker.com/orgs/neurogenomicslab)  
-<br>
-
-# References
-

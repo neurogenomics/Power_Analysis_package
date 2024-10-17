@@ -29,7 +29,7 @@ utils::globalVariables(c("design","PValue","logFC","name","variable"))
 #' @param pval_adjust_method the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
 #' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
 
-#' @return saves all plots in the appropriate directory
+#' Saves all plots in the appropriate directory
 
 power_plots <- function(data,
                         range_downsampled="placeholder",
@@ -58,6 +58,7 @@ power_plots <- function(data,
     }
 
     # create output path if doesn't already exist
+    setwd(output_path)
     dir.create(output_path,showWarnings=FALSE)
     # validate function input params
     validate_input_parameters_power(data=data, range_downsampled=range_downsampled, output_path=output_path,

@@ -54,10 +54,8 @@ power_plots(
 
 \item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
 
-\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE}
-}
-\value{
-saves all plots in the appropriate directory
+\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
+Saves all plots in the appropriate directory}
 }
 \description{
 Create plots for power analysis, with down-sampling based either on the individuals or cells

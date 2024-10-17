@@ -23,7 +23,7 @@ utils::globalVariables(c("PValue","name"))
 #' @param pval_adjust_method the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
 #' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
 
-#' @return saves all DE outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells
+#' Saves all DE outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells
 
 downsampling_DEanalysis <- function(data,
                                     range_downsampled="placeholder",
