@@ -5,20 +5,20 @@
 #' @importFrom ggplot2 labs theme ggsave element_text scale_fill_gradient2
 #' @importFrom ggcorrplot ggcorrplot
 
-#' @param data - the input data (should be an SCE object)
-#' @param range_downsampled - range of values to be downsampled for, in ascending order
-#' @param output_path - base path in which outputs will be stored
-#' @param inpath - base path where downsampled DE output folders are stored (taken to be output_path if not provided)
-#' @param sampled - downsampling carried out based on what (either "individuals" or "cells")
-#' @param sampleID - sample ID
-#' @param celltypeID - cell type ID
-#' @param coeff - which coefficient to carry out DE analysis with respect to
-#' @param Nperms - number of subsets created when downsampling at each level
-#' @param y - the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)
-#' @param region - the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
-#' @param control - character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.
-#' @param pval_adjust_method - the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
-#' @param rmv_zero_count_genes - whether genes with no count values in any cell should be removed. Default is TRUE
+#' @param data the input data (should be an SCE object)
+#' @param range_downsampled range of values to be downsampled for, in ascending order
+#' @param output_path base path in which outputs will be stored
+#' @param inpath base path where downsampled DE output folders are stored (taken to be output_path if not provided)
+#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
+#' @param sampleID sample ID
+#' @param celltypeID cell type ID
+#' @param coeff which coefficient to carry out DE analysis with respect to
+#' @param Nperms number of subsets created when downsampling at each level
+#' @param y the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)
+#' @param region the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
+#' @param control character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.
+#' @param pval_adjust_method the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
+#' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
 
 #' Saves all plots in the appropriate directory
 

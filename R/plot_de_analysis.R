@@ -7,7 +7,7 @@ utils::globalVariables(c("deg_direction",".I","adj_pval","celltype","i.deg_direc
 #' @importFrom data.table rbindlist setnames as.data.table setkey data.table setorder :=
 #' @importFrom ggplot2 ggplot geom_jitter stat_summary scale_shape_manual labs facet_wrap theme ggsave geom_bar ggtitle geom_hline scale_colour_manual aes element_text geom_point element_blank unit
 #' @importFrom reshape2 melt
-#' @import ensembldb
+#' @importFrom ensembldb select
 #' @importFrom cowplot theme_cowplot
 #' @importFrom viridis scale_colour_viridis scale_fill_viridis
 #' @importFrom ggrepel geom_text_repel

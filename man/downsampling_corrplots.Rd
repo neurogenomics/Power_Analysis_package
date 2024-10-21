@@ -22,62 +22,34 @@ downsampling_corrplots(
 )
 }
 \arguments{
-\item{data}{\itemize{
-\item the input data (should be an SCE object)
-}}
+\item{data}{the input data (should be an SCE object)}
 
-\item{range_downsampled}{\itemize{
-\item range of values to be downsampled for, in ascending order
-}}
+\item{range_downsampled}{range of values to be downsampled for, in ascending order}
 
-\item{output_path}{\itemize{
-\item base path in which outputs will be stored
-}}
+\item{output_path}{base path in which outputs will be stored}
 
-\item{inpath}{\itemize{
-\item base path where downsampled DE output folders are stored (taken to be output_path if not provided)
-}}
+\item{inpath}{base path where downsampled DE output folders are stored (taken to be output_path if not provided)}
 
-\item{sampled}{\itemize{
-\item downsampling carried out based on what (either "individuals" or "cells")
-}}
+\item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 
-\item{sampleID}{\itemize{
-\item sample ID
-}}
+\item{sampleID}{sample ID}
 
-\item{celltypeID}{\itemize{
-\item cell type ID
-}}
+\item{celltypeID}{cell type ID}
 
-\item{coeff}{\itemize{
-\item which coefficient to carry out DE analysis with respect to
-}}
+\item{coeff}{which coefficient to carry out DE analysis with respect to}
 
-\item{Nperms}{\itemize{
-\item number of subsets created when downsampling at each level
-}}
+\item{Nperms}{number of subsets created when downsampling at each level}
 
-\item{y}{\itemize{
-\item the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)
-}}
+\item{y}{the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)}
 
-\item{region}{\itemize{
-\item the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
-}}
+\item{region}{the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.}
 
-\item{control}{\itemize{
-\item character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.
-}}
+\item{control}{character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.}
 
-\item{pval_adjust_method}{\itemize{
-\item the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
-}}
+\item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
 
-\item{rmv_zero_count_genes}{\itemize{
-\item whether genes with no count values in any cell should be removed. Default is TRUE
-Saves all plots in the appropriate directory
-}}
+\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
+Saves all plots in the appropriate directory}
 }
 \description{
 Create correlation plots of the effect sizes of the top 1000 and top 500 DEGs

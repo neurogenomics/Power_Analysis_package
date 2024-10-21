@@ -39,7 +39,8 @@ Imports:
     gtools,
     stringr,
     gridExtra,
-    ggcorrplot
+    ggcorrplot,
+    infotheo
 Suggests: 
     knitr,
     rmarkdown,

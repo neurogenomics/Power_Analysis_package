@@ -8,8 +8,8 @@ utils::globalVariables(c(".","dataset"))
 #' @importFrom stats reshape complete.cases cor
 #' @importFrom ggplot2 theme element_text scale_fill_gradient2 labs
 
-#' @param allstudies - a list containing DGE analysis outputs (subset to "celltype_all_genes" and the specified cell type) at each down-sampled point
-#' @param sampled - downsampling carried out based on what (either "individuals" or "cells")
+#' @param allstudies a list containing DGE analysis outputs (subset to "celltype_all_genes" and the specified cell type) at each down-sampled point
+#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 
 #' @return correlation matrix, plot and the number of DEGs at the specified p-value
 

@@ -21,58 +21,32 @@ preliminary_plots(
 )
 }
 \arguments{
-\item{data}{\itemize{
-\item the input data (should be an SCE object)
-}}
+\item{data}{the input data (should be an SCE object)}
 
-\item{output_path}{\itemize{
-\item base path in which outputs will be stored
-}}
+\item{output_path}{base path in which outputs will be stored}
 
-\item{sampleID}{\itemize{
-\item sample ID
-}}
+\item{sampleID}{sample ID}
 
-\item{design}{\itemize{
-\item the design formula of class type \code{formula}. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
-}}
+\item{design}{the design formula of class type \code{formula}. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease}
 
-\item{sexID}{\itemize{
-\item sex ID
-}}
+\item{sexID}{sex ID}
 
-\item{celltypeID}{\itemize{
-\item cell type ID
-}}
+\item{celltypeID}{cell type ID}
 
-\item{coeff}{\itemize{
-\item which coefficient to carry out DE analysis with respect to
-}}
+\item{coeff}{which coefficient to carry out DE analysis with respect to}
 
-\item{fdr}{\itemize{
-\item the cut-off False Discovery Rate below which to select DEGs
-}}
+\item{fdr}{the cut-off False Discovery Rate below which to select DEGs}
 
-\item{y}{\itemize{
-\item the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)
-}}
+\item{y}{the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)}
 
-\item{region}{\itemize{
-\item the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
-}}
+\item{region}{the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.}
 
-\item{control}{\itemize{
-\item character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.
-}}
+\item{control}{character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.}
 
-\item{pval_adjust_method}{\itemize{
-\item the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
-}}
+\item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
 
-\item{rmv_zero_count_genes}{\itemize{
-\item whether genes with no count values in any cell should be removed. Default is TRUE
-Saves all plots in the appropriate directory
-}}
+\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
+Saves all plots in the appropriate directory}
 }
 \description{
 Create preliminary plots for data exploration
