@@ -85,69 +85,56 @@
 
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><ul><li><p>the input data (should be an SCE object)</p></li>
-</ul></dd>
+<dd><p>the input data (should be an SCE object)</p></dd>
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><ul><li><p>base path in which outputs will be stored</p></li>
-</ul></dd>
+<dd><p>base path in which outputs will be stored</p></dd>
 
 
 <dt id="arg-sampleid">sampleID<a class="anchor" aria-label="anchor" href="#arg-sampleid"></a></dt>
-<dd><ul><li><p>sample ID</p></li>
-</ul></dd>
+<dd><p>sample ID</p></dd>
 
 
 <dt id="arg-design">design<a class="anchor" aria-label="anchor" href="#arg-design"></a></dt>
-<dd><ul><li><p>the design formula of class type <code>formula</code>. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease</p></li>
-</ul></dd>
+<dd><p>the design formula of class type <code>formula</code>. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease</p></dd>
 
 
 <dt id="arg-sexid">sexID<a class="anchor" aria-label="anchor" href="#arg-sexid"></a></dt>
-<dd><ul><li><p>sex ID</p></li>
-</ul></dd>
+<dd><p>sex ID</p></dd>
 
 
 <dt id="arg-celltypeid">celltypeID<a class="anchor" aria-label="anchor" href="#arg-celltypeid"></a></dt>
-<dd><ul><li><p>cell type ID</p></li>
-</ul></dd>
+<dd><p>cell type ID</p></dd>
 
 
 <dt id="arg-coeff">coeff<a class="anchor" aria-label="anchor" href="#arg-coeff"></a></dt>
-<dd><ul><li><p>which coefficient to carry out DE analysis with respect to</p></li>
-</ul></dd>
+<dd><p>which coefficient to carry out DE analysis with respect to</p></dd>
 
 
 <dt id="arg-fdr">fdr<a class="anchor" aria-label="anchor" href="#arg-fdr"></a></dt>
-<dd><ul><li><p>the cut-off False Discovery Rate below which to select DEGs</p></li>
-</ul></dd>
+<dd><p>the cut-off False Discovery Rate below which to select DEGs</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><ul><li><p>the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)</p></li>
-</ul></dd>
+<dd><p>the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)</p></dd>
 
 
 <dt id="arg-region">region<a class="anchor" aria-label="anchor" href="#arg-region"></a></dt>
-<dd><ul><li><p>the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.</p></li>
-</ul></dd>
+<dd><p>the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.</p></dd>
 
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
-<dd><ul><li><p>character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.</p></li>
-</ul></dd>
+<dd><p>character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.</p></dd>
 
 
 <dt id="arg-pval-adjust-method">pval_adjust_method<a class="anchor" aria-label="anchor" href="#arg-pval-adjust-method"></a></dt>
-<dd><ul><li><p>the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options</p></li>
-</ul></dd>
+<dd><p>the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options</p></dd>
 
 
 <dt id="arg-rmv-zero-count-genes">rmv_zero_count_genes<a class="anchor" aria-label="anchor" href="#arg-rmv-zero-count-genes"></a></dt>
-<dd><ul><li><p>whether genes with no count values in any cell should be removed. Default is TRUE
-Saves all plots in the appropriate directory</p></li>
-</ul></dd>
+<dd><p>whether genes with no count values in any cell should be removed. Default is TRUE
+Saves all plots in the appropriate directory</p></dd>
 
 </dl></div>
 

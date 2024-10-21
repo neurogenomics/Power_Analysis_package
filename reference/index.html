@@ -85,9 +85,17 @@
         </td>
         <td><p>Calculate the summed pseudobulk values for an SCE object based on one single cell type only. Ensure to filter SCE to pass one cell type's data.</p></td>
       </tr><tr><td>
+          <p><code><a href="plot_celltype_correlation.html">plot_celltype_correlation()</a></code> </p>
+        </td>
+        <td><p>Computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given celltype, across all datasets</p></td>
+      </tr><tr><td>
           <p><code><a href="plot_de_analysis.html">plot_de_analysis()</a></code> </p>
         </td>
         <td><p>Create differential expression analysis plots. Run by sc_cell_type_de()</p></td>
+      </tr><tr><td>
+          <p><code><a href="plot_mean_correlation.html">plot_mean_correlation()</a></code> </p>
+        </td>
+        <td><p>Obtain the average correlation (across celltypes) at a specified cutoff p-value</p></td>
       </tr><tr><td>
           <p><code><a href="power_analysis.html">power_analysis()</a></code> </p>
         </td>
@@ -101,6 +109,10 @@
         </td>
         <td><p>Create preliminary plots for data exploration</p></td>
       </tr><tr><td>
+          <p><code><a href="random_permutations.html">random_permutations()</a></code> </p>
+        </td>
+        <td><p>Obtain highly randomised permutations of a specified dataset (based on sex labels), while maintaining consistency with the sample ID</p></td>
+      </tr><tr><td>
           <p><code><a href="sample_cells.html">sample_cells()</a></code> </p>
         </td>
         <td><p>Sample the data for a specified mean number of cells (per sample) from the dataset</p></td>
@@ -112,6 +124,14 @@
           <p><code><a href="sc_cell_type_de.html">sc_cell_type_de()</a></code> </p>
         </td>
         <td><p>Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis</p></td>
+      </tr><tr><td>
+          <p><code><a href="sex_chromosome_DEGs.html">sex_chromosome_DEGs()</a></code> </p>
+        </td>
+        <td><p>Given a DGE analysis output, this outputs a subset of the analysis with the genes laying only on the sex chromosomes (X/Y)</p></td>
+      </tr><tr><td>
+          <p><code><a href="subset_pairs.html">subset_pairs()</a></code> </p>
+        </td>
+        <td><p>Obtain independent pairs of subsets of a specified dataset, based on sample ID</p></td>
       </tr><tr><td>
           <p><code><a href="validate_input_parameters_de.html">validate_input_parameters_de()</a></code> </p>
         </td>
