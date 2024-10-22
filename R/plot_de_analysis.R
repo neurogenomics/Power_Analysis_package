@@ -1,7 +1,7 @@
 # Define global variables
 utils::globalVariables(c("deg_direction",".I","adj_pval","celltype","i.deg_direction","phenotype","gene_name","x.hgnc_symbol",".N","N","num_cells","prop","N_prop","colour_ident","."))
 
-#' Create differential expression analysis plots. Run by sc_cell_type_de()
+#' Create differential expression analysis plots. Run by DGE_analysis()
 
 #' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
 #' @importFrom data.table rbindlist setnames as.data.table setkey data.table setorder :=

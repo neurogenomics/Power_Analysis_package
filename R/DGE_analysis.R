@@ -70,11 +70,11 @@
 #'          .N,by=.(celltype,chromosome_name)]
 #'}
 
-sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
-                            region="single_region", coef=NULL, control=NULL,
-                            pval_adjust_method = "BH", adj_pval=0.05,
-                            folder="sc.cell.type.de.graphs/",
-                            rmv_zero_count_genes=TRUE, verbose=F){
+DGE_analysis <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
+                         region="single_region", coef=NULL, control=NULL,
+                         pval_adjust_method = "BH", adj_pval=0.05,
+                         folder="sc.cell.type.de.graphs/",
+                         rmv_zero_count_genes=TRUE, verbose=F){
 
     # need to load SCE if a directory is passed
     if(class(SCE)[1]=="character"){
@@ -135,8 +135,8 @@ sc_cell_type_de <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
 
     # run edgeR LRT DE analysis
     celltype_de <-
-        de_analysis(pb_dat,formula,y_name=y,y_contin,coef,control,
-                        pval_adjust_method, adj_pval, verbose)
+        differential_expression(pb_dat,formula,y_name=y,y_contin,coef,control,
+                                pval_adjust_method, adj_pval, verbose)
     # get sig DEGs for each
     celltype_DEGs <- lapply(celltype_de, function(x) x[x$adj_pval<adj_pval,])
 

@@ -68,7 +68,7 @@ downsampling_DEanalysis <- function(data,
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
         # run and save DE analysis
-        assign("DEout", sc_cell_type_de(data, design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        assign("DEout", DGE_analysis(data, design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
         save(DEout,file=paste0(output_path,"/DEout.RData"))
     }else{
         load(paste0(output_path,"/DEout.RData"))
@@ -115,7 +115,7 @@ downsampling_DEanalysis <- function(data,
                 dir.create(path,showWarnings=FALSE)
                 setwd(path)
                 # ensure sexID isnt "Sex", has to be lower case (change this in SCE if needed)
-                assign(paste0("DEout_",toString(value)), sc_cell_type_de(samples[[j]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+                assign(paste0("DEout_",toString(value)), DGE_analysis(samples[[j]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
                 # save output
                 save(list=eval(paste0("DEout_",toString(value))),file=paste0("DEout",toString(value),"_",j,".RData"))
                 # get number of TP DEGs
@@ -170,7 +170,7 @@ downsampling_DEanalysis <- function(data,
                 dir.create(path,showWarnings=FALSE)
                 setwd(path)
                 # ensure sexID isnt "Sex", has to be lower case (change this in SCE if needed)
-                assign(paste0("DEout_",toString(value)), sc_cell_type_de(cells[[j]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+                assign(paste0("DEout_",toString(value)), DGE_analysis(cells[[j]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
                 # save output
                 save(list=eval(paste0("DEout_",toString(value))),file=paste0("DEout",toString(value),"_",j,".RData"))
                 # get number of TP DEGs

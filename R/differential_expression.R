@@ -18,8 +18,8 @@
 #' @return a list containing differential expression data (a dataframe) for each cell type. The dataframe contains:
 #' log fold change (logFC), log counts per million (logCPM), log ratio (LR), p-value (PValue), adjusted p-value (adj_pval)
 
-de_analysis <- function(pb_dat,formula,y_name,y_contin,coef, control,
-                            pval_adjust_method, adj_pval,verbose){
+differential_expression <- function(pb_dat,formula,y_name,y_contin,coef, control,
+                                    pval_adjust_method, adj_pval,verbose){
     # use Likelihood ratio test from edgeR, found to have best perf in a recent benchmark: https://www.biorxiv.org/content/10.1101/2021.03.12.435024v1.full
     # other option for edgeR is quasi-likelihood F-tests
     # run each cell type through

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_de_analysis.R
 \name{plot_de_analysis}
 \alias{plot_de_analysis}
-\title{Create differential expression analysis plots. Run by sc_cell_type_de()}
+\title{Create differential expression analysis plots. Run by DGE_analysis()}
 \usage{
 plot_de_analysis(
   pb_dat,
@@ -30,5 +30,5 @@ annot_pb: dataframe of the annotation data from the SCE rolled up based on the p
 Creates and saves plot in relevant directory}
 }
 \description{
-Create differential expression analysis plots. Run by sc_cell_type_de()
+Create differential expression analysis plots. Run by DGE_analysis()
 }

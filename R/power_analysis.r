@@ -1,7 +1,7 @@
 # Define global variables
 utils::globalVariables(c("dataset"))
 
-#' Runs entire power analysis
+#' Runs entire power analysis pipeline
 
 #' @importFrom stats as.formula
 
@@ -24,6 +24,7 @@ utils::globalVariables(c("dataset"))
 #' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
 
 #' Saves all plots and DE outputs in the appropriate directories
+#' @export
 
 power_analysis <- function(data,
                            range_downsampled_individuals="placeholder",
