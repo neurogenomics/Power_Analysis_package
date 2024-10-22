@@ -61,11 +61,19 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="DGE_analysis.html">DGE_analysis()</a></code> </p>
+        </td>
+        <td><p>Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis</p></td>
+      </tr><tr><td>
           <p><code><a href="compute_downsampled_corr.html">compute_downsampled_corr()</a></code> </p>
         </td>
         <td><p>For a given down-sampled DE output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)</p></td>
       </tr><tr><td>
-          <p><code><a href="de_analysis.html">de_analysis()</a></code> </p>
+          <p><code><a href="correlation_boxplots.html">correlation_boxplots()</a></code> </p>
+        </td>
+        <td><p>Obtain box plots for the correlations of all celltypes, and the mean correlations at a specified cutoff p-value</p></td>
+      </tr><tr><td>
+          <p><code><a href="differential_expression.html">differential_expression()</a></code> </p>
         </td>
         <td><p>Differential Expression Analysis using edgeR LRT on pseudobulk data</p></td>
       </tr><tr><td>
@@ -91,7 +99,7 @@
       </tr><tr><td>
           <p><code><a href="plot_de_analysis.html">plot_de_analysis()</a></code> </p>
         </td>
-        <td><p>Create differential expression analysis plots. Run by sc_cell_type_de()</p></td>
+        <td><p>Create differential expression analysis plots. Run by DGE_analysis()</p></td>
       </tr><tr><td>
           <p><code><a href="plot_mean_correlation.html">plot_mean_correlation()</a></code> </p>
         </td>
@@ -99,7 +107,7 @@
       </tr><tr><td>
           <p><code><a href="power_analysis.html">power_analysis()</a></code> </p>
         </td>
-        <td><p>Runs entire power analysis</p></td>
+        <td><p>Runs entire power analysis pipeline</p></td>
       </tr><tr><td>
           <p><code><a href="power_plots.html">power_plots()</a></code> </p>
         </td>
@@ -121,10 +129,6 @@
         </td>
         <td><p>Sample the data for a specified number of individuals from the dataset</p></td>
       </tr><tr><td>
-          <p><code><a href="sc_cell_type_de.html">sc_cell_type_de()</a></code> </p>
-        </td>
-        <td><p>Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis</p></td>
-      </tr><tr><td>
           <p><code><a href="sex_chromosome_DEGs.html">sex_chromosome_DEGs()</a></code> </p>
         </td>
         <td><p>Given a DGE analysis output, this outputs a subset of the analysis with the genes laying only on the sex chromosomes (X/Y)</p></td>
@@ -140,6 +144,10 @@
           <p><code><a href="validate_input_parameters_power.html">validate_input_parameters_power()</a></code> </p>
         </td>
         <td><p>Tests input parameters for functions</p></td>
+      </tr><tr><td>
+          <p><code><a href="within_data_correlation.html">within_data_correlation()</a></code> </p>
+        </td>
+        <td><p>Create correlation plots of the effect sizes, between random permutations and subsets of a given dataset</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
