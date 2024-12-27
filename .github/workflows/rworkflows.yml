@@ -40,7 +40,7 @@ jobs:
           cont: ~
           rspm: ~
     steps:
-    - uses: HDash/rworkflows@force_install_packages
+    - uses: neurogenomics/rworkflows@master
       with:
         run_bioccheck: ${{ false }}
         run_rcmdcheck: ${{ true }}
@@ -57,3 +57,4 @@ jobs:
         runner_os: ${{ runner.os }}
         cache_version: cache-v1
         docker_registry: ghcr.io
+        force_install: ${{ true }}
