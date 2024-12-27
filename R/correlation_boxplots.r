@@ -36,67 +36,12 @@ correlation_boxplots <- function(corrMats,
                                  fontsize_legendtitle=9,
                                  fontsize_facet_labels=9){
 
-    # check input parameters are fine
-    if(class(corrMats)!="list"){
-        stop("Error: corrMats should be a list of matrices")
-    }
-    if(floor(numRealDatasets)!=numRealDatasets){
-        stop("Error: numRealDatasets should be an integer specifying the number of real datasets (see description)")
-    }
-    if(!is.numeric(pval) | pval <= 0 | pval > 1){
-        stop("Error: pval should be a (positive) number between 0 and 1")
-    }
-    if(floor(numPerms)!=numPerms){
-        stop("Error: numPerms should be an integer specifying the number of random permutations of Tsai (see description)")
-    }
-    if(floor(numSubsets)!=numSubsets){
-        stop("Error: numSubsets should be an integer specifying the number of subsets of Tsai (see description)")
-    }
-    if(class(sexDEGs)!="logical"){
-        stop("Error: sexDEGs should be TRUE (if DEGs are chosen only from sex chromosomes) or FALSE")
-    }
-    if(class(fontsize_yaxislabels)!="numeric"){
-        stop("Error: fontsize_yaxislabels should be numerical.")
-    }else{
-        if(fontsize_yaxislabels-floor(fontsize_yaxislabels)!=0|fontsize_yaxislabels<0){
-            stop("Error: fontsize_yaxislabels should be a positive integer.")
-        }
-    }
-    if(class(fontsize_yaxisticks)!="numeric"){
-        stop("Error: fontsize_yaxisticks should be numerical.")
-    }else{
-        if(fontsize_yaxisticks-floor(fontsize_yaxisticks)!=0|fontsize_yaxisticks<0){
-            stop("Error: fontsize_yaxisticks should be a positive integer.")
-        }
-    }
-    if(class(fontsize_title)!="numeric"){
-        stop("Error: fontsize_title should be numerical.")
-    }else{
-        if(fontsize_title-floor(fontsize_title)!=0|fontsize_title<0){
-            stop("Error: fontsize_title should be a positive integer.")
-        }
-    }
-    if(class(fontsize_legendlabels)!="numeric"){
-        stop("Error: fontsize_legendlabels should be numerical.")
-    }else{
-        if(fontsize_legendlabels-floor(fontsize_legendlabels)!=0|fontsize_legendlabels<0){
-            stop("Error: fontsize_legendlabels should be a positive integer.")
-        }
-    }
-    if(class(fontsize_legendtitle)!="numeric"){
-        stop("Error: fontsize_legendtitle should be numerical.")
-    }else{
-        if(fontsize_legendtitle-floor(fontsize_legendtitle)!=0|fontsize_legendtitle<0){
-            stop("Error: fontsize_legendtitle should be a positive integer.")
-        }
-    }
-    if(class(fontsize_facet_labels)!="numeric"){
-        stop("Error: fontsize_facet_labels should be numerical.")
-    }else{
-        if(fontsize_facet_labels-floor(fontsize_facet_labels)!=0|fontsize_facet_labels<0){
-            stop("Error: fontsize_facet_labels should be a positive integer.")
-        }
-    }
+    # validate function input params
+    validate_input_parameters_correlation(corrMats=corrMats, numRealDatasets=numRealDatasets, pvalue=pval,
+                                          alphaval=alphaval, numPerms=numPerms, numSubsets=numSubsets,
+                                          sexDEGs=sexDEGs, fontsize_yaxislabels=fontsize_yaxislabels, fontsize_yaxisticks=fontsize_yaxisticks,
+                                          fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels, fontsize_legendtitle=fontsize_legendtitle,
+                                          fontsize_facet_labels=fontsize_facet_labels)
 
     # midCor submatrix limits
     midCorLim <- numPerms + numRealDatasets

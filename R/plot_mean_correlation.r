@@ -17,19 +17,9 @@ plot_mean_correlation <- function(dataset_name,
                                   pvalue,
                                   data_names="placeholder"){
 
-    # check input parameters are fine
-    if(class(allstudies)!="list"){
-        stop("Error: allstudies should be a list")
-    }
-    if(!is.character(celltypes)){
-        stop("Error: celltypes should be a list containing strings specifying the celltypes")
-    }
-    if(!is.numeric(pvalue) | pvalue <= 0 | pvalue > 1){
-        stop("Error: pvalue should be a (positive) number between 0 and 1")
-    }
-    if(data_names!="placeholder" && !is.vector(data_names)){
-        stop("Error: data_names should be a list containing the names of all datasets as should appear in the final output (if these are different to the names in allstudies)")
-    }
+    # validate function input params
+    validate_input_parameters_correlation(dataset_name=dataset_name, allstudies=allstudies, celltypes=celltypes,
+                                          pvalue=pvalue, data_names=data_names)
 
     # list for genes of each celltype at specified p-value
     genes <- list()
