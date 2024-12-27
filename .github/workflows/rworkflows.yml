@@ -6,14 +6,16 @@ name: rworkflows
     - main
     - devel
     - RELEASE_**
-    - rworkflows_fix
+    - '*'
+    - '!gh-pages'
   pull_request:
     branches:
     - master
     - main
     - devel
     - RELEASE_**
-    - rworkflows_fix
+    - '*'
+    - '!gh-pages'
 jobs:
   rworkflows:
     permissions: write-all
@@ -40,7 +42,7 @@ jobs:
           cont: ~
           rspm: ~
     steps:
-    - uses: HDash/rworkflows@force_install_packages
+    - uses: neurogenomics/rworkflows@master
       with:
         run_bioccheck: ${{ false }}
         run_rcmdcheck: ${{ true }}
@@ -57,3 +59,4 @@ jobs:
         runner_os: ${{ runner.os }}
         cache_version: cache-v1
         docker_registry: ghcr.io
+        force_install: ${{ true }}
