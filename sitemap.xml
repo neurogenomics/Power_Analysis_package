@@ -9,6 +9,7 @@
 <url><loc>/index.html</loc></url>
 <url><loc>/reference/DGE_analysis.html</loc></url>
 <url><loc>/reference/compute_downsampled_corr.html</loc></url>
+<url><loc>/reference/correlation_analysis.html</loc></url>
 <url><loc>/reference/correlation_boxplots.html</loc></url>
 <url><loc>/reference/differential_expression.html</loc></url>
 <url><loc>/reference/downsampling_DEanalysis.html</loc></url>
@@ -27,6 +28,7 @@
 <url><loc>/reference/sample_individuals.html</loc></url>
 <url><loc>/reference/sex_chromosome_DEGs.html</loc></url>
 <url><loc>/reference/subset_pairs.html</loc></url>
+<url><loc>/reference/validate_input_parameters_correlation.html</loc></url>
 <url><loc>/reference/validate_input_parameters_de.html</loc></url>
 <url><loc>/reference/validate_input_parameters_power.html</loc></url>
 <url><loc>/reference/within_data_correlation.html</loc></url>
