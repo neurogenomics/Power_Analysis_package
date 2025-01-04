@@ -7,7 +7,7 @@
 correlation_boxplots(
   corrMats,
   numRealDatasets,
-  pval,
+  pvals,
   alphaval = 0.25,
   numPerms = 5,
   numSubsets = 5,
@@ -17,7 +17,8 @@ correlation_boxplots(
   fontsize_title = 14,
   fontsize_legendlabels = 9,
   fontsize_legendtitle = 9,
-  fontsize_facet_labels = 9
+  fontsize_facet_labels = 9,
+  output_path = getwd()
 )
 }
 \arguments{
@@ -25,7 +26,7 @@ correlation_boxplots(
 
 \item{numRealDatasets}{total number of \emph{real} datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)}
 
-\item{pval}{the cut-off p-value which was used to select DEGs}
+\item{pvals}{the cut-off p-value which was used to select DEGs}
 
 \item{alphaval}{(alpha) transparency of the non-mean boxplots}
 
@@ -46,6 +47,8 @@ correlation_boxplots(
 \item{fontsize_legendtitle}{font size for legend title in plot}
 
 \item{fontsize_facet_labels}{font size for facet labels}
+
+\item{output_path}{base path in which outputs will be stored}
 }
 \value{
 box plots for correlation matrices at a certain p-value cut-off, sorted by celltype and then type of correlation

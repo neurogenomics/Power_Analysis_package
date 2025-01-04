@@ -21,7 +21,8 @@ validate_input_parameters_correlation(
   fontsize_title = "placeholder",
   fontsize_legendlabels = "placeholder",
   fontsize_legendtitle = "placeholder",
-  fontsize_facet_labels = "placeholder"
+  fontsize_facet_labels = "placeholder",
+  output_path = "placeholder"
 )
 }
 \arguments{
@@ -57,7 +58,9 @@ validate_input_parameters_correlation(
 
 \item{fontsize_legendtitle}{font size for legend title in plot}
 
-\item{fontsize_facet_labels}{font size for facet labels
+\item{fontsize_facet_labels}{font size for facet labels}
+
+\item{output_path}{base path in which outputs will be stored
 Checks all correlation analysis parameters are specified correctly}
 }
 \description{

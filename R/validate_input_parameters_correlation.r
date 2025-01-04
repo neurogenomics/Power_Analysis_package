@@ -17,6 +17,7 @@
 #' @param fontsize_legendlabels font size for legend labels in plot
 #' @param fontsize_legendtitle font size for legend title in plot
 #' @param fontsize_facet_labels font size for facet labels
+#' @param output_path base path in which outputs will be stored
 
 #' Checks all correlation analysis parameters are specified correctly
 
@@ -36,7 +37,8 @@ validate_input_parameters_correlation <- function(dataset_name="placeholder",
                                                   fontsize_title="placeholder",
                                                   fontsize_legendlabels="placeholder",
                                                   fontsize_legendtitle="placeholder",
-                                                  fontsize_facet_labels="placeholder"){
+                                                  fontsize_facet_labels="placeholder",
+                                                  output_path="placeholder"){
 
     # test each parameter to check if it works
     if(dataset_name!="placeholder"){
@@ -146,5 +148,14 @@ validate_input_parameters_correlation <- function(dataset_name="placeholder",
             }
         }
     }
-
+    if(output_path!="placeholder"){
+        if(output_path!=getwd()){
+            if(!is.character(output_path)){
+                stop("Error: output_path should be a string specifying the base path where output will be stored.")        
+            }
+            if(!dir.exists(output_path)){
+                stop("Error: the specified output_path directory does not exist.")
+            }      
+        }
+    }    
 }

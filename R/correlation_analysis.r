@@ -23,8 +23,20 @@ correlation_analysis <- function(dataset_name="placeholder",
                                  numSubsets="placeholder",
                                  output_path=getwd()){
     
-    # create correlation plots for each p-value cut-off
-    
-    return("TestOut")
+    # run plot_mean_correlation for each p-value (saving outputs)
+    mean_correlation_results <- plot_mean_correlation(dataset_name,
+                                                      allstudies,
+                                                      celltypes,
+                                                      pvals,
+                                                      data_names,
+                                                      output_path)
+
+    # run correlation_boxplots for each p-value (saving outputs)
+    boxplot_results <- correlation_boxplots(mean_correlation_results,
+                                            numRealDatasets=length(allstudies),
+                                            pvals=pvals,
+                                            output_path=output_path)
+
+    return(list(mean_correlation_results = mean_correlation_results, boxplot_results = boxplot_results))
 
 }

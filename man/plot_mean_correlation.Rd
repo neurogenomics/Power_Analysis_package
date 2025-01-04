@@ -8,8 +8,9 @@ plot_mean_correlation(
   dataset_name,
   allstudies,
   celltypes,
-  pvalue,
-  data_names = "placeholder"
+  pvals,
+  data_names = "placeholder",
+  output_path = getwd()
 )
 }
 \arguments{
@@ -19,9 +20,11 @@ plot_mean_correlation(
 
 \item{celltypes}{a list containing the celltypes to compute mean correlation across}
 
-\item{pvalue}{the cut-off p-value which will be used to select DEGs}
+\item{pvals}{the cut-off p-value which will be used to select DEGs}
 
 \item{data_names}{names of the datasets as they appear in the correlation plot}
+
+\item{output_path}{base path in which outputs will be stored}
 }
 \value{
 mean correlation matrix
