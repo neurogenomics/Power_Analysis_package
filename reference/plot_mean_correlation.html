@@ -67,8 +67,9 @@
 <span>  <span class="va">dataset_name</span>,</span>
 <span>  <span class="va">allstudies</span>,</span>
 <span>  <span class="va">celltypes</span>,</span>
-<span>  <span class="va">pvalue</span>,</span>
-<span>  data_names <span class="op">=</span> <span class="st">"placeholder"</span></span>
+<span>  <span class="va">pvals</span>,</span>
+<span>  data_names <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -88,12 +89,16 @@
 <dd><p>a list containing the celltypes to compute mean correlation across</p></dd>
 
 
-<dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
+<dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>
 <dd><p>the cut-off p-value which will be used to select DEGs</p></dd>
 
 
 <dt id="arg-data-names">data_names<a class="anchor" aria-label="anchor" href="#arg-data-names"></a></dt>
 <dd><p>names of the datasets as they appear in the correlation plot</p></dd>
+
+
+<dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
+<dd><p>base path in which outputs will be stored</p></dd>
 
 </dl></div>
     <div id="value">

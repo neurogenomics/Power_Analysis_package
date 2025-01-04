@@ -66,7 +66,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correlation_boxplots</span><span class="op">(</span></span>
 <span>  <span class="va">corrMats</span>,</span>
 <span>  <span class="va">numRealDatasets</span>,</span>
-<span>  <span class="va">pval</span>,</span>
+<span>  <span class="va">pvals</span>,</span>
 <span>  alphaval <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  numPerms <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  numSubsets <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -76,7 +76,8 @@
 <span>  fontsize_title <span class="op">=</span> <span class="fl">14</span>,</span>
 <span>  fontsize_legendlabels <span class="op">=</span> <span class="fl">9</span>,</span>
 <span>  fontsize_legendtitle <span class="op">=</span> <span class="fl">9</span>,</span>
-<span>  fontsize_facet_labels <span class="op">=</span> <span class="fl">9</span></span>
+<span>  fontsize_facet_labels <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -92,7 +93,7 @@
 <dd><p>total number of <em>real</em> datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)</p></dd>
 
 
-<dt id="arg-pval">pval<a class="anchor" aria-label="anchor" href="#arg-pval"></a></dt>
+<dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>
 <dd><p>the cut-off p-value which was used to select DEGs</p></dd>
 
 
@@ -134,6 +135,10 @@
 
 <dt id="arg-fontsize-facet-labels">fontsize_facet_labels<a class="anchor" aria-label="anchor" href="#arg-fontsize-facet-labels"></a></dt>
 <dd><p>font size for facet labels</p></dd>
+
+
+<dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
+<dd><p>base path in which outputs will be stored</p></dd>
 
 </dl></div>
     <div id="value">
