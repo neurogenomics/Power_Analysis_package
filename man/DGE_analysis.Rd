@@ -65,20 +65,20 @@ Perform differential expression analysis across cell types based on single cell 
 library(qs)
 library(SingleCellExperiment)
 SCE <- qs::qread("sce.qs")
-sc.cell.type.de.return_incl_sex<- sc.cell.type.de(SCE_small,
+DGE_analysis.return_incl_sex<- DGE_analysis(SCE_small,
 design= ~ sex + pathological_diagnosis_original,
 pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
 # If you only want to also account for other variables as well as sex, such as
 # postmortem interval (PMI):
-sc.cell.type.de.return_sex_pmi<- sc.cell.type.de(SCE_small,
+DGE_analysis.return_sex_pmi<- DGE_analysis(SCE_small,
 design= ~ sex + PMI + pathological_diagnosis_original,
 pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
 # If you only want to compare disease and control across cell types w/o any other constraints:
-sc.cell.type.de.return<- sc.cell.type.de(SCE_small,design= ~ pathological_diagnosis_original,
+DGE_analysis.return<- DGE_analysis(SCE_small,design= ~ pathological_diagnosis_original,
 pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
 # A good way to validate the DEG analysis approach is to run a sex comparison
 # You would expect genes on the sex chromosomes to be DEGs, this can be done:
-sc.cell.type.de.sex.return<- sc.cell.type.de(SCE,design= ~ sex,
+DGE_analysis.sex.return<- DGE_analysis(SCE,design= ~ sex,
 pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="M")
 #get gene names of chromosomal DEGs
 library('biomaRt')
