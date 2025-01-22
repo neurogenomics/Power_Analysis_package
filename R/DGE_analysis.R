@@ -22,7 +22,7 @@
 #'             celltype_DEGs: list with the differentially expressed genes (DEGs) for each cell type
 #'             celltype_all_genes: list with all genes along with their differential expression scores for each cell type
 #'             celltype_counts: vector with the counts of cells after QC in each cell type
-#' @export 
+#' @export
 
 #' @examples
 #'\dontrun{

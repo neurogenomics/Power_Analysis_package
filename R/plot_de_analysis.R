@@ -5,7 +5,7 @@ utils::globalVariables(c("deg_direction",".I","adj_pval","celltype","i.deg_direc
 
 #' @importFrom EnsDb.Hsapiens.v79 EnsDb.Hsapiens.v79
 #' @importFrom data.table rbindlist setnames as.data.table setkey data.table setorder :=
-#' @importFrom ggplot2 ggplot geom_jitter stat_summary scale_shape_manual labs facet_wrap theme ggsave geom_bar ggtitle geom_hline scale_colour_manual aes element_text geom_point element_blank unit geom_text
+#' @importFrom ggplot2 ggplot geom_jitter stat_summary scale_shape_manual labs facet_wrap theme ggsave geom_bar ggtitle geom_hline scale_colour_manual aes element_text geom_point element_blank unit geom_text mean_cl_normal
 #' @importFrom reshape2 melt
 #' @importFrom ensembldb select
 #' @importFrom cowplot theme_cowplot
