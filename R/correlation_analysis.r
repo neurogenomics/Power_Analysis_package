@@ -10,7 +10,7 @@
 #' @param numSubsets number of pairs of random subsets of the dataset used to select significant DEGs from
 #' @param output_path base path in which outputs will be stored
 
-#' Saves all plots and DE outputs in the appropriate directories
+#' Saves all plots and DGE analysis outputs in the appropriate directories
 #' @export
 
 correlation_analysis <- function(dataset_name="placeholder",

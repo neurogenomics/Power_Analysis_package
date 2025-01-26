@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_downsampled_corr.r
 \name{compute_downsampled_corr}
 \alias{compute_downsampled_corr}
-\title{For a given down-sampled DE output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)}
+\title{For a given down-sampled DGE analysis output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)}
 \usage{
 compute_downsampled_corr(allstudies, sampled = "individuals")
 }
@@ -15,5 +15,5 @@ compute_downsampled_corr(allstudies, sampled = "individuals")
 correlation matrix, plot and the number of DEGs at the specified p-value
 }
 \description{
-For a given down-sampled DE output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)
+For a given down-sampled DGE analysis output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)
 }

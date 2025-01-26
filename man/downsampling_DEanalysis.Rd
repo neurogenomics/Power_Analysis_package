@@ -27,7 +27,7 @@ downsampling_DEanalysis(
 \arguments{
 \item{data}{the input data (should be an SCE object)}
 
-\item{range_downsampled}{range of values to be downsampled for, in ascending order}
+\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
 \item{output_path}{base path in which outputs will be stored}
 
@@ -58,7 +58,7 @@ downsampling_DEanalysis(
 \item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
 
 \item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
-Saves all DE outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells}
+Saves all DGE analysis outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells}
 }
 \description{
 Downsample the dataset, based either on the individuals or cells, and run DE analysis on each downsampled output. Save results in a dataframe

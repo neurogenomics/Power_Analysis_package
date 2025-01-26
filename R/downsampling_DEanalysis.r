@@ -6,7 +6,7 @@ utils::globalVariables(c("PValue","name"))
 #' @importFrom stats as.formula
 
 #' @param data the input data (should be an SCE object)
-#' @param range_downsampled range of values to be downsampled for, in ascending order
+#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param output_path base path in which outputs will be stored
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
@@ -23,7 +23,7 @@ utils::globalVariables(c("PValue","name"))
 #' @param pval_adjust_method the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
 #' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
 
-#' Saves all DE outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells
+#' Saves all DGE analysis outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells
 
 downsampling_DEanalysis <- function(data,
                                     range_downsampled="placeholder",
@@ -44,7 +44,7 @@ downsampling_DEanalysis <- function(data,
                                     rmv_zero_count_genes=TRUE){
 
     # alter range_downsampled
-    if(range_downsampled=="placeholder"){
+    if(identical(range_downsampled,"placeholder")){
         range_downsampled <- downsampling_range(data, sampled, sampleID)
     }
     # alter design

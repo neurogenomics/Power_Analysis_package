@@ -7,7 +7,7 @@
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 
-#' @return a list of values to be downsampled at
+#' @return list containing values which the data will be downsampled at, in ascending order
 
 downsampling_range <- function(data,
                                sampled="individuals",

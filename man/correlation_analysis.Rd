@@ -34,7 +34,7 @@ correlation_analysis(
 \item{numSubsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
 
 \item{output_path}{base path in which outputs will be stored
-Saves all plots and DE outputs in the appropriate directories}
+Saves all plots and DGE analysis outputs in the appropriate directories}
 }
 \description{
 Runs correlation analysis pipeline

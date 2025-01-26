@@ -1,7 +1,7 @@
 # Define global variables
 utils::globalVariables(c(".","dataset"))
 
-#' For a given down-sampled DE output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)
+#' For a given down-sampled DGE analysis output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)
 
 #' @importFrom ggcorrplot ggcorrplot
 #' @importFrom data.table rbindlist setkey

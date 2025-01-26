@@ -27,9 +27,9 @@ power_analysis(
 \arguments{
 \item{data}{the input data (should be an SCE object)}
 
-\item{range_downsampled_individuals}{range of values to downsample individuals for}
+\item{range_downsampled_individuals}{vector or list containing values which the data will be downsampled at (for individuals), in ascending order}
 
-\item{range_downsampled_cells}{range of values to downsample cells for}
+\item{range_downsampled_cells}{vector or list containing values which the data will be downsampled at (for cells), in ascending order}
 
 \item{output_path}{base path in which outputs will be stored}
 
@@ -58,7 +58,7 @@ power_analysis(
 \item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
 
 \item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
-Saves all plots and DE outputs in the appropriate directories}
+Saves all plots and DGE analysis outputs in the appropriate directories}
 }
 \description{
 Runs entire power analysis pipeline

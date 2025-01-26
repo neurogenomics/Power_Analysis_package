@@ -40,7 +40,9 @@ Imports:
     stringr,
     gridExtra,
     ggcorrplot,
-    infotheo
+    infotheo,
+    RColorBrewer,
+    grDevices
 Suggests: 
     knitr,
     rmarkdown,

@@ -48,7 +48,7 @@ plot_mean_correlation <- function(dataset_name,
         meanCorr <- Reduce("+",allCorrs)/length(allCorrs)
 
         # rename columns and rows
-        if(data_names!="placeholder"&&is.vector(data_names)){
+        if(!identical(data_names,"placeholder")&&is.vector(data_names)){
             rownames(meanCorr) <- colnames(meanCorr) <- data_names
         }
 

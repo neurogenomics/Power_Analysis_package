@@ -13,9 +13,9 @@ utils::globalVariables(c("design","PValue","logFC","name","variable"))
 #' @importFrom gridExtra arrangeGrob
 
 #' @param data the input data (should be an SCE object)
-#' @param range_downsampled range of values to be downsampled for, in ascending order
+#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param output_path base path in which outputs will be stored
-#' @param inpath base path where downsampled DE output is stored (taken to be output_path if not provided)
+#' @param inpath base path where downsampled DGE analysis output is stored (taken to be output_path if not provided)
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 #' @param celltypeID cell type ID
@@ -49,7 +49,7 @@ power_plots <- function(data,
                         rmv_zero_count_genes=TRUE){
 
     # alter range_downsampled
-    if(range_downsampled=="placeholder"){
+    if(identical(range_downsampled,"placeholder")){
         range_downsampled <- downsampling_range(data, sampled, sampleID)
     }
     # alter inpath
@@ -244,7 +244,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr)
                     # add numDEGs for each permutation
@@ -332,7 +332,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr&logFC>0)
                     # add numDEGs for each permutation
@@ -420,7 +420,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr&logFC<0)
                     # add numDEGs for each permutation
@@ -508,7 +508,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr)$name
                     allgenes_tmp <- get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]]
@@ -563,7 +563,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr)$name
                     # get true positives
@@ -617,7 +617,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr)
                     # get numTPs for each range
@@ -729,7 +729,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval)
                     # add numDEGs for each permutation
@@ -817,7 +817,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval&logFC>0)
                     # add numDEGs for each permutation
@@ -905,7 +905,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval&logFC<0)
                     # add numDEGs for each permutation
@@ -993,7 +993,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval)$name
                     allgenes_tmp <- get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]]
@@ -1048,7 +1048,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval)$name
                     # get true positives
@@ -1102,7 +1102,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval)
                     # get numTPs for each range
@@ -1244,7 +1244,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr)
                     # add numDEGs for each permutation
@@ -1332,7 +1332,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr&logFC>0)
                     # add numDEGs for each permutation
@@ -1420,7 +1420,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr&logFC<0)
                     # add numDEGs for each permutation
@@ -1508,7 +1508,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr)$name
                     allgenes_tmp <- get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]]
@@ -1563,7 +1563,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr)$name
                     # get true positives
@@ -1617,7 +1617,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], adj_pval<fdr)
                     # get numTPs for each range
@@ -1729,7 +1729,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval)
                     # add numDEGs for each permutation
@@ -1817,7 +1817,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval&logFC>0)
                     # add numDEGs for each permutation
@@ -1905,7 +1905,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval&logFC<0)
                     # add numDEGs for each permutation
@@ -1993,7 +1993,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval)$name
                     allgenes_tmp <- get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]]
@@ -2048,7 +2048,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval)$name
                     # get true positives
@@ -2102,7 +2102,7 @@ power_plots <- function(data,
                     setwd(subpath)
                     # get samples
                     samples <- strsplit(subfolder,"_")[[1]][[1]]
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",subfolder,".RData"))
                     degs <- subset(get(paste0("DEout_",samples))$celltype_all_genes[[celltype_name]], PValue<nom_pval)
                     # get numTPs for each range

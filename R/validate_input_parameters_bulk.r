@@ -1,0 +1,172 @@
+#' Tests input parameters for functions
+
+#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
+#' @param inpath path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
+#' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
+#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
+#' @param bulk_cutoff percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset
+#' @param pvalue the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)
+#' @param celltype_names list of the names specifying cell types in each DGE analysis output (in order they appear in the directory)
+#' @param datasets2 list of datasets to be used, with celltype names (in DGE analysis outputs) as celltype_names2
+#' @param celltype_names2 alt. list of the names specifying cell types in each DGE analysis output (in order they appear in the directory), if all are not the same as celltype
+#' @param Nperms number of permutations of DGE analysis outputs for each sample
+#' @param fontsize_axislabels font size for axis labels in plot
+#' @param fontsize_axisticks font size for axis tick labels in plot
+#' @param fontsize_title font size for plot title
+#' @param fontsize_legendlabels font size for legend labels in plot
+#' @param fontsize_legendtitle font size for legend title in plot
+#' @param plot_title plot title
+
+#' Checks all bulk analysis parameters are specified correctly
+
+validate_input_parameters_bulk <- function(bulkDE="placeholder",
+                                           inpath="placeholder",
+                                           range_downsampled="placeholder",
+                                           celltype="placeholder",
+                                           sampled="placeholder",
+                                           bulk_cutoff="placeholder",
+                                           pvalue="placeholder",
+                                           celltype_names="placeholder",
+                                           datasets2="placeholder",
+                                           celltype_names2="placeholder",
+                                           Nperms="placeholder",
+                                           fontsize_axislabels="placeholder",
+                                           fontsize_axisticks="placeholder",
+                                           fontsize_title="placeholder",
+                                           fontsize_legendlabels="placeholder",
+                                           fontsize_legendtitle="placeholder",
+                                           plot_title="placeholder"){
+
+    # test each parameter to check if it works
+    if(bulkDE!="placeholder"){
+        if(class(bulkDE)!="data.frame"){
+            stop("Error: bulkDE should be a dataframe with rows being genes, columns being tissues and entries being significance level")
+        }
+    }
+    if(inpath!="placeholder"){
+        if(!is.character(inpath)){
+            stop("Error: inpath should be a string specifying the base path where down-sampled DE analysis outputs are saved.")        
+        }
+        if(!dir.exists(inpath)){
+            stop("Error: the specified inpath directory does not exist.")
+        }    
+    }
+    if(!identical(range_downsampled,"placeholder")){
+        if(class(range_downsampled)=="character"){
+            stop("Error: range_downsampled should be a list or numeric vector containing the values to be downsampled at.")
+        }else{
+            if(!is.list(range_downsampled)&!is.numeric(range_downsampled)){
+                stop("Error: range_downsampled should be a list or numeric vector containing the values to be downsampled at.")
+            }else if(is.unsorted(unlist(range_downsampled))|!sum(1*(range_downsampled > 0))==length(range_downsampled)){
+                stop("Error: range_downsampled should be an ascending list with all elements bigger than 0.")
+            }
+        }
+    }
+    if(celltype!="placeholder"){
+        if(!is.character(celltype)){
+            stop("Error: celltype should be a string specifying the cell type.")
+        }
+    }
+    if(sampled!="placeholder"){
+        if(sampled!="individuals"){
+            if(!is.character(sampled)){
+                stop("Error: sampled should be a string specifying what we are downsampling based on.")
+            }
+            if(sampled!="cells"){
+                stop("Error: sampled should either be set to individuals or cells.")
+            }
+        }
+    }
+    if(bulk_cutoff!="placeholder"){
+        if(class(bulk_cutoff)!="numeric"){
+            stop("Error: bulk_cutoff should be numerical.")
+        }else{
+            if(bulk_cutoff<0|bulk_cutoff>1){
+                stop("Error: bulk_cutoff should be between 0 and 1.")
+            }
+        }
+    }
+    if(pvalue!="placeholder"){
+        if(class(pvalue)!="numeric"){
+            stop("Error: pvalue should be numerical.")
+        }else{
+            if(pvalue<0|pvalue>1){
+                stop("Error: pvalue should be between 0 and 1.")
+            }
+        }
+    }
+    if(!identical(celltype_names,"placeholder")){
+        if(class(celltype_names)!="character"&!is.list(celltype_names)){
+            stop("Error: celltype_names should be a list or vector containing the names of cell types as they appear in the DGE analysis outputs.")
+        }
+        if(class(fontsize_axislabels)!="numeric"){
+            stop("Error: fontsize_axislabels should be numerical.")
+        }else{
+            if(fontsize_axislabels-floor(fontsize_axislabels)!=0|fontsize_axislabels<0){
+                stop("Error: fontsize_axislabels should be a positive integer.")
+            }
+        }
+    }
+    if(!identical(datasets2,"placeholder")){
+        if(class(datasets2)!="character"){
+            stop("Error: datasets2 should be a list or vector containing any datasets with cell type names not as in celltype_names.")
+        }
+    }
+    if(!identical(celltype_names2,"placeholder")){
+        if(class(celltype_names2)!="character"&!is.list(celltype_names2)){
+            stop("Error: celltype_names2 should be a list or vector containing the names of cell types as they appear in the DGE analysis outputs for datasets in datasets2.")
+        }
+    }
+    if(Nperms!="placeholder"){
+        if(class(Nperms)!="numeric"){
+            stop("Error: Nperms should be numerical.")
+        }else{
+            if(Nperms < 0|Nperms%%1!=0){
+                stop("Error: Nperms should be a positive integer.")
+            }
+        }
+    }
+    if(fontsize_axisticks!="placeholder"){
+        if(class(fontsize_axisticks)!="numeric"){
+            stop("Error: fontsize_axisticks should be numerical.")
+        }else{
+            if(fontsize_axisticks-floor(fontsize_axisticks)!=0|fontsize_axisticks<0){
+                stop("Error: fontsize_axisticks should be a positive integer.")
+            }
+        }
+    }
+    if(fontsize_title!="placeholder"){
+        if(class(fontsize_title)!="numeric"){
+            stop("Error: fontsize_title should be numerical.")
+        }else{
+            if(fontsize_title-floor(fontsize_title)!=0|fontsize_title<0){
+                stop("Error: fontsize_title should be a positive integer.")
+            }
+        }
+    }
+    if(fontsize_legendlabels!="placeholder"){
+        if(class(fontsize_legendlabels)!="numeric"){
+            stop("Error: fontsize_legendlabels should be numerical.")
+        }else{
+            if(fontsize_legendlabels-floor(fontsize_legendlabels)!=0|fontsize_legendlabels<0){
+                stop("Error: fontsize_legendlabels should be a positive integer.")
+            }
+        }
+    }
+    if(fontsize_legendtitle!="placeholder"){
+        if(class(fontsize_legendtitle)!="numeric"){
+            stop("Error: fontsize_legendtitle should be numerical.")
+        }else{
+            if(fontsize_legendtitle-floor(fontsize_legendtitle)!=0|fontsize_legendtitle<0){
+                stop("Error: fontsize_legendtitle should be a positive integer.")
+            }
+        }
+    }
+    if(plot_title!="placeholder"){
+        if(class(plot_title)!="character"){
+            stop("Error: plot_title should be text.")
+        }
+    }
+
+}

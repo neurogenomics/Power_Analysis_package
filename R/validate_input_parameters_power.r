@@ -1,9 +1,9 @@
 #' Tests input parameters for functions
 
 #' @param data the input data (should be an SCE object)
-#' @param range_downsampled range of values to be downsampled for, in ascending order
+#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param output_path base path in which outputs will be stored
-#' @param inpath base path where downsampled DE output is stored (taken to be output_path if not provided)
+#' @param inpath base path where downsampled DGE analysis output is stored (taken to be output_path if not provided)
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
@@ -55,7 +55,7 @@ validate_input_parameters_power <- function(data="placeholder",
         stop("Error: data should be a SingleCellExperiment object.")
     }
     if(class(range_downsampled)=="character"){
-        if(range_downsampled!="placeholder"){
+        if(!identical(range_downsampled,"placeholder")){
             stop("Error: range_downsampled should be a list or numeric vector containing the values to be downsampled at.")
         }
     }else{

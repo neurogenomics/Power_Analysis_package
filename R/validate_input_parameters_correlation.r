@@ -46,12 +46,12 @@ validate_input_parameters_correlation <- function(dataset_name="placeholder",
             stop("Error: dataset_name should be a string")
         }
     }
-    if(allstudies!="placeholder"){
+    if(!identical(allstudies,"placeholder")){
         if(class(allstudies)!="list"){
             stop("Error: allstudies should be a list")
         }
     }
-    if(celltypes!="placeholder"){    
+    if(!identical(celltypes,"placeholder")){    
         if(!is.character(celltypes)){
             stop("Error: celltypes should be a list containing strings specifying the celltypes")
         }
@@ -61,10 +61,10 @@ validate_input_parameters_correlation <- function(dataset_name="placeholder",
             stop("Error: pvalue should be a (positive) number between 0 and 1")
         }
     }
-    if(data_names!="placeholder" && !is.vector(data_names)){
+    if(!identical(data_names,"placeholder") && !is.vector(data_names)){
         stop("Error: data_names should be a list containing the names of all datasets as should appear in the final output (if these are different to the names in allstudies)")
     }
-    if(corrMats!="placeholder"){
+    if(!identical(corrMats,"placeholder")){
         if(class(corrMats)!="list"){
             stop("Error: corrMats should be a list of matrices")
         }

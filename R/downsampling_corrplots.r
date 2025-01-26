@@ -6,9 +6,9 @@
 #' @importFrom ggcorrplot ggcorrplot
 
 #' @param data the input data (should be an SCE object)
-#' @param range_downsampled range of values to be downsampled for, in ascending order
+#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param output_path base path in which outputs will be stored
-#' @param inpath base path where downsampled DE output folders are stored (taken to be output_path if not provided)
+#' @param inpath base path where downsampled DGE analysis output folders are stored (taken to be output_path if not provided)
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 #' @param celltypeID cell type ID
@@ -38,7 +38,7 @@ downsampling_corrplots <- function(data,
                                    rmv_zero_count_genes=TRUE){
     
     # alter range_downsampled
-    if(range_downsampled=="placeholder"){
+    if(identical(range_downsampled,"placeholder")){
         range_downsampled <- downsampling_range(data, sampled, sampleID)
     }
     # alter inpath
@@ -106,7 +106,7 @@ downsampling_corrplots <- function(data,
                     # go into permutation
                     subpath <- paste0(newpath,"/",paste0(num_samples,"_",i))
                     setwd(subpath)
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",num_samples,"_",i,".RData"))
                     # get df for top 1000 genes
                     all_genes <- get(paste0("DEout_",num_samples))$celltype_all_genes[[celltype_name]]
@@ -153,7 +153,7 @@ downsampling_corrplots <- function(data,
                     # go into permutation
                     subpath <- paste0(newpath,"/",paste0(num_samples,"_",i))
                     setwd(subpath)
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",num_samples,"_",i,".RData"))
                     # get df for top 500 genes
                     all_genes <- get(paste0("DEout_",num_samples))$celltype_all_genes[[celltype_name]]
@@ -206,7 +206,7 @@ downsampling_corrplots <- function(data,
                     # go into permutation
                     subpath <- paste0(newpath,"/",paste0(num_cells,"_",i))
                     setwd(subpath)
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",num_cells,"_",i,".RData"))
                     # get df for top 1000 genes
                     all_genes <- get(paste0("DEout_",num_cells))$celltype_all_genes[[celltype_name]]
@@ -239,7 +239,7 @@ downsampling_corrplots <- function(data,
         ggsave("meanCorr_downsampling_cells_1000.pdf",meanCorr_downsampling_cells_1000.plot,width=25,height=20,units="cm",bg="white")
 
         ## correlation using down-sampled datasets (cells) - top 500 genes
-        # load in DE outputs for down-sampled datasets, take union of DEGs across perms
+        # load in DGE analysis outputs for down-sampled datasets, take union of DEGs across perms
         setwd(path)
         # get corr matrices for each permutation
         corrMats_cells_500 <- list()
@@ -256,7 +256,7 @@ downsampling_corrplots <- function(data,
                     # go into permutation
                     subpath <- paste0(newpath,"/",paste0(num_cells,"_",i))
                     setwd(subpath)
-                    # read DE output
+                    # read DGE analysis output
                     load(paste0("DEout",num_cells,"_",i,".RData"))
                     # get df for top 500 genes
                     all_genes <- get(paste0("DEout_",num_cells))$celltype_all_genes[[celltype_name]]

@@ -24,11 +24,11 @@ downsampling_corrplots(
 \arguments{
 \item{data}{the input data (should be an SCE object)}
 
-\item{range_downsampled}{range of values to be downsampled for, in ascending order}
+\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
 \item{output_path}{base path in which outputs will be stored}
 
-\item{inpath}{base path where downsampled DE output folders are stored (taken to be output_path if not provided)}
+\item{inpath}{base path where downsampled DGE analysis output folders are stored (taken to be output_path if not provided)}
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 

@@ -17,7 +17,7 @@ repo <- strsplit(URL,"/")[[1]][5]
 `r rworkflows::use_badges(add_hex = FALSE, add_authors = FALSE, add_codecov = FALSE, add_codecov_graphs = FALSE, add_license = FALSE)`
 `r badger::badge_license(license = rworkflows::get_description(refs = NULL)[[1]]$get_field("License"))`
 
-**Authors:** ***Salman Fawad, Alan Murphy, Nathan Skene***  
+**Authors:** ***Salman Fawad, Alan Murphy, Nathan Skene, Yunning Yuan***  
 **Updated:** ***`r format(Sys.Date(), '%b-%d-%Y')`***  
 
 

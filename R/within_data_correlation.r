@@ -55,7 +55,7 @@ within_data_correlation <- function(data,
 
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
-        stop("Error: DE output file (DEout.RData) for the full dataset is not in the specified (output_path) directory!")
+        stop("Error: DGE analysis output file (DEout.RData) for the full dataset is not in the specified (output_path) directory!")
     }else{
         load(paste0(output_path,"/DEout.RData"))
     }

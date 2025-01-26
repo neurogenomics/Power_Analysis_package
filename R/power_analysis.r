@@ -6,8 +6,8 @@ utils::globalVariables(c("dataset"))
 #' @importFrom stats as.formula
 
 #' @param data the input data (should be an SCE object)
-#' @param range_downsampled_individuals range of values to downsample individuals for
-#' @param range_downsampled_cells range of values to downsample cells for
+#' @param range_downsampled_individuals vector or list containing values which the data will be downsampled at (for individuals), in ascending order
+#' @param range_downsampled_cells vector or list containing values which the data will be downsampled at (for cells), in ascending order
 #' @param output_path base path in which outputs will be stored
 #' @param sampleID sample ID
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
@@ -23,7 +23,7 @@ utils::globalVariables(c("dataset"))
 #' @param pval_adjust_method the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
 #' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
 
-#' Saves all plots and DE outputs in the appropriate directories
+#' Saves all plots and DGE analysis outputs in the appropriate directories
 #' @export
 
 power_analysis <- function(data,
@@ -47,11 +47,11 @@ power_analysis <- function(data,
     setwd(output_path)
 
     # alter range_downsampled_individuals
-    if(range_downsampled_individuals=="placeholder"){
+    if(identical(range_downsampled_individuals,"placeholder")){
         range_downsampled_individuals <- downsampling_range(data, "individuals", sampleID)
     }
     # alter range_downsampled_cells
-    if(range_downsampled_cells=="placeholder"){
+    if(identical(range_downsampled_cells,"placeholder")){
         range_downsampled_cells <- downsampling_range(data, "cells", sampleID)
     }
     # alter design

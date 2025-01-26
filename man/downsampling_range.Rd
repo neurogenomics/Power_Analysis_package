@@ -14,7 +14,7 @@ downsampling_range(data, sampled = "individuals", sampleID = "Donor.ID")
 \item{sampleID}{sample ID}
 }
 \value{
-a list of values to be downsampled at
+list containing values which the data will be downsampled at, in ascending order
 }
 \description{
 Obtain the range of values to downsample at (either for individuals, or mean number of cells per individual)
