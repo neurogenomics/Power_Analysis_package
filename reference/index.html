@@ -67,7 +67,7 @@
       </tr><tr><td>
           <p><code><a href="compute_downsampled_corr.html">compute_downsampled_corr()</a></code> </p>
         </td>
-        <td><p>For a given down-sampled DE output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)</p></td>
+        <td><p>For a given down-sampled DGE analysis output, computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given dataset (celltype)</p></td>
       </tr><tr><td>
           <p><code><a href="correlation_analysis.html">correlation_analysis()</a></code> </p>
         </td>
@@ -92,6 +92,10 @@
           <p><code><a href="downsampling_range.html">downsampling_range()</a></code> </p>
         </td>
         <td><p>Obtain the range of values to downsample at (either for individuals, or mean number of cells per individual)</p></td>
+      </tr><tr><td>
+          <p><code><a href="gather_celltype_DEGs.html">gather_celltype_DEGs()</a></code> </p>
+        </td>
+        <td><p>Collate DEGs detected in DGE analysis outputs, across all celltypes in a dataset (datasets/DGE analysis outputs should have common celltypes as specified below)</p></td>
       </tr><tr><td>
           <p><code><a href="make_pseudobulk.html">make_pseudobulk()</a></code> </p>
         </td>
@@ -121,6 +125,14 @@
         </td>
         <td><p>Create preliminary plots for data exploration</p></td>
       </tr><tr><td>
+          <p><code><a href="prop_bulk_DEGs_sc.html">prop_bulk_DEGs_sc()</a></code> </p>
+        </td>
+        <td><p>Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all cell types</p></td>
+      </tr><tr><td>
+          <p><code><a href="prop_bulk_DEGs_sc_celltype.html">prop_bulk_DEGs_sc_celltype()</a></code> </p>
+        </td>
+        <td><p>Obtain percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, for a specified cell type</p></td>
+      </tr><tr><td>
           <p><code><a href="random_permutations.html">random_permutations()</a></code> </p>
         </td>
         <td><p>Obtain highly randomised permutations of a specified dataset (based on sex labels), while maintaining consistency with the sample ID</p></td>
@@ -140,6 +152,10 @@
           <p><code><a href="subset_pairs.html">subset_pairs()</a></code> </p>
         </td>
         <td><p>Obtain independent pairs of subsets of a specified dataset, based on sample ID</p></td>
+      </tr><tr><td>
+          <p><code><a href="validate_input_parameters_bulk.html">validate_input_parameters_bulk()</a></code> </p>
+        </td>
+        <td><p>Tests input parameters for functions</p></td>
       </tr><tr><td>
           <p><code><a href="validate_input_parameters_correlation.html">validate_input_parameters_correlation()</a></code> </p>
         </td>

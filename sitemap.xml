@@ -15,6 +15,7 @@
 <url><loc>/reference/downsampling_DEanalysis.html</loc></url>
 <url><loc>/reference/downsampling_corrplots.html</loc></url>
 <url><loc>/reference/downsampling_range.html</loc></url>
+<url><loc>/reference/gather_celltype_DEGs.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
 <url><loc>/reference/make_pseudobulk.html</loc></url>
 <url><loc>/reference/plot_celltype_correlation.html</loc></url>
@@ -23,11 +24,14 @@
 <url><loc>/reference/power_analysis.html</loc></url>
 <url><loc>/reference/power_plots.html</loc></url>
 <url><loc>/reference/preliminary_plots.html</loc></url>
+<url><loc>/reference/prop_bulk_DEGs_sc.html</loc></url>
+<url><loc>/reference/prop_bulk_DEGs_sc_celltype.html</loc></url>
 <url><loc>/reference/random_permutations.html</loc></url>
 <url><loc>/reference/sample_cells.html</loc></url>
 <url><loc>/reference/sample_individuals.html</loc></url>
 <url><loc>/reference/sex_chromosome_DEGs.html</loc></url>
 <url><loc>/reference/subset_pairs.html</loc></url>
+<url><loc>/reference/validate_input_parameters_bulk.html</loc></url>
 <url><loc>/reference/validate_input_parameters_correlation.html</loc></url>
 <url><loc>/reference/validate_input_parameters_de.html</loc></url>
 <url><loc>/reference/validate_input_parameters_power.html</loc></url>
