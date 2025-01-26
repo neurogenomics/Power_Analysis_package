@@ -9,7 +9,7 @@ status](https://github.com/neurogenomics/Power_Analysis_package/workflows/rworkf
 <br> [![License: MIT + file
 LICENSE](https://img.shields.io/badge/license-MIT%20+%20file%20LICENSE-blue.svg)](https://cran.r-project.org/web/licenses/MIT%20+%20file%20LICENSE)
 
-**Authors:** ***Salman Fawad, Alan Murphy, Nathan Skene***  
+**Authors:** ***Salman Fawad, Alan Murphy, Nathan Skene, Yunning Yuan***  
 **Updated:** ***Oct-16-2024***
 
 ## Introduction
