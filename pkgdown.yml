@@ -3,5 +3,4 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   getting_started: getting_started.html
-  poweranalysis: poweranalysis.html
-last_built: 2025-01-26T06:25Z
+last_built: 2025-02-06T14:48Z
