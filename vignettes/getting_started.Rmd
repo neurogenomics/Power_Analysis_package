@@ -21,22 +21,24 @@ pkg <- read.dcf("../DESCRIPTION", fields = "Package")[1]
 library(pkg, character.only = TRUE)
 ```
 
+
 The *poweranalysis* R package is designed to run robust power analysis for differential gene expression in scRNA-seq studies and provides tools to estimate the optimal number of samples and cells needed to achieve reliable power levels.
 
-## Setup
-```{r setup}
-library(poweranalysis)
+```{r setup, include=FALSE}
+library(ggplot2)
+```
+
+```R
+library(`r pkg`)
 ```
 
 ## Differential Gene Expression (DGE) Analysis
 Import an SCE object and perform differential expression analysis using a pseudobulking approach, enabling the robust identification of differentially expressed genes (DEGs) across conditions or groups from single-cell data. <br>
-**Example Usage**: <br>
 To run the DGE analysis, first load your own SingleCellExperiment (SCE) object.
 
 ```{r, message=FALSE, warning=FALSE}
 # Load your SCE object (replace with actual file path)
 library(qs)
-library(SingleCellExperiment)
 
 SCE <- qs::qread("./data/sce.qs")
 ```
@@ -47,29 +49,53 @@ To use the `DGE_analysis` function, specify the formula for comparison along wit
 
 · **`coef`**: A character string that specifies which group in the `design` formula you want to investigate for differential expression. <br>
 
-For example, to validate the differential expression (DEG) analysis approach, you can run a comparison between sexes using the <i>formula = ~ sex. </i>. This will assess how gene expression differs between male and female groups. 
+**Example Usage**: <br>
+To validate the differential expression (DEG) analysis approach, you can run a comparison between sexes using the <i>formula = ~ sex. </i>. This will assess how gene expression differs between male and female groups. 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # Run the DGE_analysis function for a sex comparison
 DGE_analysis.sex <- DGE_analysis(
   SCE,
   design = ~ sex,
+  coef = "M",
   pseudobulk_ID = "sample_id",
-  celltype_ID = "cluster_celltype",
-  coef = "M"
+  celltype_ID = "cluster_celltype"
 )
 ```
 
 If you want to compare disease and control conditions, specify the disease status in the formula and the disease group of interest in the coef.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # Run the DGE_analysis function for a disease vs. control comparison
-DGE_analysis.AD_sex <- DGE_analysis(
+DGE_analysis.AD <- DGE_analysis(
   SCE,
   design = ~ pathological_diagnosis,
+  coef = "AD",
   pseudobulk_ID = "sample_id",
-  celltype_ID = "cluster_celltype",
-  coef = "AD"
+  celltype_ID = "cluster_celltype"
 )
 ```
 
+
+## Power Analysis
+Assess the accuracy of DEG detection in scRNA-seq data by systematically down-sampling the dataset at varying numbers of individuals and cells. DEGs identified in each subset are compared to those from the full dataset to compute the percentage of True Positive (PTP) DEGs recovered and the False Discovery Rate (FDR). <br>
+
+To perform power analysis based on sex-specific DEGs, use the following function:
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+# Run the power_analysis function for a sex comparison
+power_analysis.sex <- power_analysis(
+  SCE,
+  design = ~ sex,
+  coef = "M",
+  sampleID = "sample_id",
+  celltypeID = "cluster_celltype")
+```
+
+The `power_analysis` function generates several key outputs:  
+
+- **QC plots** display distributions of effect sizes (log2 fold-change) across detected DEGs and the number of cells per individual in the full dataset.  
+- **DGE analysis results** identify PTP DEGs and non-DEGs using a 0.05 cut-off on both nominal and adjusted p-values.  
+- **Power plots** show the mean percentage of PTP DEGs detected and FDR trends as sample size increases.  
+- **Effect size-specific detection rates** assess DEG recovery across different absolute log2 fold-change bins.  
+- **Correlation plots** compare effect sizes for significant DEGs across down-sampling levels.
