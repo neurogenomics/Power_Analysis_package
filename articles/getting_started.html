@@ -83,7 +83,7 @@ Skene</i><br>
             
             <h4 data-toc-skip class="date"><h4>
 <br>
-Vignette updated: <i>Feb-06-2025</i><br>
+Vignette updated: <i>Feb-17-2025</i><br>
 </h4></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/vignettes/getting_started.Rmd" class="external-link"><code>vignettes/getting_started.Rmd</code></a></small>
@@ -97,24 +97,19 @@ Vignette updated: <i>Feb-06-2025</i><br>
 analysis for differential gene expression in scRNA-seq studies and
 provides tools to estimate the optimal number of samples and cells
 needed to achieve reliable power levels.</p>
-<div class="section level2">
-<h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
-</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/Power_Analysis_package" class="external-link">poweranalysis</a></span><span class="op">)</span></span></code></pre></div>
-</div>
 <div class="section level2">
 <h2 id="differential-gene-expression-dge-analysis">Differential Gene Expression (DGE) Analysis<a class="anchor" aria-label="anchor" href="#differential-gene-expression-dge-analysis"></a>
 </h2>
 <p>Import an SCE object and perform differential expression analysis
 using a pseudobulking approach, enabling the robust identification of
 differentially expressed genes (DEGs) across conditions or groups from
-single-cell data. <br><strong>Example Usage</strong>: <br> To run the
-DGE analysis, first load your own SingleCellExperiment (SCE) object.</p>
+single-cell data. <br> To run the DGE analysis, first load your own
+SingleCellExperiment (SCE) object.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load your SCE object (replace with actual file path)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs" class="external-link">qs</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">SCE</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"./data/sce.qs"</span><span class="op">)</span></span></code></pre></div>
 <p>To use the <code>DGE_analysis</code> function, specify the formula
@@ -127,59 +122,74 @@ groups.</p>
 <p>· <strong><code>coef</code></strong>: A character string that
 specifies which group in the <code>design</code> formula you want to
 investigate for differential expression. <br></p>
-<p>For example, to validate the differential expression (DEG) analysis
-approach, you can run a comparison between sexes using the <i>formula =
-~ sex. </i>. This will assess how gene expression differs between male
-and female groups.</p>
+<p><strong>Example Usage</strong>: <br> To validate the differential
+expression (DEG) analysis approach, you can run a comparison between
+sexes using the <i>formula = ~ sex. </i>. This will assess how gene
+expression differs between male and female groups.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run the DGE_analysis function for a sex comparison</span></span>
 <span><span class="va">DGE_analysis.sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DGE_analysis.html">DGE_analysis</a></span><span class="op">(</span></span>
 <span>  <span class="va">SCE</span>,</span>
 <span>  design <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span>,</span>
+<span>  coef <span class="op">=</span> <span class="st">"M"</span>,</span>
 <span>  pseudobulk_ID <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
-<span>  celltype_ID <span class="op">=</span> <span class="st">"cluster_celltype"</span>,</span>
-<span>  coef <span class="op">=</span> <span class="st">"M"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Caused by error in `get()`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> object 'mean_cl_normal' of mode 'function' was not found</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">shape</span> values.</span></span>
-<span><span class="co">#&gt; Warning: Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Caused by error in `get()`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> object 'mean_cl_normal' of mode 'function' was not found</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">shape</span> values.</span></span></code></pre></div>
+<span>  celltype_ID <span class="op">=</span> <span class="st">"cluster_celltype"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>If you want to compare disease and control conditions, specify the
 disease status in the formula and the disease group of interest in the
 coef.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run the DGE_analysis function for a disease vs. control comparison</span></span>
-<span><span class="va">DGE_analysis.AD_sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DGE_analysis.html">DGE_analysis</a></span><span class="op">(</span></span>
+<span><span class="va">DGE_analysis.AD</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DGE_analysis.html">DGE_analysis</a></span><span class="op">(</span></span>
 <span>  <span class="va">SCE</span>,</span>
 <span>  design <span class="op">=</span> <span class="op">~</span> <span class="va">pathological_diagnosis</span>,</span>
+<span>  coef <span class="op">=</span> <span class="st">"AD"</span>,</span>
 <span>  pseudobulk_ID <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
-<span>  celltype_ID <span class="op">=</span> <span class="st">"cluster_celltype"</span>,</span>
-<span>  coef <span class="op">=</span> <span class="st">"AD"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Caused by error in `get()`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> object 'mean_cl_normal' of mode 'function' was not found</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">shape</span> values.</span></span>
-<span><span class="co">#&gt; Warning: Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Computation failed in `stat_summary()`.</span></span>
-<span><span class="co">#&gt; Caused by error in `get()`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> object 'mean_cl_normal' of mode 'function' was not found</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">shape</span> values.</span></span></code></pre></div>
+<span>  celltype_ID <span class="op">=</span> <span class="st">"cluster_celltype"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="power-analysis">Power Analysis<a class="anchor" aria-label="anchor" href="#power-analysis"></a>
+</h2>
+<p>Assess the accuracy of DEG detection in scRNA-seq data by
+systematically down-sampling the dataset at varying numbers of
+individuals and cells. DEGs identified in each subset are compared to
+those from the full dataset to compute the percentage of True Positive
+(PTP) DEGs recovered and the False Discovery Rate (FDR). <br></p>
+<p>To perform power analysis based on sex-specific DEGs, use the
+following function:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Run the power_analysis function for a sex comparison</span></span>
+<span><span class="va">power_analysis.sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/power_analysis.html">power_analysis</a></span><span class="op">(</span></span>
+<span>  <span class="va">SCE</span>,</span>
+<span>  design <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span>,</span>
+<span>  coef <span class="op">=</span> <span class="st">"M"</span>,</span>
+<span>  sampleID <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
+<span>  celltypeID <span class="op">=</span> <span class="st">"cluster_celltype"</span><span class="op">)</span></span></code></pre></div>
+<p>The <code>power_analysis</code> function generates several key
+outputs:</p>
+<ul>
+<li>
+<strong>QC plots</strong> display distributions of effect sizes
+(log2 fold-change) across detected DEGs and the number of cells per
+individual in the full dataset.<br>
+</li>
+<li>
+<strong>DGE analysis results</strong> identify PTP DEGs and non-DEGs
+using a 0.05 cut-off on both nominal and adjusted p-values.<br>
+</li>
+<li>
+<strong>Power plots</strong> show the mean percentage of PTP DEGs
+detected and FDR trends as sample size increases.<br>
+</li>
+<li>
+<strong>Effect size-specific detection rates</strong> assess DEG
+recovery across different absolute log2 fold-change bins.<br>
+</li>
+<li>
+<strong>Correlation plots</strong> compare effect sizes for
+significant DEGs across down-sampling levels.</li>
+</ul>
 </div>
   </div>
 
