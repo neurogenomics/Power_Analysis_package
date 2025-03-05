@@ -6,7 +6,7 @@
 \usage{
 prop_bulk_DEGs_sc(
   bulkDE,
-  inpath,
+  path,
   range_downsampled,
   bulk_cutoff = 0.9,
   pvalue = 0.05,
@@ -21,7 +21,7 @@ prop_bulk_DEGs_sc(
 \arguments{
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
-\item{inpath}{path storing the down-sampled DGE analysis outputs for each dataset}
+\item{path}{path storing the down-sampled DGE analysis outputs for each dataset}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 

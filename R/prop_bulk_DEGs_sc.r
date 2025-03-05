@@ -11,7 +11,7 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 #' @importFrom cowplot theme_cowplot
 
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param inpath path storing the down-sampled DGE analysis outputs for each dataset
+#' @param path path storing the down-sampled DGE analysis outputs for each dataset
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param bulk_cutoff percentage (proportion), specified so that we select DEGs common across >=bulk_cutoff of the tissues in the Bulk dataset
 #' @param pvalue the cut-off p-value used to select DEGs (for bulk data)
@@ -25,7 +25,7 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 #' @return plot showing percentage DEGs from bulk data found in each scRNA-seq dataset
 
 prop_bulk_DEGs_sc <- function(bulkDE,
-                              inpath,
+                              path,
                               range_downsampled,
                               bulk_cutoff=0.9,
                               pvalue=0.05,
@@ -37,7 +37,7 @@ prop_bulk_DEGs_sc <- function(bulkDE,
                               plot_title="placeholder"){
 
     # validate function input params
-    validate_input_parameters_bulk(bulkDE=bulkDE, inpath=inpath, range_downsampled=range_downsampled,
+    validate_input_parameters_bulk(bulkDE=bulkDE, path=path, range_downsampled=range_downsampled,
                                    bulk_cutoff=bulk_cutoff,pvalue=pvalue, fontsize_axislabels=fontsize_axislabels,
                                    fontsize_axisticks=fontsize_axisticks, fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels,
                                    fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)    
@@ -68,10 +68,10 @@ prop_bulk_DEGs_sc <- function(bulkDE,
     NumSamples <- c()
     Perm <- c()
     PctDEGs <- c()
-    for(dataset in list.dirs(inpath,recursive=F,full.names=F)){
+    for(dataset in list.dirs(path,recursive=F,full.names=F)){
         print(paste0("Downsampling ",dataset))
         # go inside dataset directory overall folder, downsampling folder
-        data_dir <- paste0(inpath, "/", dataset, "/Overall/DE_downsampling/")
+        data_dir <- paste0(path, "/", dataset, "/Overall/DE_downsampling/")
         setwd(data_dir)
         # go inside numSamples, if exists
         for(sample in range_downsampled){
@@ -134,7 +134,7 @@ prop_bulk_DEGs_sc <- function(bulkDE,
                                     scale_y_continuous(labels = function(x) round(x))+
                                     guides(fill = guide_legend(label.format = function(x) round(as.numeric(x))))+
                                     theme_cowplot()+
-                                    scale_fill_manual(values=generate_color_palette(length(list.dirs(inpath,recursive=F,full.names=F)),palette="Set1"))+
+                                    scale_fill_manual(values=generate_color_palette(length(list.dirs(path,recursive=F,full.names=F)),palette="Set1"))+
                                     labs(y="% DEGs", x="Number of Samples", fill="Dataset",title="Percentage DEGs from Bulk data detected when down-sampling scRNA-seq datasets (across all cell types)")+
                                     scale_alpha(guide = 'none')+
                                     theme(axis.title = element_text(size = fontsize_axislabels),
