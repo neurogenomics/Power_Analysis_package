@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/R/DGE_analysis.R" class="external-link"><code>R/DGE_analysis.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/DGE_analysis.R" class="external-link"><code>R/DGE_analysis.R</code></a></small>
     <div class="hidden name"><code>DGE_analysis.Rd</code></div>
     </div>
 
@@ -175,7 +175,7 @@ celltype_counts: vector with the counts of cells after QC in each cell type</p>
 <span class="r-in"><span>                  values <span class="op">=</span> <span class="va">genes</span>, mart<span class="op">=</span> <span class="va">mart</span>,useCache <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gene_IDs</span> <span class="op">&lt;-</span> <span class="fu">as.data.table</span><span class="op">(</span><span class="va">gene_IDs</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">setnames</span><span class="op">(</span><span class="va">gene_IDs</span>,<span class="st">"ensembl_gene_id"</span>,<span class="st">"name"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">DEGs</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="va">sc.cell.type.de.return</span><span class="op">$</span><span class="va">celltype_DEGs</span>,idcol<span class="op">=</span><span class="st">"celltype"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">DEGs</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="va">sc.cell.type.de.return</span><span class="op">$</span><span class="va">celltype_DEGs</span>,idcol<span class="op">=</span><span class="st">"celltype"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">setkey</span><span class="op">(</span><span class="va">DEGs</span>,<span class="va">name</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#append gene names</span></span></span>
 <span class="r-in"><span><span class="va">DEGs</span><span class="op">[</span>, <span class="va">gene_name</span> <span class="op">:=</span> <span class="va">gene_IDs</span><span class="op">[</span><span class="va">DEGs</span>, on<span class="op">=</span><span class="fu">.</span><span class="op">(</span><span class="va">name</span><span class="op">)</span>, <span class="va">x.hgnc_symbol</span><span class="op">]</span><span class="op">]</span></span></span>

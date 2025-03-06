@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, for a specified cell type</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/R/prop_bulk_DEGs_sc_celltype.r" class="external-link"><code>R/prop_bulk_DEGs_sc_celltype.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/prop_bulk_DEGs_sc_celltype.r" class="external-link"><code>R/prop_bulk_DEGs_sc_celltype.r</code></a></small>
     <div class="hidden name"><code>prop_bulk_DEGs_sc_celltype.Rd</code></div>
     </div>
 
@@ -62,13 +62,13 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prop_bulk_DEGs_sc_celltype</span><span class="op">(</span></span>
 <span>  <span class="va">bulkDE</span>,</span>
-<span>  <span class="va">inpath</span>,</span>
+<span>  <span class="va">path</span>,</span>
 <span>  <span class="va">range_downsampled</span>,</span>
+<span>  <span class="va">celltype_correspondence</span>,</span>
 <span>  celltype <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  sampled <span class="op">=</span> <span class="st">"individuals"</span>,</span>
 <span>  bulk_cutoff <span class="op">=</span> <span class="fl">0.9</span>,</span>
 <span>  pvalue <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  celltype_names <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  fontsize_axislabels <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  fontsize_axisticks <span class="op">=</span> <span class="fl">9</span>,</span>
 <span>  fontsize_title <span class="op">=</span> <span class="fl">14</span>,</span>
@@ -86,12 +86,16 @@
 <dd><p>DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels</p></dd>
 
 
-<dt id="arg-inpath">inpath<a class="anchor" aria-label="anchor" href="#arg-inpath"></a></dt>
+<dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>path storing the down-sampled DGE analysis for each single-cell dataset</p></dd>
 
 
 <dt id="arg-range-downsampled">range_downsampled<a class="anchor" aria-label="anchor" href="#arg-range-downsampled"></a></dt>
 <dd><p>vector or list containing values which the data will be downsampled at, in ascending order</p></dd>
+
+
+<dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
+<dd><p>list of different names specifying each cell type</p></dd>
 
 
 <dt id="arg-celltype">celltype<a class="anchor" aria-label="anchor" href="#arg-celltype"></a></dt>
@@ -108,10 +112,6 @@
 
 <dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
 <dd><p>the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)</p></dd>
-
-
-<dt id="arg-celltype-names">celltype_names<a class="anchor" aria-label="anchor" href="#arg-celltype-names"></a></dt>
-<dd><p>list of the names specifying this celltype in each DGE analysis output (in order they appear in the directory), if all are not the same as celltype</p></dd>
 
 
 <dt id="arg-fontsize-axislabels">fontsize_axislabels<a class="anchor" aria-label="anchor" href="#arg-fontsize-axislabels"></a></dt>

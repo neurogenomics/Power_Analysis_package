@@ -7,6 +7,9 @@
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/reference/DGE_analysis.html</loc></url>
+<url><loc>/reference/bulk_downsampling_DGEanalysis.html</loc></url>
+<url><loc>/reference/bulk_downsampling_range.html</loc></url>
+<url><loc>/reference/bulk_power_analysis.html</loc></url>
 <url><loc>/reference/compute_downsampled_corr.html</loc></url>
 <url><loc>/reference/correlation_analysis.html</loc></url>
 <url><loc>/reference/correlation_boxplots.html</loc></url>

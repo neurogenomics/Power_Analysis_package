@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all cell types</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/R/prop_bulk_DEGs_sc.r" class="external-link"><code>R/prop_bulk_DEGs_sc.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/prop_bulk_DEGs_sc.r" class="external-link"><code>R/prop_bulk_DEGs_sc.r</code></a></small>
     <div class="hidden name"><code>prop_bulk_DEGs_sc.Rd</code></div>
     </div>
 
@@ -62,7 +62,7 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prop_bulk_DEGs_sc</span><span class="op">(</span></span>
 <span>  <span class="va">bulkDE</span>,</span>
-<span>  <span class="va">inpath</span>,</span>
+<span>  <span class="va">path</span>,</span>
 <span>  <span class="va">range_downsampled</span>,</span>
 <span>  bulk_cutoff <span class="op">=</span> <span class="fl">0.9</span>,</span>
 <span>  pvalue <span class="op">=</span> <span class="fl">0.05</span>,</span>
@@ -83,7 +83,7 @@
 <dd><p>DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels</p></dd>
 
 
-<dt id="arg-inpath">inpath<a class="anchor" aria-label="anchor" href="#arg-inpath"></a></dt>
+<dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>path storing the down-sampled DGE analysis outputs for each dataset</p></dd>
 
 

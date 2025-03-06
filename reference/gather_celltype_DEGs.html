@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Collate DEGs detected in DGE analysis outputs, across all celltypes in a dataset (datasets/DGE analysis outputs should have common celltypes as specified below)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/R/gather_celltype_DEGs.r" class="external-link"><code>R/gather_celltype_DEGs.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/gather_celltype_DEGs.r" class="external-link"><code>R/gather_celltype_DEGs.r</code></a></small>
     <div class="hidden name"><code>gather_celltype_DEGs.Rd</code></div>
     </div>
 
@@ -61,11 +61,9 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gather_celltype_DEGs</span><span class="op">(</span></span>
-<span>  <span class="va">inpath</span>,</span>
+<span>  <span class="va">path</span>,</span>
 <span>  <span class="va">range_downsampled</span>,</span>
-<span>  <span class="va">celltype_names</span>,</span>
-<span>  <span class="va">datasets2</span>,</span>
-<span>  <span class="va">celltype_names2</span>,</span>
+<span>  <span class="va">celltype_correspondence</span>,</span>
 <span>  Nperms <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  pvalue <span class="op">=</span> <span class="fl">0.05</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -75,7 +73,7 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-inpath">inpath<a class="anchor" aria-label="anchor" href="#arg-inpath"></a></dt>
+<dl><dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis</p></dd>
 
 
@@ -83,16 +81,8 @@
 <dd><p>vector or list containing values which the data will be downsampled at, in ascending order</p></dd>
 
 
-<dt id="arg-celltype-names">celltype_names<a class="anchor" aria-label="anchor" href="#arg-celltype-names"></a></dt>
-<dd><p>list of the names specifying cell types in each DGE analysis output (in order they appear in the directory)</p></dd>
-
-
-<dt id="arg-datasets-">datasets2<a class="anchor" aria-label="anchor" href="#arg-datasets-"></a></dt>
-<dd><p>list of datasets to be used, with celltype names (in DGE analysis outputs) as celltype_names2</p></dd>
-
-
-<dt id="arg-celltype-names-">celltype_names2<a class="anchor" aria-label="anchor" href="#arg-celltype-names-"></a></dt>
-<dd><p>alt. list of the names specifying cell types in each DGE analysis output (in order they appear in the directory), if all are not the same as celltype</p></dd>
+<dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
+<dd><p>list of different names specifying each cell type</p></dd>
 
 
 <dt id="arg-nperms">Nperms<a class="anchor" aria-label="anchor" href="#arg-nperms"></a></dt>
