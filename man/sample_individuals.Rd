@@ -5,7 +5,7 @@
 \title{Sample the data for a specified number of individuals from the dataset}
 \usage{
 sample_individuals(
-  data,
+  SCE,
   Nsamples,
   sampleID = "Donor.ID",
   sexID = "sex",
@@ -13,7 +13,7 @@ sample_individuals(
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{Nsamples}{the number of samples to be included in each subset}
 
@@ -24,7 +24,7 @@ sample_individuals(
 \item{Nperms}{the number of subsets the user needs (default 20)}
 }
 \value{
-a list of size Nperms, with each item being a subset of the input SCE containing the specified number of individuals
+a list of size Nperms, with each item being a subset of the input data containing the specified number of individuals
 }
 \description{
 Sample the data for a specified number of individuals from the dataset

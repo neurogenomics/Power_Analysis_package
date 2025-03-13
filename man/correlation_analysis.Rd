@@ -5,23 +5,30 @@
 \title{Runs correlation analysis pipeline}
 \usage{
 correlation_analysis(
-  dataset_name = "placeholder",
-  allstudies = "placeholder",
-  celltypes = "placeholder",
+  dataset_name,
+  DEouts,
+  celltype_correspondence,
   pvals = c(0.05, 0.025, 0.01, 0.001, 1e-04),
   data_names = "placeholder",
-  alphaval = "placeholder",
-  numPerms = "placeholder",
-  numSubsets = "placeholder",
+  alphaval = 0.25,
+  N_randperms = 5,
+  N_subsets = 5,
+  sex_DEGs = FALSE,
+  fontsize_yaxislabels = 12,
+  fontsize_yaxisticks = 9,
+  fontsize_title = 14,
+  fontsize_legendlabels = 9,
+  fontsize_legendtitle = 9,
+  fontsize_facet_labels = 9,
   output_path = getwd()
 )
 }
 \arguments{
-\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in allstudies)}
+\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in DEouts)}
 
-\item{allstudies}{a list containing all the datasets (as SCE objects)}
+\item{DEouts}{a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis}
 
-\item{celltypes}{a list containing the celltypes to compute mean correlation across}
+\item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{pvals}{list of p-value cut-offs which will be used to select DEGs}
 
@@ -29,13 +36,39 @@ correlation_analysis(
 
 \item{alphaval}{(alpha) transparency of the non-mean boxplots}
 
-\item{numPerms}{number of random permutations of the dataset used to select significant DEGs from}
+\item{N_randperms}{number of random permutations of the dataset used to select significant DEGs from}
 
-\item{numSubsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
+\item{N_subsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
+
+\item{sex_DEGs}{true if DEGs come from sex chromosomes, else false}
+
+\item{fontsize_yaxislabels}{font size for axis labels in plot}
+
+\item{fontsize_yaxisticks}{font size for axis tick labels in plot}
+
+\item{fontsize_title}{font size for plot title}
+
+\item{fontsize_legendlabels}{font size for legend labels in plot}
+
+\item{fontsize_legendtitle}{font size for legend title in plot}
+
+\item{fontsize_facet_labels}{font size for facet labels}
 
 \item{output_path}{base path in which outputs will be stored
 Saves all plots and DGE analysis outputs in the appropriate directories}
 }
 \description{
 Runs correlation analysis pipeline
+}
+\examples{
+\dontrun{
+# Example of celltype_correspondence:
+celltype_correspondence <- list([overall_celltype_name1] = c([celltype1.1], [celltype1.2], ...),
+                                [overall_celltype_name2] = c([celltype2.1], [celltype2.2], ...),
+                                ...)
+# E.g.
+celltype_correspondence <- list("Microglia" = c("micro", "microglial cells", "Micro"),
+                               "Astrocytes" = c("Astrocytes", "astro"),
+                               "Oligodendrocytes" = c("oligo", "Oligodendrocytes"))
+}
 }

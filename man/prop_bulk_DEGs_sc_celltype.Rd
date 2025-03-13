@@ -6,27 +6,27 @@
 \usage{
 prop_bulk_DEGs_sc_celltype(
   bulkDE,
-  inpath,
   range_downsampled,
-  celltype = "placeholder",
+  celltype_correspondence,
+  celltype,
   sampled = "individuals",
   bulk_cutoff = 0.9,
   pvalue = 0.05,
-  celltype_names = "placeholder",
   fontsize_axislabels = 12,
   fontsize_axisticks = 9,
   fontsize_title = 14,
   fontsize_legendlabels = 9,
   fontsize_legendtitle = 9,
-  plot_title = "placeholder"
+  plot_title = "placeholder",
+  output_path = getwd()
 )
 }
 \arguments{
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
-\item{inpath}{path storing the down-sampled DGE analysis for each single-cell dataset}
-
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
+
+\item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{celltype}{the cell type we are focusing on (name as it appears in cell type sub-directory name)}
 
@@ -35,8 +35,6 @@ prop_bulk_DEGs_sc_celltype(
 \item{bulk_cutoff}{percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset}
 
 \item{pvalue}{the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)}
-
-\item{celltype_names}{list of the names specifying this celltype in each DGE analysis output (in order they appear in the directory), if all are not the same as celltype}
 
 \item{fontsize_axislabels}{font size for axis labels in plot}
 
@@ -49,9 +47,9 @@ prop_bulk_DEGs_sc_celltype(
 \item{fontsize_legendtitle}{font size for legend title in plot}
 
 \item{plot_title}{plot title}
-}
-\value{
-plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, for a specified cell type
+
+\item{output_path}{path storing the down-sampled DGE analysis for each single-cell dataset
+Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, for a specified cell type, in the appropriate directory}
 }
 \description{
 Obtain percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, for a specified cell type

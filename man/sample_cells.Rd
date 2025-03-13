@@ -4,10 +4,10 @@
 \alias{sample_cells}
 \title{Sample the data for a specified mean number of cells (per sample) from the dataset}
 \usage{
-sample_cells(data, meanCells, sampleID = "Donor.ID", Nperms = 20)
+sample_cells(SCE, meanCells, sampleID = "Donor.ID", Nperms = 20)
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{meanCells}{the mean number of cells to be sampled from each individual}
 
@@ -16,7 +16,7 @@ sample_cells(data, meanCells, sampleID = "Donor.ID", Nperms = 20)
 \item{Nperms}{the number of subsets the user needs (default 20)}
 }
 \value{
-a list of size Nperms, with each item being a subset of the input SCE containing the specified mean number of cells per sample
+a list of size Nperms, with each item being a subset of the input data containing the specified mean number of cells per sample
 }
 \description{
 Sample the data for a specified mean number of cells (per sample) from the dataset

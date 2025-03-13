@@ -3,18 +3,18 @@
 #' @importFrom SingleCellExperiment colData
 #' @importFrom stats quantile
 
-#' @param data the input data (should be an SCE object)
+#' @param SCE the input data (should be an SCE object)
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 
 #' @return list containing values which the data will be downsampled at, in ascending order
 
-downsampling_range <- function(data,
+downsampling_range <- function(SCE,
                                sampled="individuals",
                                sampleID="Donor.ID"){
 
     # get list of sample IDs
-    coldata <- colData(data)
+    coldata <- colData(SCE)
     IDs <- unique(coldata[[sampleID]])
     # get number of samples
     numSamples <- length(IDs)

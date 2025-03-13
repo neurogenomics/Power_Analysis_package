@@ -4,12 +4,12 @@
 \alias{sex_chromosome_DEGs}
 \title{Given a DGE analysis output, this outputs a subset of the analysis with the genes laying only on the sex chromosomes (X/Y)}
 \usage{
-sex_chromosome_DEGs(allGenes, ensemblID_colname = "name")
+sex_chromosome_DEGs(all_genes, ensemblID_colname = "name")
 }
 \arguments{
-\item{allGenes}{list whose elements are DGE analysis output for each celltype in a dataset (e.g. as returned by "DGE_analysis.R", but subsetted to "celltype_all_genes")}
+\item{all_genes}{list whose elements are DGE analysis output for each celltype in a dataset (e.g. as returned by "DGE_analysis.R", but subsetted to "celltype_all_genes")}
 
-\item{ensemblID_colname}{the column name within each DGE analysis output in allGenes, which contains the ensembl IDs for each gene}
+\item{ensemblID_colname}{the column name within each DGE analysis output in all_genes, which contains the ensembl IDs for each gene}
 }
 \value{
 the DGE analysis output restricted to just the genes that lay on the sex chromosomes

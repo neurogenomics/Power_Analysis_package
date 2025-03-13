@@ -6,16 +6,16 @@
 \usage{
 validate_input_parameters_correlation(
   dataset_name = "placeholder",
-  allstudies = "placeholder",
-  celltypes = "placeholder",
-  pvalue = "placeholder",
+  DEouts = "placeholder",
+  celltype_correspondence = "placeholder",
+  pvalues = "placeholder",
   data_names = "placeholder",
-  corrMats = "placeholder",
-  numRealDatasets = "placeholder",
+  corr_mats = "placeholder",
+  num_real_datasets = "placeholder",
   alphaval = "placeholder",
-  numPerms = "placeholder",
-  numSubsets = "placeholder",
-  sexDEGs = "placeholder",
+  N_randperms = "placeholder",
+  N_subsets = "placeholder",
+  sex_DEGs = "placeholder",
   fontsize_yaxislabels = "placeholder",
   fontsize_yaxisticks = "placeholder",
   fontsize_title = "placeholder",
@@ -28,25 +28,25 @@ validate_input_parameters_correlation(
 \arguments{
 \item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in allStudies)}
 
-\item{allstudies}{a list containing all the datasets (most likely as SCE objects)}
+\item{DEouts}{a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis}
 
-\item{celltypes}{a list containing the celltypes to compute mean correlation across}
+\item{celltype_correspondence}{list of different names specifying each cell type}
 
-\item{pvalue}{the cut-off p-value which will be used to select DEGs}
+\item{pvalues}{the list of cut-off p-values which will be used to select DEGs (can just provide a list with one as well)}
 
 \item{data_names}{names of the datasets as they appear in the correlation plot}
 
-\item{corrMats}{(named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value}
+\item{corr_mats}{(named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value}
 
-\item{numRealDatasets}{total number of \emph{real} datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)}
+\item{num_real_datasets}{total number of \emph{real} datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)}
 
 \item{alphaval}{(alpha) transparency of the non-mean boxplots}
 
-\item{numPerms}{number of random permutations of the dataset used to select significant DEGs from}
+\item{N_randperms}{number of random permutations of the dataset used to select significant DEGs from}
 
-\item{numSubsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
+\item{N_subsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
 
-\item{sexDEGs}{true if DEGs come from sex chromosomes, else false}
+\item{sex_DEGs}{true if DEGs come from sex chromosomes, else false}
 
 \item{fontsize_yaxislabels}{font size for axis labels in plot}
 

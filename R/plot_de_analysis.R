@@ -23,17 +23,17 @@ utils::globalVariables(c("deg_direction",".I","adj_pval","celltype","i.deg_direc
 #' @param celltype_DEGs_dt data table containing the DEGs for each cell type with their differential expression data
 #' @param celltype_all_genes_dt data table containing the all genes for each cell type with their differential expression data
 #' @param counts_celltypes vector with the counts of cells after QC in each cell type
-#' @param folder the folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.
+#' @param output_path the folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.
 
 #' Creates and saves plot in relevant directory
 
 plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
-                             counts_celltypes,folder){
+                             counts_celltypes,output_path){
     save(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
-         counts_celltypes,folder, file="temp.RData")
+         counts_celltypes,output_path, file="temp.RData")
     logFC = name = NULL
     #if it doesn't exist already make folder for plots
-    dir.create(folder,showWarnings = F)
+    dir.create(output_path,showWarnings = F)
 
     celltype_DEGs_dt[,deg_direction:="Down"]
     celltype_DEGs_dt[logFC>0,deg_direction:="Up"]
@@ -95,12 +95,12 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         theme(strip.text.x = element_text(size = 6),
               axis.text = element_text(size=6))+
         scale_colour_viridis(discrete = T)
-    #save the graph to folder
-    suppressMessages(ggsave(path = folder,
+    #save the graph to output_path
+    suppressMessages(ggsave(path = output_path,
                             filename = "Pseudobulk_exp_most_sig_genes.pdf",
                             plot=top_degs_pseudobulk_exp_plot,
                             width = 210, height = 297, units = "mm"))
-    suppressMessages(ggsave(path = folder,
+    suppressMessages(ggsave(path = output_path,
                             filename = "Pseudobulk_exp_most_sig_genes.png",
                             plot=top_degs_pseudobulk_exp_plot,
                             width = 210, height = 297, units = "mm"))
@@ -117,11 +117,11 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         theme_cowplot()+
         theme(axis.text = element_text(size=6))+
         scale_fill_viridis(discrete = T)
-    #save the graph to folder
-    suppressMessages(ggsave(path = folder,
+    #save the graph to output_path
+    suppressMessages(ggsave(path = output_path,
                             filename = "Cell_counts_after_QC.pdf",
                             plot=cell_counts_plot))
-    suppressMessages(ggsave(path = folder,
+    suppressMessages(ggsave(path = output_path,
                             filename = "Cell_counts_after_QC.png",
                             plot=cell_counts_plot))
 
@@ -135,11 +135,11 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         theme_cowplot() + 
         theme(axis.text = element_text(size = 9)) + 
         scale_fill_viridis(discrete = T)
-    #save the graph to folder
-    suppressMessages(ggsave(path = folder,
+    #save the graph to output_path
+    suppressMessages(ggsave(path = output_path,
                             filename = "DEGs_per_cell_type.pdf",
                             plot=deg_per_cell_type_plot))
-    suppressMessages(ggsave(path = folder,
+    suppressMessages(ggsave(path = output_path,
                             filename = "DEGs_per_cell_type.png",
                             plot=deg_per_cell_type_plot))
 
@@ -158,11 +158,11 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     theme_cowplot() + 
     theme(axis.text = element_text(size = 9)) + 
     scale_fill_viridis(discrete = T)
-    #save the graph to folder
-    suppressMessages(ggsave(path = folder,
+    #save the graph to output_path
+    suppressMessages(ggsave(path = output_path,
                             filename = "DEGs_proportion_per_cell_type.pdf",
                             plot=deg_prop_plot))
-    suppressMessages(ggsave(path = folder,
+    suppressMessages(ggsave(path = output_path,
                             filename = "DEGs_proportion_per_cell_type.png",
                             plot=deg_prop_plot))
 
@@ -181,13 +181,13 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         theme_cowplot()+
         theme(axis.text = element_text(size=9))+
         scale_fill_viridis(discrete = T)
-    #save the graph to folder
+    #save the graph to output_path
     suppressMessages(
-        ggsave(path = folder,
+        ggsave(path = output_path,
                filename="DEGs_direction_count_per_cell_type.pdf",
                plot=count_deg_direction_plot))
     suppressMessages(
-        ggsave(path = folder,
+        ggsave(path = output_path,
                filename="DEGs_direction_count_per_cell_type.png",
                plot=count_deg_direction_plot))
 
@@ -242,12 +242,12 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
             box.padding = unit(0.35, "lines"),
             point.padding = unit(0.3, "lines")
         )
-    #save the graph to folder - increase size A4
-    suppressMessages(ggsave(path = folder,
+    #save the graph to output_path - increase size A4
+    suppressMessages(ggsave(path = output_path,
                             filename = "volcano_plot_degs_cell_types.pdf",
                             plot=volcano_plot,
                             width = 210, height = 297, units = "mm"))
-    suppressMessages(ggsave(path = folder,
+    suppressMessages(ggsave(path = output_path,
                             filename = "volcano_plot_degs_cell_types.png",
                             plot=volcano_plot,
                             width = 210, height = 297, units = "mm"))
@@ -298,11 +298,11 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
         theme_cowplot()+
         theme( axis.text = element_text(size=9))+
         scale_fill_viridis(discrete = T)
-    #save the graph to folder
-    suppressMessages(ggsave(path = folder,
+    #save the graph to output_path
+    suppressMessages(ggsave(path = output_path,
                             filename = "deg_boxplots_cell_types.pdf",
                             plot=degs_boxplot_plots))
-    suppressMessages(ggsave(path = folder,
+    suppressMessages(ggsave(path = output_path,
                             filename = "deg_boxplots_cell_types.png",
                             plot=degs_boxplot_plots))
 }

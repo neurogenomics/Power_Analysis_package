@@ -4,16 +4,27 @@
 \alias{plot_celltype_correlation}
 \title{Computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given celltype, across all datasets}
 \usage{
-plot_celltype_correlation(dataset_name, allstudies, celltype, p_val = 1)
+plot_celltype_correlation(
+  dataset_name,
+  DEouts,
+  celltype,
+  celltypes_list,
+  data_names,
+  pval = 1
+)
 }
 \arguments{
-\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in allstudies)}
+\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in data_names)}
 
-\item{allstudies}{a list containing all the datasets (most likely as SCE objects)}
+\item{DEouts}{a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis}
 
 \item{celltype}{the celltype to compute correlation for}
 
-\item{p_val}{the cut-off p-value which will be used to select DEGs (default is 1 to include all the genes)}
+\item{celltypes_list}{list of different names specifying each cell type (in order for each dataset in DEouts)}
+
+\item{data_names}{names of the datasets as they will appear in the correlation plot}
+
+\item{pval}{the cut-off p-value which will be used to select DEGs (default is 1 to include all the genes)}
 }
 \value{
 correlation matrix, plot and the number of DEGs at the specified p-value

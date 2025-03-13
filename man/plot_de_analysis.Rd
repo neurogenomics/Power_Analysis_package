@@ -10,7 +10,7 @@ plot_de_analysis(
   celltype_DEGs_dt,
   celltype_all_genes_dt,
   counts_celltypes,
-  folder
+  output_path
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ annot_pb: dataframe of the annotation data from the SCE rolled up based on the p
 
 \item{counts_celltypes}{vector with the counts of cells after QC in each cell type}
 
-\item{folder}{the folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.
+\item{output_path}{the folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.
 Creates and saves plot in relevant directory}
 }
 \description{

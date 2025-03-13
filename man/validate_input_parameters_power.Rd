@@ -5,7 +5,7 @@
 \title{Tests input parameters for functions}
 \usage{
 validate_input_parameters_power(
-  data = "placeholder",
+  SCE = "placeholder",
   range_downsampled = "placeholder",
   output_path = "placeholder",
   inpath = "placeholder",
@@ -24,16 +24,13 @@ validate_input_parameters_power(
   region = "placeholder",
   control = "placeholder",
   pval_adjust_method = "placeholder",
-  rmv_zero_count_genes = "placeholder",
-  base_outpath = "placeholder",
-  datasets_path = "placeholder",
-  sampleIDs = "placeholder"
+  rmv_zero_count_genes = "placeholder"
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
-\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
+\item{range_downsampled}{vector or list containing values which the SCE will be downsampled at, in ascending order}
 
 \item{output_path}{base path in which outputs will be stored}
 
@@ -69,13 +66,7 @@ validate_input_parameters_power(
 
 \item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
 
-\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE}
-
-\item{base_outpath}{the base output path which contains power analysis output folders for \emph{all} datasets (each one as created by "downsampling_DEanalysis.r")}
-
-\item{datasets_path}{path where all dataset SCEs (in .qs format) are saved}
-
-\item{sampleIDs}{list of sample ID names for datasets in "datasets_path" (may be in any order)
+\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
 Checks all power analysis parameters are specified correctly}
 }
 \description{

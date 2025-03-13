@@ -6,28 +6,26 @@
 \usage{
 plot_mean_correlation(
   dataset_name,
-  allstudies,
-  celltypes,
+  DEouts,
   pvals,
-  data_names = "placeholder",
+  celltype_correspondence,
+  data_names,
   output_path = getwd()
 )
 }
 \arguments{
-\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in allStudies)}
+\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in DEouts)}
 
-\item{allstudies}{a list containing all the datasets (most likely as SCE objects)}
-
-\item{celltypes}{a list containing the celltypes to compute mean correlation across}
+\item{DEouts}{a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis}
 
 \item{pvals}{the cut-off p-value which will be used to select DEGs}
 
+\item{celltype_correspondence}{list of different names specifying each cell type}
+
 \item{data_names}{names of the datasets as they appear in the correlation plot}
 
-\item{output_path}{base path in which outputs will be stored}
-}
-\value{
-mean correlation matrix
+\item{output_path}{base path in which outputs will be stored
+Saves mean correlation matrix (and actual values) in the appropriate directory}
 }
 \description{
 Obtain the average correlation (across celltypes) at a specified cutoff p-value

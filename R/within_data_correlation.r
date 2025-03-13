@@ -5,7 +5,7 @@ utils::globalVariables(c("DEout"))
 
 #' @importFrom ggplot2 ggsave
 
-#' @param data the input data (should be an SCE object)
+#' @param SCE the input data (should be an SCE object)
 #' @param output_path base path in which outputs will be stored
 #' @param sampleID sample ID
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
@@ -24,7 +24,7 @@ utils::globalVariables(c("DEout"))
 
 #' @export
 
-within_data_correlation <- function(data,
+within_data_correlation <- function(SCE,
                                     output_path=getwd(),
                                     sampleID="donor_id",
                                     design="placeholder",
@@ -47,7 +47,7 @@ within_data_correlation <- function(data,
         design=as.formula(paste0("~",sexID))
     }
     # validate function input params
-    validate_input_parameters_power(data=data, output_path=output_path, sampleID=sampleID,
+    validate_input_parameters_power(SCE=SCE, output_path=output_path, sampleID=sampleID,
                                     design=design, sexID=sexID, celltypeID=celltypeID,
                                     coeff=coeff, N_randperms=N_randperms, N_subsetpairs=N_subsetpairs,
                                     y=y, region=region, control=control,
@@ -57,10 +57,10 @@ within_data_correlation <- function(data,
     if(!"DEout.RData" %in% list.files(output_path)){
         stop("Error: DGE analysis output file (DEout.RData) for the full dataset is not in the specified (output_path) directory!")
     }else{
-        load(paste0(output_path,"/DEout.RData"))
+        load(file.path(output_path,"DEout.RData"))
     }
     # create directory for correlation analysis if doesn't already exist
-    dir.create(paste0(output_path, "/corr_analysis/"), showWarnings=FALSE)
+    dir.create(file.path(output_path, "corr_analysis"), showWarnings=FALSE)
 
     # get all genes from main dataset
     allgenes_full <- DEout$celltype_all_genes
@@ -68,19 +68,19 @@ within_data_correlation <- function(data,
     celltypes <- names(allgenes_full)
     ## create random permutations and subsets of data, run DE analysis on them
     # random perms
-    permutedData <- random_permutations(data,sampleID,sexID,N_randperms)
+    permutedData <- random_permutations(SCE,sampleID,sexID,N_randperms)
     # list of data
     allstudies <- list()
     names <- c()
     # run DGE analysis on these
     for(perm in 1:N_randperms){
         # create relevant directory and move to it
-        dir.create(paste0(output_path, "/corr_analysis/randperm",toString(perm),"/"),showWarnings=FALSE)
-        savepath <- paste0(output_path, "/corr_analysis/randperm",toString(perm),"/")
+        dir.create(file.path(output_path, paste0("corr_analysis/randperm",toString(perm))),showWarnings=FALSE)
+        savepath <- file.path(output_path, paste0("corr_analysis/randperm",toString(perm)))
         # run DE analysis
-        assign(paste0("perm_",toString(perm),"DEout"), DGE_analysis(permutedData[[perm]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        assign(paste0("perm_",toString(perm),"DEout"), DGE_analysis(permutedData[[perm]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
         # save
-        save(list=eval(paste0("perm_",toString(perm),"DEout")),file=paste0(savepath,"perm_",toString(perm),"DEout.RData"))
+        save(list=eval(paste0("perm_",toString(perm),"DEout")),file=file.path(savepath,paste0("perm_",toString(perm),"DEout.RData")))
         # get all genes
         assign(paste0("rand",toString(perm),"_genes"),eval(as.name(paste0("perm_",toString(perm),"DEout")))$celltype_all_genes)
         # add to list
@@ -93,24 +93,24 @@ within_data_correlation <- function(data,
     # add name
     names <- c(names, "full_dataset")
     # subsets
-    subsets <- subset_pairs(data,sampleID,N_subsetpairs)
+    subsets <- subset_pairs(SCE,sampleID,N_subsetpairs)
     for(subset in 1:N_subsetpairs){
         ## subset a
         # create relevant directory and move to it
-        dir.create(paste0(output_path, "/corr_analysis/subset",toString(subset),"a/"),showWarnings=FALSE)
-        savepath_a <- paste0(output_path, "/corr_analysis/subset",toString(subset),"a/")
+        dir.create(file.path(output_path, paste0("corr_analysis/subset",toString(subset),"a")),showWarnings=FALSE)
+        savepath_a <- file.path(output_path, paste0("corr_analysis/subset",toString(subset),"a"))
         # run DE analysis
-        assign(paste0("subset",toString(subset),"a_DEout"), DGE_analysis(subsets[[subset]][[1]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        assign(paste0("subset",toString(subset),"a_DEout"), DGE_analysis(subsets[[subset]][[1]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
         # save
-        save(list=eval(paste0("subset",toString(subset),"a_DEout")),file=paste0(savepath_a,"subset",toString(subset),"a_DEout.RData"))
+        save(list=eval(paste0("subset",toString(subset),"a_DEout")),file=file.path(savepath_a,paste0("subset",toString(subset),"a_DEout.RData")))
         ## subset b
         # create relevant directory and move to it
-        dir.create(paste0(output_path, "/corr_analysis/subset",toString(subset),"b/"),showWarnings=FALSE)
-        savepath_b <- paste0(output_path, "/corr_analysis/subset",toString(subset),"b/")
+        dir.create(file.path(output_path, paste0("corr_analysis/subset",toString(subset),"b")),showWarnings=FALSE)
+        savepath_b <- file.path(output_path, paste0("corr_analysis/subset",toString(subset),"b"))
         # run DE analysis
-        assign(paste0("subset",toString(subset),"b_DEout"), DGE_analysis(subsets[[subset]][[2]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        assign(paste0("subset",toString(subset),"b_DEout"), DGE_analysis(subsets[[subset]][[2]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
         # save
-        save(list=eval(paste0("subset",toString(subset),"b_DEout")),file=paste0(savepath_b,"subset",toString(subset),"b_DEout.RData"))
+        save(list=eval(paste0("subset",toString(subset),"b_DEout")),file=file.path(savepath_b,paste0("subset",toString(subset),"b_DEout.RData")))
         # get all genes
         assign(paste0("subset",toString(subset),"a_genes"),eval(as.name(paste0("subset",toString(subset),"a_DEout")))$celltype_all_genes)
         assign(paste0("subset",toString(subset),"b_genes"),eval(as.name(paste0("subset",toString(subset),"b_DEout")))$celltype_all_genes)
@@ -127,25 +127,25 @@ within_data_correlation <- function(data,
     allstudies <- lapply(allstudies,"[",celltypes)
     ## correlations
     # 0.05
-    savepath_corrs <- paste0(output_path, "/corr_analysis/")
+    savepath_corrs <- file.path(output_path, "corr_analysis")
     corr_0.05pval <- plot_mean_correlation("full_dataset",allstudies,celltypes,0.05)
-    ggsave(paste0(savepath_corrs,"corrPlot_0.05pval.png"),corr_0.05pval[[1]],width=20,height=20,units="cm",bg="white")
-    ggsave(paste0(savepath_corrs,"corrPlot_0.05pval.pdf"),corr_0.05pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.05pval.png"),corr_0.05pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.05pval.pdf"),corr_0.05pval[[1]],width=20,height=20,units="cm",bg="white")
     # 0.025
     corr_0.025pval <- plot_mean_correlation("full_dataset",allstudies,celltypes,0.025)
-    ggsave(paste0(savepath_corrs,"corrPlot_0.025pval.png"),corr_0.025pval[[1]],width=20,height=20,units="cm",bg="white")
-    ggsave(paste0(savepath_corrs,"corrPlot_0.025pval.pdf"),corr_0.025pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.025pval.png"),corr_0.025pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.025pval.pdf"),corr_0.025pval[[1]],width=20,height=20,units="cm",bg="white")
     # 0.01
     corr_0.01pval <- plot_mean_correlation("full_dataset",allstudies,celltypes,0.01)
-    ggsave(paste0(savepath_corrs,"corrPlot_0.01pval.png"),corr_0.01pval[[1]],width=20,height=20,units="cm",bg="white")
-    ggsave(paste0(savepath_corrs,"corrPlot_0.01pval.pdf"),corr_0.01pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.01pval.png"),corr_0.01pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.01pval.pdf"),corr_0.01pval[[1]],width=20,height=20,units="cm",bg="white")
     # 0.001
     corr_0.001pval <- plot_mean_correlation("full_dataset",allstudies,celltypes,0.001)
-    ggsave(paste0(savepath_corrs,"corrPlot_0.001pval.png"),corr_0.001pval[[1]],width=20,height=20,units="cm",bg="white")
-    ggsave(paste0(savepath_corrs,"corrPlot_0.001pval.pdf"),corr_0.001pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.001pval.png"),corr_0.001pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.001pval.pdf"),corr_0.001pval[[1]],width=20,height=20,units="cm",bg="white")
     # 0.0001
     corr_0.0001pval <- plot_mean_correlation("full_dataset",allstudies,celltypes,0.0001)
-    ggsave(paste0(savepath_corrs,"corrPlot_0.0001pval.png"),corr_0.0001pval[[1]],width=20,height=20,units="cm",bg="white")
-    ggsave(paste0(savepath_corrs,"corrPlot_0.0001pval.pdf"),corr_0.0001pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.0001pval.png"),corr_0.0001pval[[1]],width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(savepath_corrs,"corrPlot_0.0001pval.pdf"),corr_0.0001pval[[1]],width=20,height=20,units="cm",bg="white")
     
 }

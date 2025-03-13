@@ -9,7 +9,7 @@ utils::globalVariables(c("..density.."))
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom SingleCellExperiment colData
 
-#' @param data the input data (should be an SCE object)
+#' @param SCE the input data (should be an SCE object)
 #' @param output_path base path in which outputs will be stored
 #' @param sampleID sample ID
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
@@ -25,7 +25,7 @@ utils::globalVariables(c("..density.."))
 
 #' Saves all plots in the appropriate directory
 
-preliminary_plots <- function(data,
+preliminary_plots <- function(SCE,
                               output_path=getwd(),
                               sampleID="donor_id",
                               design="placeholder",
@@ -47,21 +47,21 @@ preliminary_plots <- function(data,
         design=as.formula(paste0("~",sexID))
     }
     # validate function input params
-    validate_input_parameters_power(data=data, output_path=output_path, sampleID=sampleID,
+    validate_input_parameters_power(SCE=SCE, output_path=output_path, sampleID=sampleID,
                                     design=design, sexID=sexID, celltypeID=celltypeID, 
                                     coeff=coeff, fdr=fdr, y=y,
                                     region=region, control=control, pval_adjust_method=pval_adjust_method,
                                     rmv_zero_count_genes=rmv_zero_count_genes)
 
     # get celltype name from dataset
-    celltype_name <- toString(unique(data[[celltypeID]]))
+    celltype_name <- toString(unique(SCE[[celltypeID]]))
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
     # run and save DE analysis
-        assign("DEout", DGE_analysis(data, design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
-        save(DEout,file=paste0(output_path,"/DEout.RData"))
+        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        save(DEout,file=file.path(output_path,"DEout.RData"))
     }else{
-        load(paste0(output_path,"/DEout.RData"))
+        load(file.path(output_path,"DEout.RData"))
     }
     
     ## plot histogram of effect sizes in DEGs and all genes
@@ -72,8 +72,8 @@ preliminary_plots <- function(data,
                             labs(title=paste0("Distribution of LogFC (DEGs at ", fdr,"%)"),y="Density",x ="LogFC") + 
                             theme_cowplot() +
                             theme(axis.text=element_text(size=20),axis.title=element_text(size=22),plot.title=element_text(size=22))
-    ggsave(paste0(output_path, "/logFCdist.png"),logFCdist.plot,width=20,height=20,units="cm",bg="white")
-    ggsave(paste0(output_path, "/logFCdist.pdf"),logFCdist.plot,width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(output_path, "logFCdist.png"),logFCdist.plot,width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(output_path, "logFCdist.pdf"),logFCdist.plot,width=20,height=20,units="cm",bg="white")
     # for all genes
     allgenes <- DEout$celltype_all_genes[[celltype_name]]
     logFCdist_allgenes.plot <- ggplot(allgenes,aes(x=logFC)) + 
@@ -81,13 +81,13 @@ preliminary_plots <- function(data,
                             labs(title=paste0("Distribution of LogFC (all genes)"),y="Density",x ="LogFC") + 
                             theme_cowplot() +
                             theme(axis.text=element_text(size=20),axis.title=element_text(size=22),plot.title=element_text(size=22))
-    ggsave(paste0(output_path, "/logFCdist_allgenes.png"),logFCdist_allgenes.plot,width=20,height=20,units="cm",bg="white")
-    ggsave(paste0(output_path, "/logFCdist_allgenes.pdf"),logFCdist_allgenes.plot,width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(output_path, "logFCdist_allgenes.png"),logFCdist_allgenes.plot,width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(output_path, "logFCdist_allgenes.pdf"),logFCdist_allgenes.plot,width=20,height=20,units="cm",bg="white")
 
     ## plot distribution of cells across individuals
     ## get table of sample ID/number of cells
     # get list of sample IDs
-    coldata <- colData(data)
+    coldata <- colData(SCE)
     IDs <- unique(coldata[[sampleID]])
     # get list of number of cells
     numIDs <- length(IDs)
@@ -105,11 +105,11 @@ preliminary_plots <- function(data,
                             labs(title="Distribution of numbers of cells across individuals",y="Density",x ="Number of cells") + 
                             theme_cowplot()+
                             theme(axis.text.y=element_blank(),axis.ticks.y=element_blank(),axis.text=element_text(size=20),axis.title=element_text(size=22),plot.title=element_text(size=22),axis.text.x = element_text(hjust=0.8))
-    ggsave(paste0(output_path, "/cellcount.png"),cellcount.plot,width=20,height=20,units="cm",bg="white")
-    ggsave(paste0(output_path, "/cellcount.pdf"),cellcount.plot,width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(output_path, "cellcount.png"),cellcount.plot,width=20,height=20,units="cm",bg="white")
+    ggsave(file.path(output_path, "cellcount.pdf"),cellcount.plot,width=20,height=20,units="cm",bg="white")
 
     # put plots in a subplot together
-    ggsave(paste0(output_path, "/QC_plots.png"),arrangeGrob(logFCdist.plot,logFCdist_allgenes.plot,cellcount.plot,ncol=3),width=60,height=20,units="cm",bg="white")
-    ggsave(paste0(output_path, "/QC_plots.pdf"),arrangeGrob(logFCdist.plot,logFCdist_allgenes.plot,cellcount.plot,ncol=3),width=60,height=20,units="cm",bg="white")
+    ggsave(file.path(output_path, "QC_plots.png"),arrangeGrob(logFCdist.plot,logFCdist_allgenes.plot,cellcount.plot,ncol=3),width=60,height=20,units="cm",bg="white")
+    ggsave(file.path(output_path, "QC_plots.pdf"),arrangeGrob(logFCdist.plot,logFCdist_allgenes.plot,cellcount.plot,ncol=3),width=60,height=20,units="cm",bg="white")
 
 }

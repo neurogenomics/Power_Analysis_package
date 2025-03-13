@@ -5,7 +5,7 @@
 \title{Create correlation plots of the effect sizes, between random permutations and subsets of a given dataset}
 \usage{
 within_data_correlation(
-  data,
+  SCE,
   output_path = getwd(),
   sampleID = "donor_id",
   design = "placeholder",
@@ -22,7 +22,7 @@ within_data_correlation(
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{output_path}{base path in which outputs will be stored}
 

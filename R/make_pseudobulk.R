@@ -3,8 +3,8 @@
 #' @importFrom SingleCellExperiment colData counts
 #' @importFrom Matrix rowSums
 
-#' @param data SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.
-#' @param pseudobulk_ID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
+#' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.
+#' @param sampleID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
 #' @param pb_columns Vector, list of annotation column names in the SCE object to be returned in annot_pb rolled up to pseudobulk level. Default is NULL which won't return any information in annot_pb.
 #' @param region Column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
 #' @param rmv_zero_count_genes Whether genes with no count values in any cell should be removed. Default is TRUE
@@ -13,18 +13,18 @@
 #'              sumDat: matrix of the summed pseudobulk count values
 #'              annot_pb: dataframe of the annotation data from the SCE rolled up based on the pseudobulk aggregation.
 
-make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
+make_pseudobulk <- function(SCE,sampleID, pb_columns=NULL,
                             region="single_region",rmv_zero_count_genes=TRUE){
-    allAnnot <- colData(data)
+    allAnnot <- colData(SCE)
     if(region=="single_region") # constant value for all samples
         allAnnot[[region]] <- "one_region"
-    indvs <- as.character(unique(allAnnot[[pseudobulk_ID]]))
+    indvs <- as.character(unique(allAnnot[[sampleID]]))
     regions <- as.character(unique(allAnnot[[region]]))
     sumDat <-
-        matrix(0,nrow=dim(data)[1],
+        matrix(0,nrow=dim(SCE)[1],
                ncol=length(indvs)*length(regions))
     colnames(sumDat) <- rep(indvs,length(regions))
-    rownames(sumDat) <- rownames(data)
+    rownames(sumDat) <- rownames(SCE)
     count=0
     # for a single cell type, look at a single individual in single brain region, create list to hold annot values for each region, individual combination
     annot_list <- vector(mode="list",length=length(regions)*length(indvs))
@@ -32,8 +32,8 @@ make_pseudobulk <- function(data,pseudobulk_ID, pb_columns=NULL,
     for(region_i in regions){
         for(indv in indvs){
             whichCells =
-                allAnnot[[pseudobulk_ID]]==indv & allAnnot[[region]]==region_i
-            theData <- data[,whichCells]
+                allAnnot[[sampleID]]==indv & allAnnot[[region]]==region_i
+            theData <- SCE[,whichCells]
             count <- count+1
             sumDat[,count] <- rowSums(counts(theData))
             colnames(sumDat)[count] = sprintf("%s_%s",indv,region_i)

@@ -1,7 +1,7 @@
 #' Tests input parameters for functions
 
-#' @param data the input data (should be an SCE object)
-#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
+#' @param SCE the input data (should be an SCE object)
+#' @param range_downsampled vector or list containing values which the SCE will be downsampled at, in ascending order
 #' @param output_path base path in which outputs will be stored
 #' @param inpath base path where downsampled DGE analysis output is stored (taken to be output_path if not provided)
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
@@ -20,13 +20,10 @@
 #' @param control character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.
 #' @param pval_adjust_method the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
 #' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
-#' @param base_outpath the base output path which contains power analysis output folders for *all* datasets (each one as created by "downsampling_DEanalysis.r")
-#' @param datasets_path path where all dataset SCEs (in .qs format) are saved
-#' @param sampleIDs list of sample ID names for datasets in "datasets_path" (may be in any order)
 
 #' Checks all power analysis parameters are specified correctly
 
-validate_input_parameters_power <- function(data="placeholder",
+validate_input_parameters_power <- function(SCE="placeholder",
                                             range_downsampled="placeholder",
                                             output_path="placeholder",
                                             inpath="placeholder",
@@ -45,14 +42,11 @@ validate_input_parameters_power <- function(data="placeholder",
                                             region="placeholder",
                                             control="placeholder",
                                             pval_adjust_method="placeholder",
-                                            rmv_zero_count_genes="placeholder",
-                                            base_outpath="placeholder",
-                                            datasets_path="placeholder",
-                                            sampleIDs="placeholder"){
+                                            rmv_zero_count_genes="placeholder"){
 
     # test each parameter to check if it works
-    if(class(data)[1]!="SingleCellExperiment"){
-        stop("Error: data should be a SingleCellExperiment object.")
+    if(class(SCE)[1]!="SingleCellExperiment"){
+        stop("Error: SCE should be a SingleCellExperiment object.")
     }
     if(class(range_downsampled)=="character"){
         if(!identical(range_downsampled,"placeholder")){
@@ -116,8 +110,8 @@ validate_input_parameters_power <- function(data="placeholder",
             if(!is.character(sexID)){
                 stop("Error: sexID should be a string specifying the column name.")
             }
-            if(is.null(data[[sexID]])){
-                stop("Error: The specified column name (sexID argument) is not present in the data. Please check if this is spelled correctly.")
+            if(is.null(SCE[[sexID]])){
+                stop("Error: The specified column name (sexID argument) is not present in the SCE. Please check if this is spelled correctly.")
             }
         }
     }
@@ -126,8 +120,8 @@ validate_input_parameters_power <- function(data="placeholder",
             if(!is.character(celltypeID)){
                 stop("Error: celltypeID should be a string specifying the column name.")
             }
-            if(is.null(data[[celltypeID]])){
-                stop("Error: The specified column name (celltypeID argument) is not present in the data. Please check if this is spelled correctly.")
+            if(is.null(SCE[[celltypeID]])){
+                stop("Error: The specified column name (celltypeID argument) is not present in the SCE. Please check if this is spelled correctly.")
             }
         }
     }
@@ -188,8 +182,8 @@ validate_input_parameters_power <- function(data="placeholder",
             if(!is.character(y)){
                 stop("Error: please input a character for y indicating the column holding the response variable information")
             }
-            if(is.null(data[[y]])){
-                stop("Error: the inputted y value is not present in the data, perhaps check the spelling is correct")
+            if(is.null(SCE[[y]])){
+                stop("Error: the inputted y value is not present in the SCE, perhaps check the spelling is correct")
             }
         }
     }
@@ -198,15 +192,15 @@ validate_input_parameters_power <- function(data="placeholder",
             if(!is.character(region)){
                 stop("Error: please input a character for region indicating the column holding the variable information")
             }
-            if(is.null(data[[region]])){
-                stop("Error: the inputted region value is not present in the data, perhaps check the spelling is correct")
+            if(is.null(SCE[[region]])){
+                stop("Error: the inputted region value is not present in the SCE, perhaps check the spelling is correct")
             }
         }
     }
     if(!is.null(control)){
         if(control!="placeholder"){
-            if(!control %in% unique(data[[y]])){
-                stop("Error: the inputted control value is not present in y in the data, perhaps check the spelling is correct")
+            if(!control %in% unique(SCE[[y]])){
+                stop("Error: the inputted control value is not present in y in the SCE, perhaps check the spelling is correct")
             }
         }
     }
@@ -219,32 +213,5 @@ validate_input_parameters_power <- function(data="placeholder",
         if(!is.logical(rmv_zero_count_genes)){
             stop("Error: please input TRUE/FALSE for rmv_zero_count_genes")
         }
-    }
-    if(base_outpath!="placeholder"){
-        if(length(list.dirs(base_outpath,recursive=F))!=0){
-            if(!is.character(base_outpath)){
-                stop("Error: base_outpath should be a string specifying the base path where all power analysis outputs are stored.")        
-            }
-            if(!dir.exists(base_outpath)){
-                stop("Error: the specified base_outpath directory does not exist.")
-            }      
-        }else{
-            stop("Error: base_outpath cannot be an empty directory.")
-        }
-    }
-    if(datasets_path!="placeholder"){
-        if(length(list.files(datasets_path))!=0){
-            if(!is.character(datasets_path)){
-                stop("Error: datasets_path should be a string specifying the path where all datasets are stored.")        
-            }
-            if(!dir.exists(datasets_path)){
-                stop("Error: the specified datasets_path directory does not exist.")
-            }      
-        }else{
-            stop("Error: datasets_path cannot be an empty directory.")
-        }
-    }
-    if(class(sampleIDs)!="character"&!is.list(sampleIDs)){
-        stop("Error: sampleIDs should be a list or vector containing the list of sampleID names for each dataset.")
     }
 }

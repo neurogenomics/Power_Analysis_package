@@ -1,16 +1,16 @@
 #' Tests input parameters for functions
 
 #' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in allStudies)
-#' @param allstudies a list containing all the datasets (most likely as SCE objects)
-#' @param celltypes a list containing the celltypes to compute mean correlation across
-#' @param pvalue the cut-off p-value which will be used to select DEGs
+#' @param DEouts a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis
+#' @param celltype_correspondence list of different names specifying each cell type
+#' @param pvalues the list of cut-off p-values which will be used to select DEGs (can just provide a list with one as well)
 #' @param data_names names of the datasets as they appear in the correlation plot
-#' @param corrMats (named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value
-#' @param numRealDatasets total number of *real* datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)
+#' @param corr_mats (named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value
+#' @param num_real_datasets total number of *real* datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)
 #' @param alphaval (alpha) transparency of the non-mean boxplots
-#' @param numPerms number of random permutations of the dataset used to select significant DEGs from
-#' @param numSubsets number of pairs of random subsets of the dataset used to select significant DEGs from
-#' @param sexDEGs true if DEGs come from sex chromosomes, else false
+#' @param N_randperms number of random permutations of the dataset used to select significant DEGs from
+#' @param N_subsets number of pairs of random subsets of the dataset used to select significant DEGs from
+#' @param sex_DEGs true if DEGs come from sex chromosomes, else false
 #' @param fontsize_yaxislabels font size for axis labels in plot
 #' @param fontsize_yaxisticks font size for axis tick labels in plot
 #' @param fontsize_title font size for plot title
@@ -22,16 +22,16 @@
 #' Checks all correlation analysis parameters are specified correctly
 
 validate_input_parameters_correlation <- function(dataset_name="placeholder",
-                                                  allstudies="placeholder",
-                                                  celltypes="placeholder",
-                                                  pvalue="placeholder",
+                                                  DEouts="placeholder",
+                                                  celltype_correspondence="placeholder",
+                                                  pvalues="placeholder",
                                                   data_names="placeholder",
-                                                  corrMats="placeholder",
-                                                  numRealDatasets="placeholder",
+                                                  corr_mats="placeholder",
+                                                  num_real_datasets="placeholder",
                                                   alphaval="placeholder",
-                                                  numPerms="placeholder",
-                                                  numSubsets="placeholder",
-                                                  sexDEGs="placeholder",
+                                                  N_randperms="placeholder",
+                                                  N_subsets="placeholder",
+                                                  sex_DEGs="placeholder",
                                                   fontsize_yaxislabels="placeholder",
                                                   fontsize_yaxisticks="placeholder",
                                                   fontsize_title="placeholder",
@@ -46,32 +46,34 @@ validate_input_parameters_correlation <- function(dataset_name="placeholder",
             stop("Error: dataset_name should be a string")
         }
     }
-    if(!identical(allstudies,"placeholder")){
-        if(class(allstudies)!="list"){
-            stop("Error: allstudies should be a list")
+    if(!identical(DEouts,"placeholder")){
+        if(class(DEouts)!="list"){
+            stop("Error: DEouts should be a list")
         }
     }
-    if(!identical(celltypes,"placeholder")){    
-        if(!is.character(celltypes)){
-            stop("Error: celltypes should be a list containing strings specifying the celltypes")
+    if(!identical(celltype_correspondence,"placeholder")){    
+        if(class(celltype_correspondence)!="list"){
+            stop("Error: celltype_correspondence should be a list of lists of all cell type names, as they appear in each of the DEouts")
         }
     }
-    if(pvalue!="placeholder"){
-        if(!is.numeric(pvalue) | pvalue <= 0 | pvalue > 1){
-            stop("Error: pvalue should be a (positive) number between 0 and 1")
+    if(!identical(pvalues,"placeholder")){
+        for(pval in pvalues){
+            if(!is.numeric(pval) | pval <= 0 | pval > 1){
+                stop("Error: pvalues should be a list of (positive) numbers between 0 and 1")
+            }
         }
     }
     if(!identical(data_names,"placeholder") && !is.vector(data_names)){
-        stop("Error: data_names should be a list containing the names of all datasets as should appear in the final output (if these are different to the names in allstudies)")
+        stop("Error: data_names should be a list containing the names of all datasets as should appear in the final output (if these are different to the names in DEouts)")
     }
-    if(!identical(corrMats,"placeholder")){
-        if(class(corrMats)!="list"){
-            stop("Error: corrMats should be a list of matrices")
+    if(!identical(corr_mats,"placeholder")){
+        if(class(corr_mats)!="list"){
+            stop("Error: corr_mats should be a list of matrices")
         }
     }
-    if(numRealDatasets!="placeholder"){
-        if(floor(numRealDatasets)!=numRealDatasets){
-            stop("Error: numRealDatasets should be an integer specifying the number of real datasets (see description)")
+    if(num_real_datasets!="placeholder"){
+        if(floor(num_real_datasets)!=num_real_datasets){
+            stop("Error: num_real_datasets should be an integer specifying the number of real datasets (see description)")
         }
     }
     if(alphaval!="placeholder"){
@@ -79,19 +81,19 @@ validate_input_parameters_correlation <- function(dataset_name="placeholder",
             stop("Error: alphaval should be numerical")
         }
     }
-    if(numPerms!="placeholder"){
-        if(floor(numPerms)!=numPerms){
-            stop("Error: numPerms should be an integer specifying the number of random permutations of Tsai (see description)")
+    if(N_randperms!="placeholder"){
+        if(floor(N_randperms)!=N_randperms){
+            stop("Error: N_randperms should be an integer specifying the number of random permutations of Tsai (see description)")
         }
     }
-    if(numSubsets!="placeholder"){
-        if(floor(numSubsets)!=numSubsets){
-            stop("Error: numSubsets should be an integer specifying the number of subsets of Tsai (see description)")
+    if(N_subsets!="placeholder"){
+        if(floor(N_subsets)!=N_subsets){
+            stop("Error: N_subsets should be an integer specifying the number of subsets of Tsai (see description)")
         }
     }
-    if(sexDEGs!="placeholder"){
-        if(class(sexDEGs)!="logical"){
-            stop("Error: sexDEGs should be TRUE (if DEGs are chosen only from sex chromosomes) or FALSE")
+    if(sex_DEGs!="placeholder"){
+        if(class(sex_DEGs)!="logical"){
+            stop("Error: sex_DEGs should be TRUE (if DEGs are chosen only from sex chromosomes) or FALSE")
         }
     }
     if(fontsize_yaxislabels!="placeholder"){

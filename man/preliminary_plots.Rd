@@ -5,7 +5,7 @@
 \title{Create preliminary plots for data exploration}
 \usage{
 preliminary_plots(
-  data,
+  SCE,
   output_path = getwd(),
   sampleID = "donor_id",
   design = "placeholder",
@@ -21,7 +21,7 @@ preliminary_plots(
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{output_path}{base path in which outputs will be stored}
 

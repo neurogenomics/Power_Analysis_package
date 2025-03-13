@@ -1,15 +1,16 @@
 #' Tests input parameters for functions
 
-#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param inpath path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
-#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
+#' @param SCEs list of the input data (elements should be SCE objects)
 #' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
+#' @param celltype_correspondence list of different names specifying each cell type
+#' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
+#' @param celltypeID cell type ID
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
+#' @param sampleID sample ID
+#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
 #' @param bulk_cutoff percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset
 #' @param pvalue the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)
-#' @param celltype_names list of the names specifying cell types in each DGE analysis output (in order they appear in the directory)
-#' @param datasets2 list of datasets to be used, with celltype names (in DGE analysis outputs) as celltype_names2
-#' @param celltype_names2 alt. list of the names specifying cell types in each DGE analysis output (in order they appear in the directory), if all are not the same as celltype
 #' @param Nperms number of permutations of DGE analysis outputs for each sample
 #' @param fontsize_axislabels font size for axis labels in plot
 #' @param fontsize_axisticks font size for axis tick labels in plot
@@ -20,16 +21,17 @@
 
 #' Checks all bulk analysis parameters are specified correctly
 
-validate_input_parameters_bulk <- function(bulkDE="placeholder",
-                                           inpath="placeholder",
-                                           range_downsampled="placeholder",
+validate_input_parameters_bulk <- function(SCEs="placeholder",
                                            celltype="placeholder",
+                                           celltype_correspondence="placeholder",
+                                           output_path="placeholder",
+                                           range_downsampled="placeholder",
+                                           celltypeID="placeholder",
                                            sampled="placeholder",
+                                           sampleID="placeholder",
+                                           bulkDE="placeholder",
                                            bulk_cutoff="placeholder",
                                            pvalue="placeholder",
-                                           celltype_names="placeholder",
-                                           datasets2="placeholder",
-                                           celltype_names2="placeholder",
                                            Nperms="placeholder",
                                            fontsize_axislabels="placeholder",
                                            fontsize_axisticks="placeholder",
@@ -39,17 +41,34 @@ validate_input_parameters_bulk <- function(bulkDE="placeholder",
                                            plot_title="placeholder"){
 
     # test each parameter to check if it works
-    if(bulkDE!="placeholder"){
-        if(class(bulkDE)!="data.frame"){
-            stop("Error: bulkDE should be a dataframe with rows being genes, columns being tissues and entries being significance level")
+    if(!identical(SCEs, "placeholder")){
+        if(!is.list(SCEs)){
+            stop("Error: SCEs should be a list of SingleCellExperiment objects.")
         }
     }
-    if(inpath!="placeholder"){
-        if(!is.character(inpath)){
-            stop("Error: inpath should be a string specifying the base path where down-sampled DE analysis outputs are saved.")        
+    if(celltype!="placeholder"){
+        if(!is.character(celltype)){
+            stop("Error: celltype should be a string specifying the cell type.")
         }
-        if(!dir.exists(inpath)){
-            stop("Error: the specified inpath directory does not exist.")
+    }
+    if (!identical(celltype_correspondence, "placeholder")) {
+        if (!is.list(celltype_correspondence)) {
+            stop("Error: celltype_correspondence should be a list of lists containing the names of cell types as they appear across all DGE analysis outputs.")
+        }
+        for (celltype_list in celltype_correspondence) {
+            if (!is.list(celltype_list)) {
+                stop("Error: each element of celltype_correspondence should be a list of cell type names.")
+            }
+        }
+    }
+    if(output_path!="placeholder"){
+        if(output_path!=getwd()){
+            if(!is.character(output_path)){
+                stop("Error: output_path should be a string specifying the base path where down-sampled DE analysis outputs are saved (and output will be saved).")
+            }
+        }
+        if(!dir.exists(output_path)){
+            stop("Error: the specified output_path directory does not exist.")
         }    
     }
     if(!identical(range_downsampled,"placeholder")){
@@ -63,9 +82,9 @@ validate_input_parameters_bulk <- function(bulkDE="placeholder",
             }
         }
     }
-    if(celltype!="placeholder"){
-        if(!is.character(celltype)){
-            stop("Error: celltype should be a string specifying the cell type.")
+    if(celltypeID!="placeholder"){
+        if(!is.character(celltypeID)){
+            stop("Error: celltypeID should be a string specifying the cell type ID.")
         }
     }
     if(sampled!="placeholder"){
@@ -76,6 +95,16 @@ validate_input_parameters_bulk <- function(bulkDE="placeholder",
             if(sampled!="cells"){
                 stop("Error: sampled should either be set to individuals or cells.")
             }
+        }
+    }
+    if(sampleID!="placeholder"){
+        if(!is.character(sampleID)){
+            stop("Error: sampleID should be a string specifying the sample ID.")
+        }
+    }
+    if(bulkDE!="placeholder"){
+        if(class(bulkDE)!="data.frame"){
+            stop("Error: bulkDE should be a dataframe with rows being genes, columns being tissues and entries being significance level")
         }
     }
     if(bulk_cutoff!="placeholder"){
@@ -94,28 +123,6 @@ validate_input_parameters_bulk <- function(bulkDE="placeholder",
             if(pvalue<0|pvalue>1){
                 stop("Error: pvalue should be between 0 and 1.")
             }
-        }
-    }
-    if(!identical(celltype_names,"placeholder")){
-        if(class(celltype_names)!="character"&!is.list(celltype_names)){
-            stop("Error: celltype_names should be a list or vector containing the names of cell types as they appear in the DGE analysis outputs.")
-        }
-        if(class(fontsize_axislabels)!="numeric"){
-            stop("Error: fontsize_axislabels should be numerical.")
-        }else{
-            if(fontsize_axislabels-floor(fontsize_axislabels)!=0|fontsize_axislabels<0){
-                stop("Error: fontsize_axislabels should be a positive integer.")
-            }
-        }
-    }
-    if(!identical(datasets2,"placeholder")){
-        if(class(datasets2)!="character"){
-            stop("Error: datasets2 should be a list or vector containing any datasets with cell type names not as in celltype_names.")
-        }
-    }
-    if(!identical(celltype_names2,"placeholder")){
-        if(class(celltype_names2)!="character"&!is.list(celltype_names2)){
-            stop("Error: celltype_names2 should be a list or vector containing the names of cell types as they appear in the DGE analysis outputs for datasets in datasets2.")
         }
     }
     if(Nperms!="placeholder"){

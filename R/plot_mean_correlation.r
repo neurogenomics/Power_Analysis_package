@@ -2,39 +2,41 @@
 
 #' @importFrom ggcorrplot ggcorrplot
 #' @importFrom ggplot2 theme element_text
+#' @importFrom utils write.csv
 
-#' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in allStudies)
-#' @param allstudies a list containing all the datasets (most likely as SCE objects)
-#' @param celltypes a list containing the celltypes to compute mean correlation across
+#' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in DEouts)
+#' @param DEouts a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis
 #' @param pvals the cut-off p-value which will be used to select DEGs
+#' @param celltype_correspondence list of different names specifying each cell type
 #' @param data_names names of the datasets as they appear in the correlation plot
 #' @param output_path base path in which outputs will be stored
 
-#' @return mean correlation matrix
+#' Saves mean correlation matrix (and actual values) in the appropriate directory 
 
 plot_mean_correlation <- function(dataset_name,
-                                  allstudies,
-                                  celltypes,
+                                  DEouts,
                                   pvals,
-                                  data_names="placeholder",
+                                  celltype_correspondence,
+                                  data_names,
                                   output_path=getwd()){
     
+    # validate function input params
+    validate_input_parameters_correlation(dataset_name=dataset_name, DEouts=DEouts, pvalues=pvals, 
+                                          celltype_correspondence=celltype_correspondence, data_names=data_names, output_path=output_path)
     # outputs
     output_list <- list()
-
+    
     # loop over each p-value
     for(pvalue in pvals){
-        # validate function input params
-        validate_input_parameters_correlation(dataset_name=dataset_name, allstudies=allstudies, celltypes=celltypes,
-                                              pvalue=pvalue, data_names=data_names, output_path=output_path)
-
         # list for genes of each celltype at specified p-value
         genes <- list()
         allCorrs <- list()
         i <- 0
-        for(celltype in celltypes){
+        for(celltype in names(celltype_correspondence)){
+            # get corresponding cell type names for each dataset
+            celltype_names <- celltype_correspondence[[celltype]]
             # correlation for each celltype at specified p-value
-            corrOut <- plot_celltype_correlation(dataset_name, allstudies, celltype, pvalue)
+            corrOut <- plot_celltype_correlation(dataset_name, DEouts, celltype_names, pvalue)
             i <- i+1
             # get correlation matrix for each celltype
             allCorrs[[i]] <- corrOut[[1]]
@@ -48,7 +50,7 @@ plot_mean_correlation <- function(dataset_name,
         meanCorr <- Reduce("+",allCorrs)/length(allCorrs)
 
         # rename columns and rows
-        if(!identical(data_names,"placeholder")&&is.vector(data_names)){
+        if(is.vector(data_names)){
             rownames(meanCorr) <- colnames(meanCorr) <- data_names
         }
 
@@ -64,14 +66,19 @@ plot_mean_correlation <- function(dataset_name,
         # store output in list with p-value as key
         output_list[[as.character(pvalue)]] <- list(corr_plot = corr_plot.plot, meanCorr = meanCorr)
 
+        # save the mean correlation matrix
+        write.csv(meanCorr, file.path(output_path, paste0("mean_correlation_matrix_p", pvalue, ".csv")))
         # save the plot
-        if (!is.null(output_path)) {
-            ggsave(paste0(output_path, "/mean_correlation_p", pvalue, ".png"), corr_plot.plot)
-            #write.csv(meanCorr, paste0(output_path, "/mean_correlation_matrix_p", pvalue, ".csv"))
+        if(length(DEouts) <= 5){
+            fig_width <- 10
+            fig_height <- 10
+        }else{
+            fig_width <- 2*length(DEouts)
+            fig_height <- 2*length(DEouts)
         }
+        ggsave(file.path(output_path, paste0("mean_correlation_p", pvalue, ".png")), corr_plot.plot, width=fig_width, height=fig_height, units="cm", bg="white")
+        ggsave(file.path(output_path, paste0("mean_correlation_p", pvalue, ".pdf")), corr_plot.plot, width=fig_width, height=fig_height, units="cm", bg="white")
     
     }
 
-    # output plot and final matrix
-    return(output_list)
 }

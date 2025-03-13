@@ -6,13 +6,13 @@ utils::globalVariables(c("alpha"))
 #' @importFrom ggplot2 geom_boxplot ggplot labs facet_wrap theme aes element_text element_blank scale_colour_brewer scale_alpha guides guide_legend
 #' @importFrom cowplot theme_cowplot
 
-#' @param corrMats (named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value
-#' @param numRealDatasets total number of *real* datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)
+#' @param corr_mats (named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value
+#' @param num_real_datasets total number of *real* datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)
 #' @param pvals the cut-off p-value which was used to select DEGs
 #' @param alphaval (alpha) transparency of the non-mean boxplots
-#' @param numPerms number of random permutations of the dataset used to select significant DEGs from
-#' @param numSubsets number of pairs of random subsets of the dataset used to select significant DEGs from
-#' @param sexDEGs true if DEGs come from sex chromosomes, else false
+#' @param N_randperms number of random permutations of the dataset used to select significant DEGs from
+#' @param N_subsets number of pairs of random subsets of the dataset used to select significant DEGs from
+#' @param sex_DEGs true if DEGs come from sex chromosomes, else false
 #' @param fontsize_yaxislabels font size for axis labels in plot
 #' @param fontsize_yaxisticks font size for axis tick labels in plot
 #' @param fontsize_title font size for plot title
@@ -21,15 +21,15 @@ utils::globalVariables(c("alpha"))
 #' @param fontsize_facet_labels font size for facet labels
 #' @param output_path base path in which outputs will be stored
 
-#' @return box plots for correlation matrices at a certain p-value cut-off, sorted by celltype and then type of correlation
+#' Saves box plots for correlation matrices, at a certain p-value cut-off, in the appropriate directory 
 
-correlation_boxplots <- function(corrMats,
-                                 numRealDatasets,
-                                 pvals,
+correlation_boxplots <- function(corr_mats,
+                                 num_real_datasets,
+                                 pvals=c(0.05,0.025,0.01,0.001,0.0001),
                                  alphaval=0.25,
-                                 numPerms=5,
-                                 numSubsets=5,
-                                 sexDEGs=FALSE,
+                                 N_randperms=5,
+                                 N_subsets=5,
+                                 sex_DEGs=FALSE,
                                  fontsize_yaxislabels=12,
                                  fontsize_yaxisticks=9,
                                  fontsize_title=14,
@@ -37,32 +37,31 @@ correlation_boxplots <- function(corrMats,
                                  fontsize_legendtitle=9,
                                  fontsize_facet_labels=9,
                                  output_path=getwd()){
-                                    
+
+    # validate function input params
+    validate_input_parameters_correlation(corr_mats=corr_mats, num_real_datasets=num_real_datasets, pvalues=pvals,
+                                          alphaval=alphaval, N_randperms=N_randperms, N_subsets=N_subsets,
+                                          sex_DEGs=sex_DEGs, fontsize_yaxislabels=fontsize_yaxislabels, fontsize_yaxisticks=fontsize_yaxisticks,
+                                          fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels, fontsize_legendtitle=fontsize_legendtitle,
+                                          fontsize_facet_labels=fontsize_facet_labels, output_path=output_path)                                    
     # outputs
     output_list <- list()
 
     # loop over each p-value
     for(pval in pvals){
-        # validate function input params
-        validate_input_parameters_correlation(corrMats=corrMats, numRealDatasets=numRealDatasets, pvalue=pval,
-                                            alphaval=alphaval, numPerms=numPerms, numSubsets=numSubsets,
-                                            sexDEGs=sexDEGs, fontsize_yaxislabels=fontsize_yaxislabels, fontsize_yaxisticks=fontsize_yaxisticks,
-                                            fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels, fontsize_legendtitle=fontsize_legendtitle,
-                                            fontsize_facet_labels=fontsize_facet_labels, output_path=output_path)
-
         # midCor submatrix limits
-        midCorLim <- numPerms + numRealDatasets
+        midCorLim <- N_randperms + num_real_datasets
         # list to hold results
         corrOuts <- c()
         # index
         j <- 1
 
         # get lists with all correlations
-        for(corrMat in corrMats){
+        for(corrMat in corr_mats){
             # specify submatrices with upper/middle/lower bounds
-            lower <- corrMat[1:numPerms,1:numPerms]
-            middle <- corrMat[(numPerms+1):midCorLim,(numPerms+1):midCorLim]
-            upper <- corrMat[(midCorLim+1):(midCorLim+numSubsets),(midCorLim+1):(midCorLim+numSubsets)]
+            lower <- corrMat[1:N_randperms,1:N_randperms]
+            middle <- corrMat[(N_randperms+1):midCorLim,(N_randperms+1):midCorLim]
+            upper <- corrMat[(midCorLim+1):(midCorLim+N_subsets),(midCorLim+1):(midCorLim+N_subsets)]
             # convert each one to a list and remove "1" (selfcorrelation)
             lower <- unique(unlist(as.list(lower)))
             lower <- lower[-c(1)]
@@ -72,7 +71,7 @@ correlation_boxplots <- function(corrMats,
             upper <- upper[-c(1)]
             # store in list
             corrOuts[[j]] <- list(lower,middle,upper)
-            names(corrOuts)[[j]] <- names(corrMats)[[j]]
+            names(corrOuts)[[j]] <- names(corr_mats)[[j]]
             # increment
             j <- j+1
         }
@@ -102,7 +101,7 @@ correlation_boxplots <- function(corrMats,
 
         # box plot
         if(pval == 1){
-            if(sexDEGs == FALSE){
+            if(sex_DEGs == FALSE){
                 fig.plot <- ggplot(df,
                     aes(x=factor(var1,levels=c("Mean","Astro","Endo","Micro","Oligo")),y=val))+
                     geom_boxplot(outlier.shape=NA,aes(fill=factor(var1,levels=c("Mean","Astro","Endo","Micro","Oligo")),alpha=alpha),width=5)+
@@ -142,7 +141,7 @@ correlation_boxplots <- function(corrMats,
                     guides(fill=guide_legend(override.aes = list(alpha=unique_alphas)))
             }
         }else{
-            if(sexDEGs == FALSE){
+            if(sex_DEGs == FALSE){
                 fig.plot <- ggplot(df,
                     aes(x=factor(var1,levels=c("Mean","Astro","Endo","Micro","Oligo")),y=val))+
                     geom_boxplot(outlier.shape=NA,aes(fill=factor(var1,levels=c("Mean","Astro","Endo","Micro","Oligo")),alpha=alpha),width=5)+
@@ -187,11 +186,9 @@ correlation_boxplots <- function(corrMats,
         output_plots[[as.character(pval)]] <- fig.plot
 
         # save the plot if output_path is specified
-        if (!is.null(output_path)) {
-            ggsave(paste0(output_path, "/correlation_boxplot_p", pval, ".png"), fig.plot)
-        }
-    }
+        ggsave(file.path(output_path,paste0("correlation_boxplot_p", pval, ".png")), fig.plot, width=30, height=15, units="cm", bg="white")
+        ggsave(file.path(output_path,paste0("correlation_boxplot_p", pval, ".pdf")), fig.plot, width=30, height=15, units="cm", bg="white")
 
-    return(output_plots)
+    }
 
 }

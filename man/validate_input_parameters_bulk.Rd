@@ -5,16 +5,17 @@
 \title{Tests input parameters for functions}
 \usage{
 validate_input_parameters_bulk(
-  bulkDE = "placeholder",
-  inpath = "placeholder",
-  range_downsampled = "placeholder",
+  SCEs = "placeholder",
   celltype = "placeholder",
+  celltype_correspondence = "placeholder",
+  output_path = "placeholder",
+  range_downsampled = "placeholder",
+  celltypeID = "placeholder",
   sampled = "placeholder",
+  sampleID = "placeholder",
+  bulkDE = "placeholder",
   bulk_cutoff = "placeholder",
   pvalue = "placeholder",
-  celltype_names = "placeholder",
-  datasets2 = "placeholder",
-  celltype_names2 = "placeholder",
   Nperms = "placeholder",
   fontsize_axislabels = "placeholder",
   fontsize_axisticks = "placeholder",
@@ -25,25 +26,27 @@ validate_input_parameters_bulk(
 )
 }
 \arguments{
-\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
-
-\item{inpath}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis}
-
-\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
+\item{SCEs}{list of the input data (elements should be SCE objects)}
 
 \item{celltype}{the cell type we are focusing on (name as it appears in cell type sub-directory name)}
 
+\item{celltype_correspondence}{list of different names specifying each cell type}
+
+\item{output_path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis}
+
+\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
+
+\item{celltypeID}{cell type ID}
+
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
+
+\item{sampleID}{sample ID}
+
+\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
 \item{bulk_cutoff}{percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset}
 
 \item{pvalue}{the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)}
-
-\item{celltype_names}{list of the names specifying cell types in each DGE analysis output (in order they appear in the directory)}
-
-\item{datasets2}{list of datasets to be used, with celltype names (in DGE analysis outputs) as celltype_names2}
-
-\item{celltype_names2}{alt. list of the names specifying cell types in each DGE analysis output (in order they appear in the directory), if all are not the same as celltype}
 
 \item{Nperms}{number of permutations of DGE analysis outputs for each sample}
 

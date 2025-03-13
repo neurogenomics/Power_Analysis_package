@@ -6,7 +6,6 @@
 \usage{
 prop_bulk_DEGs_sc(
   bulkDE,
-  inpath,
   range_downsampled,
   bulk_cutoff = 0.9,
   pvalue = 0.05,
@@ -15,13 +14,12 @@ prop_bulk_DEGs_sc(
   fontsize_title = 14,
   fontsize_legendlabels = 9,
   fontsize_legendtitle = 9,
-  plot_title = "placeholder"
+  plot_title = "placeholder",
+  output_path = getwd()
 )
 }
 \arguments{
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
-
-\item{inpath}{path storing the down-sampled DGE analysis outputs for each dataset}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
@@ -40,9 +38,9 @@ prop_bulk_DEGs_sc(
 \item{fontsize_legendtitle}{font size for legend title in plot}
 
 \item{plot_title}{plot title}
-}
-\value{
-plot showing percentage DEGs from bulk data found in each scRNA-seq dataset
+
+\item{output_path}{path storing the down-sampled DGE analysis outputs for each dataset
+Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory}
 }
 \description{
 Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all cell types

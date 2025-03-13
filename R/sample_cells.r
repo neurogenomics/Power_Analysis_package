@@ -2,21 +2,21 @@
 
 #' @importFrom SingleCellExperiment colData
 
-#' @param data the input data (should be an SCE object)
+#' @param SCE the input data (should be an SCE object)
 #' @param meanCells the mean number of cells to be sampled from each individual
 #' @param Nperms the number of subsets the user needs (default 20)
 #' @param sampleID sample ID
 
-#' @return a list of size Nperms, with each item being a subset of the input SCE containing the specified mean number of cells per sample
+#' @return a list of size Nperms, with each item being a subset of the input data containing the specified mean number of cells per sample
 
-sample_cells <- function(data,
+sample_cells <- function(SCE,
                          meanCells,
                          sampleID="Donor.ID",
                          Nperms=20){
 
     # check input parameters are fine
-	if(class(data)[1]!="SingleCellExperiment"){
-        stop("Error: data should be a SingleCellExperiment object.")
+	if(class(SCE)[1]!="SingleCellExperiment"){
+        stop("Error: SCE should be a SingleCellExperiment object.")
 	}
     if(!as.integer(meanCells)==meanCells){
         stop("Error: meanCells should be a positive whole number.")
@@ -25,8 +25,8 @@ sample_cells <- function(data,
 		if(!is.character(sampleID)){
 			stop("Error: sampleID should be a string specifying the column name.")
 		}
-		if(is.null(data[[sampleID]])){
-			stop("Error: The specified column name (sampleID argument) is not present in the data. Please check if this is spelled correctly.")
+		if(is.null(SCE[[sampleID]])){
+			stop("Error: The specified column name (sampleID argument) is not present in the SCE. Please check if this is spelled correctly.")
 		}
 	}
 	if(Nperms!=20){
@@ -38,7 +38,7 @@ sample_cells <- function(data,
     # store outputs
     newData <- list()
     # column data
-    coldata <- colData(data)
+    coldata <- colData(SCE)
     # check no. cells per individual
     samples <- unique(coldata[[sampleID]])
     # from each individual, want to sample an average of meanCells cells
@@ -62,7 +62,7 @@ sample_cells <- function(data,
             }
         }
         # get updated permutations and add to list
-        newData[[j]] <- data[, unique(colnames(data))%in%cells]
+        newData[[j]] <- SCE[, unique(colnames(SCE))%in%cells]
     }
 
     return(newData)
