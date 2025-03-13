@@ -61,7 +61,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_input_parameters_power</span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  SCE <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  range_downsampled <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  output_path <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  inpath <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
@@ -80,10 +80,7 @@
 <span>  region <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  control <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  pval_adjust_method <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  rmv_zero_count_genes <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  base_outpath <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  datasets_path <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  sampleIDs <span class="op">=</span> <span class="st">"placeholder"</span></span>
+<span>  rmv_zero_count_genes <span class="op">=</span> <span class="st">"placeholder"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,12 +88,12 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dl><dt id="arg-sce">SCE<a class="anchor" aria-label="anchor" href="#arg-sce"></a></dt>
 <dd><p>the input data (should be an SCE object)</p></dd>
 
 
 <dt id="arg-range-downsampled">range_downsampled<a class="anchor" aria-label="anchor" href="#arg-range-downsampled"></a></dt>
-<dd><p>vector or list containing values which the data will be downsampled at, in ascending order</p></dd>
+<dd><p>vector or list containing values which the SCE will be downsampled at, in ascending order</p></dd>
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
@@ -168,19 +165,7 @@
 
 
 <dt id="arg-rmv-zero-count-genes">rmv_zero_count_genes<a class="anchor" aria-label="anchor" href="#arg-rmv-zero-count-genes"></a></dt>
-<dd><p>whether genes with no count values in any cell should be removed. Default is TRUE</p></dd>
-
-
-<dt id="arg-base-outpath">base_outpath<a class="anchor" aria-label="anchor" href="#arg-base-outpath"></a></dt>
-<dd><p>the base output path which contains power analysis output folders for <em>all</em> datasets (each one as created by "downsampling_DEanalysis.r")</p></dd>
-
-
-<dt id="arg-datasets-path">datasets_path<a class="anchor" aria-label="anchor" href="#arg-datasets-path"></a></dt>
-<dd><p>path where all dataset SCEs (in .qs format) are saved</p></dd>
-
-
-<dt id="arg-sampleids">sampleIDs<a class="anchor" aria-label="anchor" href="#arg-sampleids"></a></dt>
-<dd><p>list of sample ID names for datasets in "datasets_path" (may be in any order)
+<dd><p>whether genes with no count values in any cell should be removed. Default is TRUE
 Checks all power analysis parameters are specified correctly</p></dd>
 
 </dl></div>

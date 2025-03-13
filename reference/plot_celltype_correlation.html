@@ -60,7 +60,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_celltype_correlation</span><span class="op">(</span><span class="va">dataset_name</span>, <span class="va">allstudies</span>, <span class="va">celltype</span>, p_val <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_celltype_correlation</span><span class="op">(</span></span>
+<span>  <span class="va">dataset_name</span>,</span>
+<span>  <span class="va">DEouts</span>,</span>
+<span>  <span class="va">celltype</span>,</span>
+<span>  <span class="va">celltypes_list</span>,</span>
+<span>  <span class="va">data_names</span>,</span>
+<span>  pval <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -68,18 +75,26 @@
 
 
 <dl><dt id="arg-dataset-name">dataset_name<a class="anchor" aria-label="anchor" href="#arg-dataset-name"></a></dt>
-<dd><p>name of the dataset used to select significant DEGs from (specified as a string, name as in allstudies)</p></dd>
+<dd><p>name of the dataset used to select significant DEGs from (specified as a string, name as in data_names)</p></dd>
 
 
-<dt id="arg-allstudies">allstudies<a class="anchor" aria-label="anchor" href="#arg-allstudies"></a></dt>
-<dd><p>a list containing all the datasets (most likely as SCE objects)</p></dd>
+<dt id="arg-deouts">DEouts<a class="anchor" aria-label="anchor" href="#arg-deouts"></a></dt>
+<dd><p>a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis</p></dd>
 
 
 <dt id="arg-celltype">celltype<a class="anchor" aria-label="anchor" href="#arg-celltype"></a></dt>
 <dd><p>the celltype to compute correlation for</p></dd>
 
 
-<dt id="arg-p-val">p_val<a class="anchor" aria-label="anchor" href="#arg-p-val"></a></dt>
+<dt id="arg-celltypes-list">celltypes_list<a class="anchor" aria-label="anchor" href="#arg-celltypes-list"></a></dt>
+<dd><p>list of different names specifying each cell type (in order for each dataset in DEouts)</p></dd>
+
+
+<dt id="arg-data-names">data_names<a class="anchor" aria-label="anchor" href="#arg-data-names"></a></dt>
+<dd><p>names of the datasets as they will appear in the correlation plot</p></dd>
+
+
+<dt id="arg-pval">pval<a class="anchor" aria-label="anchor" href="#arg-pval"></a></dt>
 <dd><p>the cut-off p-value which will be used to select DEGs (default is 1 to include all the genes)</p></dd>
 
 </dl></div>

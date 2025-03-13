@@ -63,15 +63,15 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_input_parameters_de</span><span class="op">(</span></span>
 <span>  <span class="va">SCE</span>,</span>
 <span>  <span class="va">design</span>,</span>
-<span>  <span class="va">pseudobulk_ID</span>,</span>
-<span>  <span class="va">celltype_ID</span>,</span>
+<span>  <span class="va">sampleID</span>,</span>
+<span>  <span class="va">celltypeID</span>,</span>
 <span>  <span class="va">y</span>,</span>
 <span>  <span class="va">region</span>,</span>
 <span>  <span class="va">coef</span>,</span>
 <span>  <span class="va">control</span>,</span>
 <span>  <span class="va">pval_adjust_method</span>,</span>
 <span>  <span class="va">adj_pval</span>,</span>
-<span>  <span class="va">folder</span>,</span>
+<span>  <span class="va">output_path</span>,</span>
 <span>  <span class="va">rmv_zero_count_genes</span>,</span>
 <span>  <span class="va">verbose</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -89,11 +89,11 @@
 <dd><p>Design formula of class type <code>formula</code>. Equation used to fit the model- data for the generalised linear model.</p></dd>
 
 
-<dt id="arg-pseudobulk-id">pseudobulk_ID<a class="anchor" aria-label="anchor" href="#arg-pseudobulk-id"></a></dt>
+<dt id="arg-sampleid">sampleID<a class="anchor" aria-label="anchor" href="#arg-sampleid"></a></dt>
 <dd><p>Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach</p></dd>
 
 
-<dt id="arg-celltype-id">celltype_ID<a class="anchor" aria-label="anchor" href="#arg-celltype-id"></a></dt>
+<dt id="arg-celltypeid">celltypeID<a class="anchor" aria-label="anchor" href="#arg-celltypeid"></a></dt>
 <dd><p>Column name in the SCE object for the cell type variable</p></dd>
 
 
@@ -121,7 +121,7 @@
 <dd><p>Adjusted p-value cut-off for the differential expression analysis, 0-1 range</p></dd>
 
 
-<dt id="arg-folder">folder<a class="anchor" aria-label="anchor" href="#arg-folder"></a></dt>
+<dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
 <dd><p>Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.</p></dd>
 
 

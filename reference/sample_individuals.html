@@ -61,7 +61,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sample_individuals</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">SCE</span>,</span>
 <span>  <span class="va">Nsamples</span>,</span>
 <span>  sampleID <span class="op">=</span> <span class="st">"Donor.ID"</span>,</span>
 <span>  sexID <span class="op">=</span> <span class="st">"sex"</span>,</span>
@@ -73,7 +73,7 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dl><dt id="arg-sce">SCE<a class="anchor" aria-label="anchor" href="#arg-sce"></a></dt>
 <dd><p>the input data (should be an SCE object)</p></dd>
 
 
@@ -95,7 +95,7 @@
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list of size Nperms, with each item being a subset of the input SCE containing the specified number of individuals</p>
+    <p>a list of size Nperms, with each item being a subset of the input data containing the specified number of individuals</p>
     </div>
 
   </div>

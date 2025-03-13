@@ -61,12 +61,12 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_input_parameters_bulk</span><span class="op">(</span></span>
-<span>  datasets <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  SCEs <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  celltype <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  celltype_correspondence <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  path <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  output_path <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  range_downsampled <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  celltype_ID <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  celltypeID <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  sampled <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  sampleID <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  bulkDE <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
@@ -86,7 +86,7 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-datasets">datasets<a class="anchor" aria-label="anchor" href="#arg-datasets"></a></dt>
+<dl><dt id="arg-sces">SCEs<a class="anchor" aria-label="anchor" href="#arg-sces"></a></dt>
 <dd><p>list of the input data (elements should be SCE objects)</p></dd>
 
 
@@ -98,7 +98,7 @@
 <dd><p>list of different names specifying each cell type</p></dd>
 
 
-<dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
+<dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
 <dd><p>path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis</p></dd>
 
 
@@ -106,7 +106,7 @@
 <dd><p>vector or list containing values which the data will be downsampled at, in ascending order</p></dd>
 
 
-<dt id="arg-celltype-id">celltype_ID<a class="anchor" aria-label="anchor" href="#arg-celltype-id"></a></dt>
+<dt id="arg-celltypeid">celltypeID<a class="anchor" aria-label="anchor" href="#arg-celltypeid"></a></dt>
 <dd><p>cell type ID</p></dd>
 
 

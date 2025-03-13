@@ -63,17 +63,18 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DGE_analysis</span><span class="op">(</span></span>
 <span>  <span class="va">SCE</span>,</span>
 <span>  <span class="va">design</span>,</span>
-<span>  <span class="va">pseudobulk_ID</span>,</span>
-<span>  <span class="va">celltype_ID</span>,</span>
+<span>  <span class="va">sampleID</span>,</span>
+<span>  <span class="va">celltypeID</span>,</span>
 <span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  region <span class="op">=</span> <span class="st">"single_region"</span>,</span>
 <span>  coef <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  control <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pval_adjust_method <span class="op">=</span> <span class="st">"BH"</span>,</span>
 <span>  adj_pval <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  folder <span class="op">=</span> <span class="st">"sc.cell.type.de.graphs/"</span>,</span>
-<span>  rmv_zero_count_genes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">F</span></span>
+<span>  output_path <span class="op">=</span> <span class="st">"sc.cell.type.de.graphs/"</span>,</span>
+<span>  rmv_zero_count_genes <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  save <span class="op">=</span> <span class="cn">F</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,11 +90,11 @@
 <dd><p>Design formula of class type <code>formula</code>. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease.</p></dd>
 
 
-<dt id="arg-pseudobulk-id">pseudobulk_ID<a class="anchor" aria-label="anchor" href="#arg-pseudobulk-id"></a></dt>
+<dt id="arg-sampleid">sampleID<a class="anchor" aria-label="anchor" href="#arg-sampleid"></a></dt>
 <dd><p>Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach</p></dd>
 
 
-<dt id="arg-celltype-id">celltype_ID<a class="anchor" aria-label="anchor" href="#arg-celltype-id"></a></dt>
+<dt id="arg-celltypeid">celltypeID<a class="anchor" aria-label="anchor" href="#arg-celltypeid"></a></dt>
 <dd><p>Column name in the SCE object for the cell type variable. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will be automatically updated accordingly.</p></dd>
 
 
@@ -121,7 +122,7 @@
 <dd><p>Adjusted p-value cut-off for the differential expression analysis, 0-1 range</p></dd>
 
 
-<dt id="arg-folder">folder<a class="anchor" aria-label="anchor" href="#arg-folder"></a></dt>
+<dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
 <dd><p>Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.</p></dd>
 
 
@@ -131,6 +132,10 @@
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical indicating if extra information about the differential expression analysis should be printed</p></dd>
+
+
+<dt id="arg-save">save<a class="anchor" aria-label="anchor" href="#arg-save"></a></dt>
+<dd><p>Whether or not to save the DE analysis results as an RData file. Default is FALSE (down-sampling/power analysis saves these outputs itself)</p></dd>
 
 </dl></div>
     <div id="value">
@@ -153,19 +158,19 @@ celltype_counts: vector with the counts of cells after QC in each cell type</p>
 <span class="r-in"><span><span class="va">SCE</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"sce.qs"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">DGE_analysis.return_incl_sex</span><span class="op">&lt;-</span> <span class="fu">DGE_analysis</span><span class="op">(</span><span class="va">SCE_small</span>,</span></span>
 <span class="r-in"><span>design<span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">pathological_diagnosis_original</span>,</span></span>
-<span class="r-in"><span>pseudobulk_ID<span class="op">=</span><span class="st">"sample_id"</span>, celltype_ID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"AD"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>sampleID<span class="op">=</span><span class="st">"sample_id"</span>, celltypeID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"AD"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># If you only want to also account for other variables as well as sex, such as</span></span></span>
 <span class="r-in"><span><span class="co"># postmortem interval (PMI):</span></span></span>
 <span class="r-in"><span><span class="va">DGE_analysis.return_sex_pmi</span><span class="op">&lt;-</span> <span class="fu">DGE_analysis</span><span class="op">(</span><span class="va">SCE_small</span>,</span></span>
 <span class="r-in"><span>design<span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">PMI</span> <span class="op">+</span> <span class="va">pathological_diagnosis_original</span>,</span></span>
-<span class="r-in"><span>pseudobulk_ID<span class="op">=</span><span class="st">"sample_id"</span>, celltype_ID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"AD"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>sampleID<span class="op">=</span><span class="st">"sample_id"</span>, celltypeID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"AD"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># If you only want to compare disease and control across cell types w/o any other constraints:</span></span></span>
 <span class="r-in"><span><span class="va">DGE_analysis.return</span><span class="op">&lt;-</span> <span class="fu">DGE_analysis</span><span class="op">(</span><span class="va">SCE_small</span>,design<span class="op">=</span> <span class="op">~</span> <span class="va">pathological_diagnosis_original</span>,</span></span>
-<span class="r-in"><span>pseudobulk_ID<span class="op">=</span><span class="st">"sample_id"</span>, celltype_ID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"AD"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>sampleID<span class="op">=</span><span class="st">"sample_id"</span>, celltypeID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"AD"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># A good way to validate the DEG analysis approach is to run a sex comparison</span></span></span>
 <span class="r-in"><span><span class="co"># You would expect genes on the sex chromosomes to be DEGs, this can be done:</span></span></span>
 <span class="r-in"><span><span class="va">DGE_analysis.sex.return</span><span class="op">&lt;-</span> <span class="fu">DGE_analysis</span><span class="op">(</span><span class="va">SCE</span>,design<span class="op">=</span> <span class="op">~</span> <span class="va">sex</span>,</span></span>
-<span class="r-in"><span>pseudobulk_ID<span class="op">=</span><span class="st">"sample_id"</span>, celltype_ID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"M"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>sampleID<span class="op">=</span><span class="st">"sample_id"</span>, celltypeID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"M"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#get gene names of chromosomal DEGs</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/grimbough/biomaRt" class="external-link">'biomaRt'</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mart</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/biomaRt/man/useDataset.html" class="external-link">useDataset</a></span><span class="op">(</span><span class="st">"hsapiens_gene_ensembl"</span>, <span class="fu"><a href="https://rdrr.io/pkg/biomaRt/man/useMart.html" class="external-link">useMart</a></span><span class="op">(</span><span class="st">"ensembl"</span><span class="op">)</span><span class="op">)</span></span></span>

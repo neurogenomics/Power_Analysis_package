@@ -61,13 +61,13 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correlation_boxplots</span><span class="op">(</span></span>
-<span>  <span class="va">corrMats</span>,</span>
-<span>  <span class="va">numRealDatasets</span>,</span>
-<span>  <span class="va">pvals</span>,</span>
+<span>  <span class="va">corr_mats</span>,</span>
+<span>  <span class="va">num_real_datasets</span>,</span>
+<span>  pvals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>, <span class="fl">1e-04</span><span class="op">)</span>,</span>
 <span>  alphaval <span class="op">=</span> <span class="fl">0.25</span>,</span>
-<span>  numPerms <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  numSubsets <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  sexDEGs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  N_randperms <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  N_subsets <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  sex_DEGs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  fontsize_yaxislabels <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  fontsize_yaxisticks <span class="op">=</span> <span class="fl">9</span>,</span>
 <span>  fontsize_title <span class="op">=</span> <span class="fl">14</span>,</span>
@@ -82,11 +82,11 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-corrmats">corrMats<a class="anchor" aria-label="anchor" href="#arg-corrmats"></a></dt>
+<dl><dt id="arg-corr-mats">corr_mats<a class="anchor" aria-label="anchor" href="#arg-corr-mats"></a></dt>
 <dd><p>(named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value</p></dd>
 
 
-<dt id="arg-numrealdatasets">numRealDatasets<a class="anchor" aria-label="anchor" href="#arg-numrealdatasets"></a></dt>
+<dt id="arg-num-real-datasets">num_real_datasets<a class="anchor" aria-label="anchor" href="#arg-num-real-datasets"></a></dt>
 <dd><p>total number of <em>real</em> datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)</p></dd>
 
 
@@ -98,15 +98,15 @@
 <dd><p>(alpha) transparency of the non-mean boxplots</p></dd>
 
 
-<dt id="arg-numperms">numPerms<a class="anchor" aria-label="anchor" href="#arg-numperms"></a></dt>
+<dt id="arg-n-randperms">N_randperms<a class="anchor" aria-label="anchor" href="#arg-n-randperms"></a></dt>
 <dd><p>number of random permutations of the dataset used to select significant DEGs from</p></dd>
 
 
-<dt id="arg-numsubsets">numSubsets<a class="anchor" aria-label="anchor" href="#arg-numsubsets"></a></dt>
+<dt id="arg-n-subsets">N_subsets<a class="anchor" aria-label="anchor" href="#arg-n-subsets"></a></dt>
 <dd><p>number of pairs of random subsets of the dataset used to select significant DEGs from</p></dd>
 
 
-<dt id="arg-sexdegs">sexDEGs<a class="anchor" aria-label="anchor" href="#arg-sexdegs"></a></dt>
+<dt id="arg-sex-degs">sex_DEGs<a class="anchor" aria-label="anchor" href="#arg-sex-degs"></a></dt>
 <dd><p>true if DEGs come from sex chromosomes, else false</p></dd>
 
 
@@ -135,13 +135,10 @@
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><p>base path in which outputs will be stored</p></dd>
+<dd><p>base path in which outputs will be stored
+Saves box plots for correlation matrices, at a certain p-value cut-off, in the appropriate directory</p></dd>
 
 </dl></div>
-    <div id="value">
-    <h2>Value</h2>
-    <p>box plots for correlation matrices at a certain p-value cut-off, sorted by celltype and then type of correlation</p>
-    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -62,16 +62,16 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_input_parameters_correlation</span><span class="op">(</span></span>
 <span>  dataset_name <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  allstudies <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  celltypes <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  pvalue <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  DEouts <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  celltype_correspondence <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  pvalues <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  data_names <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  corrMats <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  numRealDatasets <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  corr_mats <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  num_real_datasets <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  alphaval <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  numPerms <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  numSubsets <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
-<span>  sexDEGs <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  N_randperms <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  N_subsets <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  sex_DEGs <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  fontsize_yaxislabels <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  fontsize_yaxisticks <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  fontsize_title <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
@@ -90,27 +90,27 @@
 <dd><p>name of the dataset used to select significant DEGs from (specified as a string, name as in allStudies)</p></dd>
 
 
-<dt id="arg-allstudies">allstudies<a class="anchor" aria-label="anchor" href="#arg-allstudies"></a></dt>
-<dd><p>a list containing all the datasets (most likely as SCE objects)</p></dd>
+<dt id="arg-deouts">DEouts<a class="anchor" aria-label="anchor" href="#arg-deouts"></a></dt>
+<dd><p>a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis</p></dd>
 
 
-<dt id="arg-celltypes">celltypes<a class="anchor" aria-label="anchor" href="#arg-celltypes"></a></dt>
-<dd><p>a list containing the celltypes to compute mean correlation across</p></dd>
+<dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
+<dd><p>list of different names specifying each cell type</p></dd>
 
 
-<dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
-<dd><p>the cut-off p-value which will be used to select DEGs</p></dd>
+<dt id="arg-pvalues">pvalues<a class="anchor" aria-label="anchor" href="#arg-pvalues"></a></dt>
+<dd><p>the list of cut-off p-values which will be used to select DEGs (can just provide a list with one as well)</p></dd>
 
 
 <dt id="arg-data-names">data_names<a class="anchor" aria-label="anchor" href="#arg-data-names"></a></dt>
 <dd><p>names of the datasets as they appear in the correlation plot</p></dd>
 
 
-<dt id="arg-corrmats">corrMats<a class="anchor" aria-label="anchor" href="#arg-corrmats"></a></dt>
+<dt id="arg-corr-mats">corr_mats<a class="anchor" aria-label="anchor" href="#arg-corr-mats"></a></dt>
 <dd><p>(named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value</p></dd>
 
 
-<dt id="arg-numrealdatasets">numRealDatasets<a class="anchor" aria-label="anchor" href="#arg-numrealdatasets"></a></dt>
+<dt id="arg-num-real-datasets">num_real_datasets<a class="anchor" aria-label="anchor" href="#arg-num-real-datasets"></a></dt>
 <dd><p>total number of <em>real</em> datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)</p></dd>
 
 
@@ -118,15 +118,15 @@
 <dd><p>(alpha) transparency of the non-mean boxplots</p></dd>
 
 
-<dt id="arg-numperms">numPerms<a class="anchor" aria-label="anchor" href="#arg-numperms"></a></dt>
+<dt id="arg-n-randperms">N_randperms<a class="anchor" aria-label="anchor" href="#arg-n-randperms"></a></dt>
 <dd><p>number of random permutations of the dataset used to select significant DEGs from</p></dd>
 
 
-<dt id="arg-numsubsets">numSubsets<a class="anchor" aria-label="anchor" href="#arg-numsubsets"></a></dt>
+<dt id="arg-n-subsets">N_subsets<a class="anchor" aria-label="anchor" href="#arg-n-subsets"></a></dt>
 <dd><p>number of pairs of random subsets of the dataset used to select significant DEGs from</p></dd>
 
 
-<dt id="arg-sexdegs">sexDEGs<a class="anchor" aria-label="anchor" href="#arg-sexdegs"></a></dt>
+<dt id="arg-sex-degs">sex_DEGs<a class="anchor" aria-label="anchor" href="#arg-sex-degs"></a></dt>
 <dd><p>true if DEGs come from sex chromosomes, else false</p></dd>
 
 

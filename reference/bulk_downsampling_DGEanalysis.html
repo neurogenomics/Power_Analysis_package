@@ -61,12 +61,12 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bulk_downsampling_DGEanalysis</span><span class="op">(</span></span>
-<span>  <span class="va">datasets</span>,</span>
+<span>  <span class="va">SCEs</span>,</span>
 <span>  <span class="va">celltype_correspondence</span>,</span>
 <span>  sampled <span class="op">=</span> <span class="st">"individuals"</span>,</span>
 <span>  sampleID <span class="op">=</span> <span class="st">"donor_id"</span>,</span>
-<span>  celltype_ID <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
-<span>  path <span class="op">=</span> <span class="st">"placeholder"</span></span>
+<span>  celltypeID <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
+<span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -74,7 +74,7 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-datasets">datasets<a class="anchor" aria-label="anchor" href="#arg-datasets"></a></dt>
+<dl><dt id="arg-sces">SCEs<a class="anchor" aria-label="anchor" href="#arg-sces"></a></dt>
 <dd><p>list of the input data (elements should be SCE objects)</p></dd>
 
 
@@ -90,11 +90,11 @@
 <dd><p>sample ID</p></dd>
 
 
-<dt id="arg-celltype-id">celltype_ID<a class="anchor" aria-label="anchor" href="#arg-celltype-id"></a></dt>
+<dt id="arg-celltypeid">celltypeID<a class="anchor" aria-label="anchor" href="#arg-celltypeid"></a></dt>
 <dd><p>cell type ID</p></dd>
 
 
-<dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
+<dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
 <dd><p>base output directory where down-sampled DGE analysis outputs will be saved
 Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions</p></dd>
 
