@@ -5,17 +5,17 @@
 \title{Calculate the summed pseudobulk values for an SCE object based on one single cell type only. Ensure to filter SCE to pass one cell type's data.}
 \usage{
 make_pseudobulk(
-  data,
-  pseudobulk_ID,
+  SCE,
+  sampleID,
   pb_columns = NULL,
   region = "single_region",
   rmv_zero_count_genes = TRUE
 )
 }
 \arguments{
-\item{data}{SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.}
+\item{SCE}{SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.}
 
-\item{pseudobulk_ID}{Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach}
+\item{sampleID}{Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach}
 
 \item{pb_columns}{Vector, list of annotation column names in the SCE object to be returned in annot_pb rolled up to pseudobulk level. Default is NULL which won't return any information in annot_pb.}
 

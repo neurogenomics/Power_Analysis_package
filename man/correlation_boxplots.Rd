@@ -5,13 +5,13 @@
 \title{Obtain box plots for the correlations of all celltypes, and the mean correlations at a specified cutoff p-value}
 \usage{
 correlation_boxplots(
-  corrMats,
-  numRealDatasets,
-  pvals,
+  corr_mats,
+  num_real_datasets,
+  pvals = c(0.05, 0.025, 0.01, 0.001, 1e-04),
   alphaval = 0.25,
-  numPerms = 5,
-  numSubsets = 5,
-  sexDEGs = FALSE,
+  N_randperms = 5,
+  N_subsets = 5,
+  sex_DEGs = FALSE,
   fontsize_yaxislabels = 12,
   fontsize_yaxisticks = 9,
   fontsize_title = 14,
@@ -22,19 +22,19 @@ correlation_boxplots(
 )
 }
 \arguments{
-\item{corrMats}{(named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value}
+\item{corr_mats}{(named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value}
 
-\item{numRealDatasets}{total number of \emph{real} datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)}
+\item{num_real_datasets}{total number of \emph{real} datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)}
 
 \item{pvals}{the cut-off p-value which was used to select DEGs}
 
 \item{alphaval}{(alpha) transparency of the non-mean boxplots}
 
-\item{numPerms}{number of random permutations of the dataset used to select significant DEGs from}
+\item{N_randperms}{number of random permutations of the dataset used to select significant DEGs from}
 
-\item{numSubsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
+\item{N_subsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
 
-\item{sexDEGs}{true if DEGs come from sex chromosomes, else false}
+\item{sex_DEGs}{true if DEGs come from sex chromosomes, else false}
 
 \item{fontsize_yaxislabels}{font size for axis labels in plot}
 
@@ -48,10 +48,8 @@ correlation_boxplots(
 
 \item{fontsize_facet_labels}{font size for facet labels}
 
-\item{output_path}{base path in which outputs will be stored}
-}
-\value{
-box plots for correlation matrices at a certain p-value cut-off, sorted by celltype and then type of correlation
+\item{output_path}{base path in which outputs will be stored
+Saves box plots for correlation matrices, at a certain p-value cut-off, in the appropriate directory}
 }
 \description{
 Obtain box plots for the correlations of all celltypes, and the mean correlations at a specified cutoff p-value

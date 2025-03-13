@@ -5,12 +5,12 @@
 \title{Tests input parameters for functions}
 \usage{
 validate_input_parameters_bulk(
-  datasets = "placeholder",
+  SCEs = "placeholder",
   celltype = "placeholder",
   celltype_correspondence = "placeholder",
-  path = "placeholder",
+  output_path = "placeholder",
   range_downsampled = "placeholder",
-  celltype_ID = "placeholder",
+  celltypeID = "placeholder",
   sampled = "placeholder",
   sampleID = "placeholder",
   bulkDE = "placeholder",
@@ -26,17 +26,17 @@ validate_input_parameters_bulk(
 )
 }
 \arguments{
-\item{datasets}{list of the input data (elements should be SCE objects)}
+\item{SCEs}{list of the input data (elements should be SCE objects)}
 
 \item{celltype}{the cell type we are focusing on (name as it appears in cell type sub-directory name)}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
-\item{path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis}
+\item{output_path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
-\item{celltype_ID}{cell type ID}
+\item{celltypeID}{cell type ID}
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 

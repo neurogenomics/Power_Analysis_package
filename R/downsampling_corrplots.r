@@ -5,7 +5,7 @@
 #' @importFrom ggplot2 labs theme ggsave element_text scale_fill_gradient2
 #' @importFrom ggcorrplot ggcorrplot
 
-#' @param data the input data (should be an SCE object)
+#' @param SCE the input data (should be an SCE object)
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param output_path base path in which outputs will be stored
 #' @param inpath base path where downsampled DGE analysis output folders are stored (taken to be output_path if not provided)
@@ -22,7 +22,7 @@
 
 #' Saves all plots in the appropriate directory
 
-downsampling_corrplots <- function(data,
+downsampling_corrplots <- function(SCE,
                                    range_downsampled="placeholder",
                                    output_path=getwd(),
                                    inpath="placeholder",
@@ -39,7 +39,7 @@ downsampling_corrplots <- function(data,
     
     # alter range_downsampled
     if(identical(range_downsampled,"placeholder")){
-        range_downsampled <- downsampling_range(data, sampled, sampleID)
+        range_downsampled <- downsampling_range(SCE, sampled, sampleID)
     }
     # alter inpath
     if(inpath=="placeholder"){
@@ -50,23 +50,23 @@ downsampling_corrplots <- function(data,
     setwd(output_path)
     dir.create(output_path,showWarnings=FALSE)
     # create directory for correlation analysis
-    dir.create(paste0(output_path, "/corr_analysis/"), showWarnings=FALSE)
+    dir.create(file.path(output_path, "corr_analysis"), showWarnings=FALSE)
     # validate function input params
-    validate_input_parameters_power(data=data, range_downsampled=range_downsampled, output_path=output_path,
+    validate_input_parameters_power(SCE=SCE, range_downsampled=range_downsampled, output_path=output_path,
                                     inpath=inpath, sampled=sampled, sampleID=sampleID,
                                     celltypeID=celltypeID, coeff=coeff, y=y,
                                     region=region, control=control, pval_adjust_method=pval_adjust_method,
                                     rmv_zero_count_genes=rmv_zero_count_genes)
     
     # get celltype name from dataset
-    celltype_name <- toString(unique(data[[celltypeID]]))
+    celltype_name <- toString(unique(SCE[[celltypeID]]))
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
         # run and save DE analysis
-        assign("DEout", DGE_analysis(data, design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
-        save(DEout,file=paste0(output_path,"/DEout.RData"))
+        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        save(DEout,file=file.path(output_path,"DEout.RData"))
     }else{
-        load(paste0(output_path,"/DEout.RData"))
+        load(file.path(output_path,"DEout.RData"))
     }
 
     ## correlation using down-sampled datasets - top 1000 genes
@@ -89,7 +89,7 @@ downsampling_corrplots <- function(data,
     if(sampled=="individuals"){
         
         # define path and folders
-        path <- paste0(inpath,"/DE_downsampling/")
+        path <- file.path(inpath,"DE_downsampling")
         downsampled_folders <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"samples")
         # get corr matrices for each permutation
         corrMats_1000 <- list()
@@ -98,13 +98,13 @@ downsampling_corrplots <- function(data,
             for(folder in mixedsort(list.files())){
                 # remove other files above
                 if(folder%in%downsampled_folders){
-                    newpath <- paste0(path,folder)
+                    newpath <- file.path(path,folder)
                     # enter directory
                     setwd(newpath)
                     # get num_samples
                     num_samples <- str_sub(folder,1,-8) 
                     # go into permutation
-                    subpath <- paste0(newpath,"/",paste0(num_samples,"_",i))
+                    subpath <- file.path(newpath,paste0(num_samples,"_",i))
                     setwd(subpath)
                     # read DGE analysis output
                     load(paste0("DEout",num_samples,"_",i,".RData"))
@@ -123,7 +123,7 @@ downsampling_corrplots <- function(data,
         # compute mean of correlation matrices
         meanCorr_1000 <- Reduce("+",corrMats_1000) / length(corrMats_1000)
         # plot
-        setwd(paste0(output_path, "/corr_analysis/"))
+        setwd(file.path(output_path, "corr_analysis"))
         # plot correlation matrix
         meanCorr_downsampling_1000.plot <- ggcorrplot(round(meanCorr_1000,2), 
                 hc.order = F, insig="pch",pch=5,pch.col = "grey",
@@ -145,13 +145,13 @@ downsampling_corrplots <- function(data,
             for(folder in mixedsort(list.files())){
                 # remove other files above
                 if(folder%in%downsampled_folders){
-                    newpath <- paste0(path,folder)
+                    newpath <- file.path(path,folder)
                     # enter directory
                     setwd(newpath)
                     # get num_samples
                     num_samples <- str_sub(folder,1,-8) 
                     # go into permutation
-                    subpath <- paste0(newpath,"/",paste0(num_samples,"_",i))
+                    subpath <- file.path(newpath,paste0(num_samples,"_",i))
                     setwd(subpath)
                     # read DGE analysis output
                     load(paste0("DEout",num_samples,"_",i,".RData"))
@@ -170,7 +170,7 @@ downsampling_corrplots <- function(data,
         # compute mean of correlation matrices
         meanCorr_500 <- Reduce("+",corrMats_500) / length(corrMats_500)
         # plot
-        setwd(paste0(output_path, "/corr_analysis/"))
+        setwd(file.path(output_path, "corr_analysis"))
         # plot correlation matrix
         meanCorr_downsampling_500.plot <- ggcorrplot(round(meanCorr_500,2), 
                 hc.order = F, insig="pch",pch=5,pch.col = "grey",
@@ -189,7 +189,7 @@ downsampling_corrplots <- function(data,
 
         ## if down-sampled cells
         # define path and folders
-        path <- paste0(inpath,"/DE_downsampling_cells/")
+        path <- file.path(inpath,"DE_downsampling_cells")
         downsampled_folders <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"cells_persample")
         # get corr matrices for each permutation
         corrMats_cells_1000 <- list()
@@ -198,13 +198,13 @@ downsampling_corrplots <- function(data,
             for(folder in mixedsort(list.files())){
                 # remove other files above
                 if(folder%in%downsampled_folders){
-                    newpath <- paste0(path,folder)
+                    newpath <- file.path(path,folder)
                     # enter directory
                     setwd(newpath)
                     # get num_cells
                     num_cells <- str_sub(folder,1,-16)
                     # go into permutation
-                    subpath <- paste0(newpath,"/",paste0(num_cells,"_",i))
+                    subpath <- file.path(newpath,paste0(num_cells,"_",i))
                     setwd(subpath)
                     # read DGE analysis output
                     load(paste0("DEout",num_cells,"_",i,".RData"))
@@ -223,7 +223,7 @@ downsampling_corrplots <- function(data,
         # compute mean of correlation matrices
         meanCorr_cells_1000 <- Reduce("+",corrMats_cells_1000) / length(corrMats_cells_1000)
         # plot
-        setwd(paste0(output_path, "/corr_analysis/"))
+        setwd(file.path(output_path, "corr_analysis"))
         # plot correlation matrix
         meanCorr_downsampling_cells_1000.plot <- ggcorrplot(round(meanCorr_cells_1000,2), 
                 hc.order = F, insig="pch",pch=5,pch.col = "grey",
@@ -248,13 +248,13 @@ downsampling_corrplots <- function(data,
             for(folder in mixedsort(list.files())){
                 # remove other files above
                 if(folder%in%downsampled_folders){
-                    newpath <- paste0(path,folder)
+                    newpath <- file.path(path,folder)
                     # enter directory
                     setwd(newpath)
                     # get num_cells
                     num_cells <- str_sub(folder,1,-16)
                     # go into permutation
-                    subpath <- paste0(newpath,"/",paste0(num_cells,"_",i))
+                    subpath <- file.path(newpath,paste0(num_cells,"_",i))
                     setwd(subpath)
                     # read DGE analysis output
                     load(paste0("DEout",num_cells,"_",i,".RData"))
@@ -273,7 +273,7 @@ downsampling_corrplots <- function(data,
         # compute mean of correlation matrices
         meanCorr_cells_500 <- Reduce("+",corrMats_cells_500) / length(corrMats_cells_500)
         # plot
-        setwd(paste0(output_path, "/corr_analysis/"))
+        setwd(file.path(output_path, "corr_analysis"))
         # plot correlation matrix
         meanCorr_downsampling_cells_500.plot <- ggcorrplot(round(meanCorr_cells_500,2), 
                 hc.order = F, insig="pch",pch=5,pch.col = "grey",

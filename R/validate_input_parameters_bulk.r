@@ -1,11 +1,11 @@
 #' Tests input parameters for functions
 
-#' @param datasets list of the input data (elements should be SCE objects)
+#' @param SCEs list of the input data (elements should be SCE objects)
 #' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
 #' @param celltype_correspondence list of different names specifying each cell type
-#' @param path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+#' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
-#' @param celltype_ID cell type ID
+#' @param celltypeID cell type ID
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
@@ -21,12 +21,12 @@
 
 #' Checks all bulk analysis parameters are specified correctly
 
-validate_input_parameters_bulk <- function(datasets="placeholder",
+validate_input_parameters_bulk <- function(SCEs="placeholder",
                                            celltype="placeholder",
                                            celltype_correspondence="placeholder",
-                                           path="placeholder",
+                                           output_path="placeholder",
                                            range_downsampled="placeholder",
-                                           celltype_ID="placeholder",
+                                           celltypeID="placeholder",
                                            sampled="placeholder",
                                            sampleID="placeholder",
                                            bulkDE="placeholder",
@@ -41,9 +41,9 @@ validate_input_parameters_bulk <- function(datasets="placeholder",
                                            plot_title="placeholder"){
 
     # test each parameter to check if it works
-    if(datasets!="placeholder"){
-        if(!is.list(datasets)){
-            stop("Error: datasets should be a list of SingleCellExperiment objects.")
+    if(!identical(SCEs, "placeholder")){
+        if(!is.list(SCEs)){
+            stop("Error: SCEs should be a list of SingleCellExperiment objects.")
         }
     }
     if(celltype!="placeholder"){
@@ -61,14 +61,14 @@ validate_input_parameters_bulk <- function(datasets="placeholder",
             }
         }
     }
-    if(path!="placeholder"){
-        if(path!=getwd()){
-            if(!is.character(path)){
-                stop("Error: path should be a string specifying the base path where down-sampled DE analysis outputs are saved.")
+    if(output_path!="placeholder"){
+        if(output_path!=getwd()){
+            if(!is.character(output_path)){
+                stop("Error: output_path should be a string specifying the base path where down-sampled DE analysis outputs are saved (and output will be saved).")
             }
         }
-        if(!dir.exists(path)){
-            stop("Error: the specified path directory does not exist.")
+        if(!dir.exists(output_path)){
+            stop("Error: the specified output_path directory does not exist.")
         }    
     }
     if(!identical(range_downsampled,"placeholder")){
@@ -82,9 +82,9 @@ validate_input_parameters_bulk <- function(datasets="placeholder",
             }
         }
     }
-    if(celltype_ID!="placeholder"){
-        if(!is.character(celltype_ID)){
-            stop("Error: celltype_ID should be a string specifying the cell type ID.")
+    if(celltypeID!="placeholder"){
+        if(!is.character(celltypeID)){
+            stop("Error: celltypeID should be a string specifying the cell type ID.")
         }
     }
     if(sampled!="placeholder"){

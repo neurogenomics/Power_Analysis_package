@@ -5,8 +5,8 @@ utils::globalVariables(c("PValue","name"))
 
 #' @importFrom stats as.formula
 
-#' @param data the input data (should be an SCE object)
-#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
+#' @param SCE the input data (should be an SCE object)
+#' @param range_downsampled vector or list containing values which the SCE will be downsampled at, in ascending order
 #' @param output_path base path in which outputs will be stored
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
@@ -25,7 +25,7 @@ utils::globalVariables(c("PValue","name"))
 
 #' Saves all DGE analysis outputs for downsampled files as well as a summary table of results showing number of true DEGs detected at each number of samples/cells
 
-downsampling_DEanalysis <- function(data,
+downsampling_DEanalysis <- function(SCE,
                                     range_downsampled="placeholder",
                                     output_path=getwd(),
                                     sampled="individuals",
@@ -45,7 +45,7 @@ downsampling_DEanalysis <- function(data,
 
     # alter range_downsampled
     if(identical(range_downsampled,"placeholder")){
-        range_downsampled <- downsampling_range(data, sampled, sampleID)
+        range_downsampled <- downsampling_range(SCE, sampled, sampleID)
     }
     # alter design
     if(design=="placeholder"){
@@ -56,7 +56,7 @@ downsampling_DEanalysis <- function(data,
     dir.create(output_path,showWarnings=FALSE)
     setwd(output_path)
     # validate function input params
-    validate_input_parameters_power(data=data, range_downsampled=range_downsampled, output_path=output_path,
+    validate_input_parameters_power(SCE=SCE, range_downsampled=range_downsampled, output_path=output_path,
                                     sampled=sampled, sampleID=sampleID, design=design, 
                                     sexID=sexID, celltypeID=celltypeID, coeff=coeff,
                                     fdr=fdr, nom_pval=nom_pval, Nperms=Nperms,
@@ -64,14 +64,14 @@ downsampling_DEanalysis <- function(data,
                                     pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes)
 
     # get celltype name from dataset
-    celltype_name <- toString(unique(data[[celltypeID]]))
+    celltype_name <- toString(unique(SCE[[celltypeID]]))
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
         # run and save DE analysis
-        assign("DEout", DGE_analysis(data, design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
-        save(DEout,file=paste0(output_path,"/DEout.RData"))
+        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        save(DEout,file=file.path(output_path,"DEout.RData"))
     }else{
-        load(paste0(output_path,"/DEout.RData"))
+        load(file.path(output_path,"DEout.RData"))
     }
     # get DEGs using both FDR and nominal Pval
     DEGs_fdr <- subset(DEout$celltype_all_genes[[celltype_name]], adj_pval<fdr)$name
@@ -92,17 +92,17 @@ downsampling_DEanalysis <- function(data,
     if(sampled=="individuals"){
 
         # make sure directory is correct (to save output)
-        output_path <- paste0(output_path,"/DE_downsampling/")
+        output_path <- file.path(output_path,"DE_downsampling")
         # create path
         dir.create(output_path,showWarnings=FALSE)
         # loop through downsampled values
         for(value in range_downsampled){
             # create and redirect to new folder
-            path_val <- paste0(output_path,"/",toString(value),"samples")
+            path_val <- file.path(output_path,paste0(toString(value),"samples"))
             dir.create(path_val,showWarnings=FALSE)
             setwd(path_val)
             # create subsets
-            samples <- sample_individuals(data, value, sampleID, sexID, Nperms)
+            samples <- sample_individuals(SCE, value, sampleID, sexID, Nperms)
             # run DGE analysis on each subset, get number of DEGs and FPs
             assign(paste0("numDEGs_fdr_",toString(value)), list())
             assign(paste0("numDEGs_pval_",toString(value)), list())
@@ -111,11 +111,11 @@ downsampling_DEanalysis <- function(data,
             # loop through
             for(j in 1:Nperms){
                 # create sub-directory for each one
-                path <- paste0(path_val,"/",toString(value),"_",j) 
+                path <- file.path(path_val,paste0(toString(value),"_",j))
                 dir.create(path,showWarnings=FALSE)
                 setwd(path)
                 # ensure sexID isnt "Sex", has to be lower case (change this in SCE if needed)
-                assign(paste0("DEout_",toString(value)), DGE_analysis(samples[[j]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+                assign(paste0("DEout_",toString(value)), DGE_analysis(samples[[j]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
                 # save output
                 save(list=eval(paste0("DEout_",toString(value))),file=paste0("DEout",toString(value),"_",j,".RData"))
                 # get number of TP DEGs
@@ -147,17 +147,17 @@ downsampling_DEanalysis <- function(data,
     }else{
 
         # make sure directory is correct (to save output)
-        output_path <- paste0(output_path,"/DE_downsampling_cells/")
+        output_path <- file.path(output_path,"DE_downsampling_cells")
         # create path
         dir.create(output_path,showWarnings=FALSE)
         # loop through downsampled values
         for(value in range_downsampled){
             # create and redirect to new folder
-            path_val <- paste0(output_path,"/",toString(value),"cells_persample")
+            path_val <- file.path(output_path,paste0(toString(value),"cells_persample"))
             dir.create(path_val,showWarnings=FALSE)
             setwd(path_val)
             # create subsets
-            cells <- sample_cells(data, value, sampleID, Nperms)
+            cells <- sample_cells(SCE, value, sampleID, Nperms)
             # run DGE analysis on each subset, get number of DEGs
             assign(paste0("numDEGs_fdr_",toString(value)), list())
             assign(paste0("numDEGs_pval_",toString(value)), list())
@@ -166,11 +166,11 @@ downsampling_DEanalysis <- function(data,
             # loop through
             for(j in 1:Nperms){
                 # create sub-directory for each one
-                path <- paste0(path_val,"/",toString(value),"_",j) 
+                path <- file.path(path_val,paste0(toString(value),"_",j))
                 dir.create(path,showWarnings=FALSE)
                 setwd(path)
                 # ensure sexID isnt "Sex", has to be lower case (change this in SCE if needed)
-                assign(paste0("DEout_",toString(value)), DGE_analysis(cells[[j]], design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+                assign(paste0("DEout_",toString(value)), DGE_analysis(cells[[j]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
                 # save output
                 save(list=eval(paste0("DEout_",toString(value))),file=paste0("DEout",toString(value),"_",j,".RData"))
                 # get number of TP DEGs

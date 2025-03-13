@@ -5,15 +5,15 @@
 \title{Obtain the range of values to downsample at (either for individuals, or mean number of cells per individual), for bulk analysis}
 \usage{
 bulk_downsampling_range(
-  datasets,
+  SCEs,
   celltype_correspondence,
   sampled = "individuals",
   sampleID = "donor_id",
-  celltype_ID = "cell_type"
+  celltypeID = "cell_type"
 )
 }
 \arguments{
-\item{datasets}{list of the input data (elements should be SCE objects)}
+\item{SCEs}{list of the input data (elements should be SCE objects)}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
@@ -21,7 +21,7 @@ bulk_downsampling_range(
 
 \item{sampleID}{sample ID}
 
-\item{celltype_ID}{cell type ID}
+\item{celltypeID}{cell type ID}
 }
 \value{
 list containing values which the data will be downsampled at, in ascending order

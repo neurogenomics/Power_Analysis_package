@@ -5,9 +5,9 @@ utils::globalVariables(c("dataset"))
 
 #' @importFrom stats as.formula
 
-#' @param data the input data (should be an SCE object)
-#' @param range_downsampled_individuals vector or list containing values which the data will be downsampled at (for individuals), in ascending order
-#' @param range_downsampled_cells vector or list containing values which the data will be downsampled at (for cells), in ascending order
+#' @param SCE the input data (should be an SCE object)
+#' @param range_downsampled_individuals vector or list containing values which the SCE will be downsampled at (for individuals), in ascending order
+#' @param range_downsampled_cells vector or list containing values which the SCE will be downsampled at (for cells), in ascending order
 #' @param output_path base path in which outputs will be stored
 #' @param sampleID sample ID
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
@@ -26,7 +26,7 @@ utils::globalVariables(c("dataset"))
 #' Saves all plots and DGE analysis outputs in the appropriate directories
 #' @export
 
-power_analysis <- function(data,
+power_analysis <- function(SCE,
                            range_downsampled_individuals="placeholder",
                            range_downsampled_cells="placeholder",
                            output_path=getwd(),
@@ -48,11 +48,11 @@ power_analysis <- function(data,
 
     # alter range_downsampled_individuals
     if(identical(range_downsampled_individuals,"placeholder")){
-        range_downsampled_individuals <- downsampling_range(data, "individuals", sampleID)
+        range_downsampled_individuals <- downsampling_range(SCE, "individuals", sampleID)
     }
     # alter range_downsampled_cells
     if(identical(range_downsampled_cells,"placeholder")){
-        range_downsampled_cells <- downsampling_range(data, "cells", sampleID)
+        range_downsampled_cells <- downsampling_range(SCE, "cells", sampleID)
     }
     # alter design
     if(design=="placeholder"){
@@ -60,7 +60,7 @@ power_analysis <- function(data,
     }    
 
     # create preliminary plots
-    preliminary_plots(data=data, 
+    preliminary_plots(SCE=SCE, 
                       output_path=output_path, 
                       sampleID=sampleID, 
                       design=design, 
@@ -71,7 +71,7 @@ power_analysis <- function(data,
     
     ## create power plots for down-sampling individuals, cells
     # down-sample individuals and run DE analysis
-    downsampling_DEanalysis(data=data,
+    downsampling_DEanalysis(SCE=SCE,
                             range_downsampled=range_downsampled_individuals,
                             output_path=output_path,
                             sampled="individuals",
@@ -89,7 +89,7 @@ power_analysis <- function(data,
                             nom_pval=nom_pval, 
                             Nperms=Nperms)
     # create power plots
-    power_plots(data=data, 
+    power_plots(SCE=SCE, 
                 range_downsampled=range_downsampled_individuals, 
                 output_path=output_path,
                 sampled="individuals", 
@@ -99,7 +99,7 @@ power_analysis <- function(data,
                 nom_pval=nom_pval, 
                 Nperms=Nperms)
     # down-sample cells and run DE analysis
-    downsampling_DEanalysis(data=data,
+    downsampling_DEanalysis(SCE=SCE,
                             range_downsampled=range_downsampled_cells,
                             output_path=output_path,
                             sampled="cells",
@@ -117,7 +117,7 @@ power_analysis <- function(data,
                             nom_pval=nom_pval, 
                             Nperms=Nperms)
     # create power plots
-    power_plots(data=data, 
+    power_plots(SCE=SCE, 
                 range_downsampled=range_downsampled_cells, 
                 output_path=output_path,
                 sampled="cells", 
@@ -127,14 +127,14 @@ power_analysis <- function(data,
                 nom_pval=nom_pval, 
                 Nperms=Nperms)
     # create down-sampling correlation plots (individuals)
-    downsampling_corrplots(data=data, 
+    downsampling_corrplots(SCE=SCE, 
                            range_downsampled=range_downsampled_individuals, 
                            output_path=output_path, 
                            sampled="individuals", 
                            celltypeID=celltypeID, 
                            Nperms=Nperms)
     # create down-sampling correlation plots (cells)
-    downsampling_corrplots(data=data, 
+    downsampling_corrplots(SCE=SCE, 
                            range_downsampled=range_downsampled_cells, 
                            output_path=output_path, 
                            sampled="cells", 

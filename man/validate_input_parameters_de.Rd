@@ -7,15 +7,15 @@
 validate_input_parameters_de(
   SCE,
   design,
-  pseudobulk_ID,
-  celltype_ID,
+  sampleID,
+  celltypeID,
   y,
   region,
   coef,
   control,
   pval_adjust_method,
   adj_pval,
-  folder,
+  output_path,
   rmv_zero_count_genes,
   verbose
 )
@@ -25,9 +25,9 @@ validate_input_parameters_de(
 
 \item{design}{Design formula of class type \code{formula}. Equation used to fit the model- data for the generalised linear model.}
 
-\item{pseudobulk_ID}{Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach}
+\item{sampleID}{Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach}
 
-\item{celltype_ID}{Column name in the SCE object for the cell type variable}
+\item{celltypeID}{Column name in the SCE object for the cell type variable}
 
 \item{y}{Column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease}
 
@@ -41,7 +41,7 @@ validate_input_parameters_de(
 
 \item{adj_pval}{Adjusted p-value cut-off for the differential expression analysis, 0-1 range}
 
-\item{folder}{Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.}
+\item{output_path}{Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.}
 
 \item{rmv_zero_count_genes}{Whether genes with no count values in any cell should be removed. Default is TRUE}
 

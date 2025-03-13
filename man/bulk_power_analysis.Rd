@@ -5,12 +5,12 @@
 \title{Runs entire bulk RNA-seq power analysis pipeline}
 \usage{
 bulk_power_analysis(
-  datasets,
+  SCEs,
   celltype,
   celltype_correspondence,
-  path = getwd(),
+  output_path = getwd(),
   range_downsampled = "placeholder",
-  celltype_ID = "cell_type",
+  celltypeID = "cell_type",
   sampled = "individuals",
   sampleID = "donor_id",
   bulkDE = "placeholder",
@@ -26,17 +26,17 @@ bulk_power_analysis(
 )
 }
 \arguments{
-\item{datasets}{list of the input data (elements should be SCE objects)}
+\item{SCEs}{list of the input data (elements should be SCE objects)}
 
 \item{celltype}{the cell type we are focusing on (name as it appears in cell type sub-directory name)}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
-\item{path}{path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)}
+\item{output_path}{path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
-\item{celltype_ID}{cell type ID}
+\item{celltypeID}{cell type ID}
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 
@@ -65,4 +65,16 @@ Saves all plots in the appropriate directories}
 }
 \description{
 Runs entire bulk RNA-seq power analysis pipeline
+}
+\examples{
+\dontrun{
+# Example of celltype_correspondence:
+celltype_correspondence <- list([overall_celltype_name1] = c([celltype1.1], [celltype1.2], ...),
+                                [overall_celltype_name2] = c([celltype2.1], [celltype2.2], ...),
+                                ...)
+# E.g.
+celltype_correspondence <- list("Microglia" = c("micro", "microglial cells", "Micro"),
+                               "Astrocytes" = c("Astrocytes", "astro"),
+                               "Oligodendrocytes" = c("oligo", "Oligodendrocytes"))
+}
 }

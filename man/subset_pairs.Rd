@@ -4,10 +4,10 @@
 \alias{subset_pairs}
 \title{Obtain independent pairs of subsets of a specified dataset, based on sample ID}
 \usage{
-subset_pairs(data, sampleID = "Donor.ID", Noutputs = 5)
+subset_pairs(SCE, sampleID = "Donor.ID", Noutputs = 5)
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{sampleID}{sample ID}
 

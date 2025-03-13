@@ -5,7 +5,7 @@
 \title{Create plots for power analysis, with down-sampling based either on the individuals or cells}
 \usage{
 power_plots(
-  data,
+  SCE,
   range_downsampled = "placeholder",
   output_path = getwd(),
   inpath = "placeholder",
@@ -24,7 +24,7 @@ power_plots(
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 

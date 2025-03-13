@@ -1,11 +1,11 @@
 #' Runs entire bulk RNA-seq power analysis pipeline
 
-#' @param datasets list of the input data (elements should be SCE objects)
+#' @param SCEs list of the input data (elements should be SCE objects)
 #' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
 #' @param celltype_correspondence list of different names specifying each cell type
-#' @param path path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)
+#' @param output_path path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
-#' @param celltype_ID cell type ID
+#' @param celltypeID cell type ID
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
@@ -22,12 +22,24 @@
 #' Saves all plots in the appropriate directories
 #' @export
 
-bulk_power_analysis <- function(datasets,
+#' @examples
+#'\dontrun{
+#'# Example of celltype_correspondence:
+#'celltype_correspondence <- list([overall_celltype_name1] = c([celltype1.1], [celltype1.2], ...),
+#'                                 [overall_celltype_name2] = c([celltype2.1], [celltype2.2], ...),
+#'                                 ...)
+#'# E.g.
+#'celltype_correspondence <- list("Microglia" = c("micro", "microglial cells", "Micro"),
+#'                                "Astrocytes" = c("Astrocytes", "astro"),
+#'                                "Oligodendrocytes" = c("oligo", "Oligodendrocytes"))
+#'}
+
+bulk_power_analysis <- function(SCEs,
                                 celltype,
                                 celltype_correspondence,
-                                path=getwd(),
+                                output_path=getwd(),
                                 range_downsampled="placeholder",
-                                celltype_ID="cell_type",
+                                celltypeID="cell_type",
                                 sampled="individuals",
                                 sampleID="donor_id",
                                 bulkDE="placeholder",
@@ -42,15 +54,15 @@ bulk_power_analysis <- function(datasets,
                                 plot_title="placeholder"){
 
     # Run bulk_downsampling_DGEanalysis for all cell types
-    bulk_downsampling_DGEanalysis(datasets = datasets,
+    bulk_downsampling_DGEanalysis(SCEs = SCEs,
                                   sampled = sampled,
                                   sampleID = sampleID,
-                                  celltype_ID = celltype_ID,
+                                  celltypeID = celltypeID,
                                   celltype_correspondence = celltype_correspondence,
-                                  path = path)
+                                  output_path = output_path)
 
     # Run gather_celltype_DEGs
-    gather_celltype_DEGs(path = path,
+    gather_celltype_DEGs(output_path = output_path,
                          range_downsampled = range_downsampled,
                          celltype_correspondence = celltype_correspondence,
                          Nperms = Nperms,
@@ -58,14 +70,14 @@ bulk_power_analysis <- function(datasets,
 
     # Run prop_bulk_DEGs_sc
     prop_bulk_DEGs_sc(bulkDE = bulkDE,
-                      path = path,
+                      output_path = output_path,
                       range_downsampled = range_downsampled,
                       bulk_cutoff = bulk_cutoff,
                       pvalue = pvalue)
 
     # Run prop_bulk_DEGs_sc_celltype
     prop_bulk_DEGs_sc_celltype(bulkDE = bulkDE,
-                               path = path,
+                               output_path = output_path,
                                range_downsampled = range_downsampled,
                                celltype = celltype,
                                celltype_correspondence = celltype_correspondence,

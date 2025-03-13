@@ -2,19 +2,19 @@
 
 #' @importFrom SingleCellExperiment colData
 
-#' @param datasets list of the input data (elements should be SCE objects)
+#' @param SCEs list of the input data (elements should be SCE objects)
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
-#' @param celltype_ID cell type ID
+#' @param celltypeID cell type ID
 
 #' @return list containing values which the data will be downsampled at, in ascending order
 
-bulk_downsampling_range <- function(datasets,
+bulk_downsampling_range <- function(SCEs,
                                     celltype_correspondence,
                                     sampled="individuals",
                                     sampleID="donor_id",
-                                    celltype_ID="cell_type"){
+                                    celltypeID="cell_type"){
 
     # initialise list to hold samples, largest dataset
     max_samples <- 0
@@ -22,10 +22,10 @@ bulk_downsampling_range <- function(datasets,
     # loop through cell type mapping
     for(standard_celltype in names(celltype_correspondence)){
         # loop through datasets to get downsampled range
-        for(idx in seq_along(datasets)){
-            dataset <- datasets[[idx]]
+        for(idx in seq_along(SCEs)){
+            dataset <- SCEs[[idx]]
             celltype_name <- celltype_correspondence[[standard_celltype]][[idx]]
-            dataset1 <- dataset[, colData(dataset)[[celltype_ID]] == celltype_name]
+            dataset1 <- dataset[, colData(dataset)[[celltypeID]] == celltype_name]
             num_samples <- length(unique(colData(dataset1)[[sampleID]]))
             # check if this dataset/celltype has the most samples
             if(num_samples > max_samples){

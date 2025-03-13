@@ -5,7 +5,7 @@
 \title{Create correlation plots of the effect sizes of the top 1000 and top 500 DEGs}
 \usage{
 downsampling_corrplots(
-  data,
+  SCE,
   range_downsampled = "placeholder",
   output_path = getwd(),
   inpath = "placeholder",
@@ -22,7 +22,7 @@ downsampling_corrplots(
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 

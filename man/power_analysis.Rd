@@ -5,7 +5,7 @@
 \title{Runs entire power analysis pipeline}
 \usage{
 power_analysis(
-  data,
+  SCE,
   range_downsampled_individuals = "placeholder",
   range_downsampled_cells = "placeholder",
   output_path = getwd(),
@@ -25,11 +25,11 @@ power_analysis(
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
-\item{range_downsampled_individuals}{vector or list containing values which the data will be downsampled at (for individuals), in ascending order}
+\item{range_downsampled_individuals}{vector or list containing values which the SCE will be downsampled at (for individuals), in ascending order}
 
-\item{range_downsampled_cells}{vector or list containing values which the data will be downsampled at (for cells), in ascending order}
+\item{range_downsampled_cells}{vector or list containing values which the SCE will be downsampled at (for cells), in ascending order}
 
 \item{output_path}{base path in which outputs will be stored}
 

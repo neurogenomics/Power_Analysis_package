@@ -11,7 +11,6 @@ utils::globalVariables(c("numSamples","pctDEGs"))
 #' @importFrom cowplot theme_cowplot
 
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param path path storing the down-sampled DGE analysis for each single-cell dataset
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
@@ -24,14 +23,14 @@ utils::globalVariables(c("numSamples","pctDEGs"))
 #' @param fontsize_legendlabels font size for legend labels in plot
 #' @param fontsize_legendtitle font size for legend title in plot
 #' @param plot_title plot title
+#' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset
 
-#' @return plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, for a specified cell type
+#' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, for a specified cell type, in the appropriate directory 
 
 prop_bulk_DEGs_sc_celltype <- function(bulkDE,
-                                       path,
                                        range_downsampled,
                                        celltype_correspondence,
-                                       celltype="placeholder",
+                                       celltype,
                                        sampled="individuals",
                                        bulk_cutoff=0.9,
                                        pvalue=0.05,
@@ -40,10 +39,11 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
                                        fontsize_title=14,
                                        fontsize_legendlabels=9,
                                        fontsize_legendtitle=9,
-                                       plot_title="placeholder"){
+                                       plot_title="placeholder",
+                                       output_path=getwd()){
 
     # validate function input params
-    validate_input_parameters_bulk(bulkDE=bulkDE, path=path, range_downsampled=range_downsampled,
+    validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path, range_downsampled=range_downsampled,
                                    celltype=celltype, sampled=sampled, bulk_cutoff=bulk_cutoff,
                                    pvalue=pvalue, celltype_correspondence=celltype_correspondence, fontsize_axislabels=fontsize_axislabels,
                                    fontsize_axisticks=fontsize_axisticks, fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels,
@@ -81,16 +81,16 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
     Perm <- c()
     PctDEGs <- c()
     j <- 1
-    for(dataset in list.dirs(path,recursive=F,full.names=F)){
+    for(dataset in list.dirs(output_path,recursive=F,full.names=F)){
         print(paste0("Downsampling ",dataset))
         # get celltype name based on data
         celltype_DE <- celltype_correspondence[[celltype]][[j]]
         j <- j+1
         # go inside dataset directory celltype folder, downsampling folder (or just downsampling folder for cells)
         if(sampled=="individuals"){
-            data_dir <- paste0(path, "/", dataset, "/", celltype_DE, "/DE_downsampling/")
+            data_dir <- file.path(output_path, dataset, celltype_DE, "DE_downsampling")
         }else{
-            data_dir <- paste0(path, "/", dataset, "/DE_downsampling_cells/")
+            data_dir <- file.path(output_path, dataset, "DE_downsampling_cells")
         }
         setwd(data_dir)
         # go inside numSamples, if exists
@@ -104,14 +104,14 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
                 # add "samples"
                 sample_samples <- paste0(sample,"cells_persample")
             }
-            data_sample_dir <- paste0(data_dir,sample_samples,"/")
+            data_sample_dir <- file.path(data_dir,sample_samples)
             # check if this sample point exists
             if(dir.exists(data_sample_dir)){
                 # go into directory
                 setwd(data_sample_dir)
                 # loop through perms
                 for(perm in list.dirs(data_sample_dir,recursive=F,full.names=F)){
-                    data_sample_perm_dir <- paste0(data_sample_dir,perm)
+                    data_sample_perm_dir <- file.path(data_sample_dir,perm)
                     # go into each perm
                     setwd(data_sample_perm_dir)
                     # load DGE analysis output for this permutation
@@ -161,7 +161,7 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
                                 scale_y_continuous(labels = function(x) round(x))+
                                 guides(fill = guide_legend(label.format = function(x) round(as.numeric(x))))+
                                 theme_cowplot()+
-                                scale_fill_manual(values=generate_color_palette(length(list.dirs(path,recursive=F,full.names=F)),palette="Set1"))+
+                                scale_fill_manual(values=generate_color_palette(length(list.dirs(output_path,recursive=F,full.names=F)),palette="Set1"))+
                                 labs(y="% DEGs", x="Number of Samples", fill="Dataset",title=plot_title)+
                                 scale_alpha(guide = 'none')+
                                 theme(axis.title = element_text(size = fontsize_axislabels),
@@ -176,7 +176,7 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
                                 scale_y_continuous(labels = function(x) round(x))+
                                 guides(fill = guide_legend(label.format = function(x) round(as.numeric(x))))+
                                 theme_cowplot()+
-                                scale_fill_manual(values=generate_color_palette(length(list.dirs(path,recursive=F,full.names=F)),palette="Set1"))+
+                                scale_fill_manual(values=generate_color_palette(length(list.dirs(output_path,recursive=F,full.names=F)),palette="Set1"))+
                                 labs(y="% DEGs", x="Mean number of cells per sample", fill="Dataset",title=plot_title)+
                                 scale_alpha(guide = 'none')+
                                 theme(axis.title = element_text(size = fontsize_axislabels),
@@ -187,6 +187,8 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
                                       legend.title = element_text(size = fontsize_legendtitle))
     }
 
-    return(propDEGs.plot)
+    # save plot
+    ggsave(filename=file.path(output_path,paste0("prop_bulk_DEGs_sc_celltype_",celltype,".png")),propDEGs.plot,width=40,height=15, units="cm", bg="white")
+    ggsave(filename=file.path(output_path,paste0("prop_bulk_DEGs_sc_celltype_",celltype,".pdf")),propDEGs.plot,width=40,height=15, units="cm", bg="white")
 
 }

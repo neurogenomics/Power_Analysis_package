@@ -6,12 +6,12 @@ utils::globalVariables(c(".","chromosome","x.chromosome_name"))
 #' @importFrom data.table rbindlist setkey setorder :=
 #' @importFrom biomaRt useDataset getBM useMart
 
-#' @param allGenes list whose elements are DGE analysis output for each celltype in a dataset (e.g. as returned by "DGE_analysis.R", but subsetted to "celltype_all_genes")
-#' @param ensemblID_colname the column name within each DGE analysis output in allGenes, which contains the ensembl IDs for each gene
+#' @param all_genes list whose elements are DGE analysis output for each celltype in a dataset (e.g. as returned by "DGE_analysis.R", but subsetted to "celltype_all_genes")
+#' @param ensemblID_colname the column name within each DGE analysis output in all_genes, which contains the ensembl IDs for each gene
 
 #' @return the DGE analysis output restricted to just the genes that lay on the sex chromosomes
 
-sex_chromosome_DEGs <- function(allGenes,
+sex_chromosome_DEGs <- function(all_genes,
                                 ensemblID_colname="name"){
 
     # check input parameter is fine
@@ -20,16 +20,16 @@ sex_chromosome_DEGs <- function(allGenes,
             stop("Error: ensemblID_colname should be a string specifying the column name for the column containing ensembl IDs.")
         }
     }
-    if(class(allGenes)!="list"){
-        stop("Error: allGenes should be a list")
+    if(class(all_genes)!="list"){
+        stop("Error: all_genes should be a list")
     }
-    column_exists <- sapply(allGenes, function(x) ensemblID_colname %in% names(x))
+    column_exists <- sapply(all_genes, function(x) ensemblID_colname %in% names(x))
     if(!all(column_exists)){
-        stop("Error: every DGE analysis output in allGenes should contain the column with the name specified by ensemblID_colname")
+        stop("Error: every DGE analysis output in all_genes should contain the column with the name specified by ensemblID_colname")
     }    
 
     # combine data for all celltypes into one dataframe
-    combn_genes <- rbindlist(allGenes,idcol="celltype")
+    combn_genes <- rbindlist(all_genes,idcol="celltype")
     # add symbol
     mart <- useDataset("hsapiens_gene_ensembl", useMart("ensembl"))
     genes <- unique(as.character(combn_genes$name))

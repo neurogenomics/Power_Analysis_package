@@ -6,17 +6,18 @@
 
 #' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments. A location of an R, rds or qs file to be loaded can also be passed. If using R objects make sure SCE object saved with the name SCE
 #' @param design Design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease.
-#' @param pseudobulk_ID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
-#' @param celltype_ID Column name in the SCE object for the cell type variable. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will be automatically updated accordingly.
+#' @param sampleID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
+#' @param celltypeID Column name in the SCE object for the cell type variable. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will be automatically updated accordingly.
 #' @param y Column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logisitc regression) or continuous (linear regression)
 #' @param region Column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
 #' @param coef Character specifying which level to investigate for the differential expression analysis e.g. in a case/control study use "case" if case is the identifier in the y column to get positive fold changes to relate to case samples. leave as default value for continuous y. Default is NULL.
 #' @param control Character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.
 #' @param pval_adjust_method Adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
 #' @param adj_pval Adjusted p-value cut-off for the differential expression analysis, 0-1 range
-#' @param folder Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.
+#' @param output_path Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.
 #' @param verbose Logical indicating if extra information about the differential expression analysis should be printed
 #' @param rmv_zero_count_genes Whether genes with no count values in any cell should be removed. Default is TRUE
+#' @param save Whether or not to save the DE analysis results as an RData file. Default is FALSE (down-sampling/power analysis saves these outputs itself)
 
 #' @return A list containing:
 #'             celltype_DEGs: list with the differentially expressed genes (DEGs) for each cell type
@@ -35,19 +36,19 @@
 #' SCE <- qs::qread("sce.qs")
 #' DGE_analysis.return_incl_sex<- DGE_analysis(SCE_small,
 #' design= ~ sex + pathological_diagnosis_original,
-#' pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
+#' sampleID="sample_id", celltypeID="allan_celltype",coef="AD")
 #'# If you only want to also account for other variables as well as sex, such as
 #'# postmortem interval (PMI):
 #' DGE_analysis.return_sex_pmi<- DGE_analysis(SCE_small,
 #' design= ~ sex + PMI + pathological_diagnosis_original,
-#' pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
+#' sampleID="sample_id", celltypeID="allan_celltype",coef="AD")
 #' # If you only want to compare disease and control across cell types w/o any other constraints:
 #' DGE_analysis.return<- DGE_analysis(SCE_small,design= ~ pathological_diagnosis_original,
-#' pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
+#' sampleID="sample_id", celltypeID="allan_celltype",coef="AD")
 #' # A good way to validate the DEG analysis approach is to run a sex comparison
 #' # You would expect genes on the sex chromosomes to be DEGs, this can be done:
 #' DGE_analysis.sex.return<- DGE_analysis(SCE,design= ~ sex,
-#' pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="M")
+#' sampleID="sample_id", celltypeID="allan_celltype",coef="M")
 #' #get gene names of chromosomal DEGs
 #' library('biomaRt')
 #' mart <- useDataset("hsapiens_gene_ensembl", useMart("ensembl"))
@@ -70,11 +71,11 @@
 #'          .N,by=.(celltype,chromosome_name)]
 #'}
 
-DGE_analysis <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
+DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
                          region="single_region", coef=NULL, control=NULL,
                          pval_adjust_method = "BH", adj_pval=0.05,
-                         folder="sc.cell.type.de.graphs/",
-                         rmv_zero_count_genes=TRUE, verbose=F){
+                         output_path="sc.cell.type.de.graphs/",
+                         rmv_zero_count_genes=T, verbose=F, save=F){
 
     # need to load SCE if a directory is passed
     if(class(SCE)[1]=="character"){
@@ -94,16 +95,16 @@ DGE_analysis <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     }
 
     # sense check inputs
-    validate_input_parameters_de(SCE, design, pseudobulk_ID, celltype_ID, y,
+    validate_input_parameters_de(SCE, design, sampleID, celltypeID, y,
                                  region, coef, control, pval_adjust_method,
-                                 adj_pval, folder, rmv_zero_count_genes,
+                                 adj_pval, output_path, rmv_zero_count_genes,
                                  verbose)
 
     # get counts of each cell type
     #counts(SCE) <- as.matrix(counts(SCE))
-    counts_celltypes <- SCE[[celltype_ID]]
+    counts_celltypes <- SCE[[celltypeID]]
     counts_celltypes <- as.vector(table(counts_celltypes))
-    names(counts_celltypes) <- names(table(SCE[[celltype_ID]]))
+    names(counts_celltypes) <- names(table(SCE[[celltypeID]]))
 
     # first format formula
     design_txt <- paste0(deparse(design,width.cutoff = 500),collapse=',')
@@ -113,7 +114,7 @@ DGE_analysis <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     design_txt <- gsub(".*~","",design_txt)
     # split design by "+" to get components to bring forward for pseudobulk, add in pseudobulk by column
     pb_columns <- c(gsub("^\\s+|\\s+$","",strsplit(design_txt, "[+]")[[1]]),
-                        pseudobulk_ID)
+                        sampleID)
     # if y not specified take last value in design matrix
     if(is.null(y))
         y <- design_txt[[length(design_txt)]]
@@ -123,13 +124,13 @@ DGE_analysis <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
         y_contin <- TRUE
 
     # get pseudobulk values
-    celltypes <- unique(SCE[[celltype_ID]])
+    celltypes <- unique(SCE[[celltypeID]])
     if(isTRUE(verbose))
         message("Deriving pseudobulk data")
     pb_dat <-
         lapply(celltypes,function(x)
-            make_pseudobulk(SCE[,SCE[[celltype_ID]]==x],
-                            pseudobulk_ID=pseudobulk_ID,
+            make_pseudobulk(SCE[,SCE[[celltypeID]]==x],
+                            sampleID=sampleID,
                             pb_columns=pb_columns))
     names(pb_dat) <- celltypes
 
@@ -157,15 +158,21 @@ DGE_analysis <- function(SCE, design, pseudobulk_ID, celltype_ID, y=NULL,
     celltype_DEGs_dt <- data.table::rbindlist(celltype_DEGs,idcol = T)
     setnames(celltype_DEGs_dt,".id","celltype")
 
-    if(!isFALSE(folder)){
-      if(isTRUE(verbose))
+    if(!isFALSE(output_path)){
+        if(isTRUE(verbose))
         message("Plotting the results of differential expression analysis")
-      #make plots for DE analysis
-      plot_de_analysis(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
-                       counts_celltypes,folder)
+        #make plots for DE analysis
+        plot_de_analysis(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
+                         counts_celltypes,output_path)
+        # save the DE analysis results if specified
+        DEout <- list("celltype_DEGs"=celltype_DEGs_dt,
+                      "celltype_all_genes"=celltype_all_genes_dt,
+                      "celltype_counts"=counts_celltypes)
+        if(isTRUE(save))
+            save(DEout, file = file.path(output_path,"DEout.RData"))
     }
 
-    return(list("celltype_DEGs"=celltype_DEGs,
-                "celltype_all_genes"=celltype_de,
-                "celltype_counts"=counts_celltypes))
+    # return the DE analysis results
+    return(DEout)
+
 }

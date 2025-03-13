@@ -5,23 +5,23 @@
 \title{Collate DEGs detected in DGE analysis outputs, across all celltypes in a dataset (datasets/DGE analysis outputs should have common celltypes as specified below)}
 \usage{
 gather_celltype_DEGs(
-  path,
   range_downsampled,
   celltype_correspondence,
   Nperms = 20,
-  pvalue = 0.05
+  pvalue = 0.05,
+  output_path = getwd()
 )
 }
 \arguments{
-\item{path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis}
-
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{Nperms}{number of permutations of DGE analysis outputs for each sample}
 
-\item{pvalue}{the cut-off p-value used to select DEGs
+\item{pvalue}{the cut-off p-value used to select DEGs}
+
+\item{output_path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
 Saves combined list of DEGs (across all cell types) in a subdirectory inside the dataset directory}
 }
 \description{

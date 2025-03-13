@@ -7,51 +7,60 @@ utils::globalVariables(c(".","name"))
 #' @importFrom data.table setkey rbindlist
 #' @importFrom stats reshape complete.cases cor
 
-#' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in allstudies)
-#' @param allstudies a list containing all the datasets (most likely as SCE objects)
+#' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in data_names)
+#' @param DEouts a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis
 #' @param celltype the celltype to compute correlation for
-#' @param p_val the cut-off p-value which will be used to select DEGs (default is 1 to include all the genes)
+#' @param celltypes_list list of different names specifying each cell type (in order for each dataset in DEouts)
+#' @param data_names names of the datasets as they will appear in the correlation plot
+#' @param pval the cut-off p-value which will be used to select DEGs (default is 1 to include all the genes)
 
 #' @return correlation matrix, plot and the number of DEGs at the specified p-value
 
 plot_celltype_correlation <- function(dataset_name,
-                                      allstudies,
+                                      DEouts,
                                       celltype,
-                                      p_val=1){
+                                      celltypes_list,
+                                      data_names,
+                                      pval=1){
 
     # check input parameters are fine
     if(!is.character(dataset_name)){
         stop("Error: dataset_name should be a string specifying the dataset to select significant DEGs from")
     }
-    if(class(allstudies)!="list"){
-        stop("Error: allstudies should be a list.")
+    if(class(DEouts)!="list"){
+        stop("Error: DEouts should be a list.")
     }
     if(!is.character(celltype)){
         stop("Error: celltype should be a string specifying the cell type to compute correlation for.")
     }
-    if(!is.numeric(p_val) | p_val <= 0 | p_val > 1){
-        stop("Error: p_val should be a (positive) number between 0 and 1.")
+    if(!is.list(celltypes_list)){
+        stop("Error: celltypes_list should be a list containing the names of the cell type of concern, as they appear across each DGE analysis output (in order).")
+    }
+    if(!is.numeric(pval) | pval <= 0 | pval > 1){
+        stop("Error: pval should be a (positive) number between 0 and 1.")
+    }
+    if(!is.vector(data_names)){
+        stop("Error: data_names should be a vector or list of strings specifying the names of the datasets as they should appear in the correlation plot.")
     }
 
-    # variable to redefine allstudies
-    allstudies_new <- list()
-    j <- 0
+    # variable to redefine DEouts
+    allstudies <- list()
     # for each study, select data corresponding only to celltype
-    for(study in names(allstudies)){
-        j <- j+1
-        # redefine allstudies so each element only contains study/celltype
-        allstudies_new[[j]] <- allstudies[[study]][[celltype]]
-        names(allstudies_new)[[j]] <- study
+    for(i in seq_along(DEouts)){
+        # get corresponding cell type names for current study
+        celltype_name <- celltypes_list[[i]]
+        # redefine DEouts so each element only contains study/celltype
+        allstudies[[i]] <- DEouts[[i]]$celltype_all_genes[[celltype_name]]
     }
+    # get names of datasets
+    names(allstudies) <- data_names
 
     # reshape data so "dataset" is now a variable
-    allstudies_dt <- rbindlist(allstudies_new,idcol="dataset")
-    # get names of datasets
-    datasets <- unique(allstudies_dt$dataset)
+    allstudies_dt <- rbindlist(allstudies,idcol="dataset")
     # create list of all genes across datasets
     allGenes <- list()
-    for(j in 1:length(datasets)){
-        allGenes[[j]] <- allstudies_dt[dataset==datasets[[j]],name]
+    for(j in 1:length(data_names)){
+        allGenes[[j]] <- allstudies_dt[dataset==data_names[[j]],name]
     }
     # get set of genes in all studies
     shared_genes <- Reduce(intersect,allGenes)  
@@ -62,13 +71,13 @@ plot_celltype_correlation <- function(dataset_name,
     allstudies_dt <- allstudies_dt[shared_genes]
 
     # select DEGs by specifying only significant genes
-    genes <- allstudies_dt[dataset==dataset_name & PValue<p_val, name]
+    genes <- allstudies_dt[dataset==dataset_name & PValue<pval, name]
     # filter to just these genes
     allstudies_dt <- allstudies_dt[name %in% genes,]
     
     # make matrix for corr() - cols will be [datset, name, logFC]
     mat_lfc <- allstudies_dt[,.(dataset,name,logFC)]
-    # reshape so cols now are [(gene) name, logFC.dataset1, logFC.dataset2,...,logFC.datasetN] (N being length(names(allstudies)))
+    # reshape so cols now are [(gene) name, logFC.dataset1, logFC.dataset2,...,logFC.datasetN] (N being length(names(DEouts)))
     mat_lfc <-
     reshape(mat_lfc, idvar = "name", timevar = "dataset", 
             direction = "wide")
@@ -95,7 +104,7 @@ plot_celltype_correlation <- function(dataset_name,
     corr_plot.plot <- ggcorrplot(round(corr_lfc,2), 
             hc.order = F, insig="pch",pch=5,pch.col = "grey",
             pch.cex=9,
-            title=paste0("LFC Correlation Matrix, ",celltype," - pval < ",p_val,": ",
+            title=paste0("LFC Correlation Matrix, ",celltype," - pval < ",pval,": ",
                         num_genes," genes"),
             colors = c("#FC4E07", "white", "#00AFBB"),
             outline.color = "white", lab = TRUE,

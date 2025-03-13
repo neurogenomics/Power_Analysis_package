@@ -5,7 +5,7 @@
 \title{Downsample the dataset, based either on the individuals or cells, and run DE analysis on each downsampled output. Save results in a dataframe}
 \usage{
 downsampling_DEanalysis(
-  data,
+  SCE,
   range_downsampled = "placeholder",
   output_path = getwd(),
   sampled = "individuals",
@@ -25,9 +25,9 @@ downsampling_DEanalysis(
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
-\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
+\item{range_downsampled}{vector or list containing values which the SCE will be downsampled at, in ascending order}
 
 \item{output_path}{base path in which outputs will be stored}
 

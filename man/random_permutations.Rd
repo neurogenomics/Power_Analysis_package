@@ -5,7 +5,7 @@
 \title{Obtain highly randomised permutations of a specified dataset (based on sex labels), while maintaining consistency with the sample ID}
 \usage{
 random_permutations(
-  data,
+  SCE,
   sampleID = "Donor.ID",
   sexID = "sex",
   Nrandom_perms = 5,
@@ -13,7 +13,7 @@ random_permutations(
 )
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{sampleID}{sample ID}
 

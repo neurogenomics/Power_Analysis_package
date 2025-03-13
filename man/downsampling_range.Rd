@@ -4,10 +4,10 @@
 \alias{downsampling_range}
 \title{Obtain the range of values to downsample at (either for individuals, or mean number of cells per individual)}
 \usage{
-downsampling_range(data, sampled = "individuals", sampleID = "Donor.ID")
+downsampling_range(SCE, sampled = "individuals", sampleID = "Donor.ID")
 }
 \arguments{
-\item{data}{the input data (should be an SCE object)}
+\item{SCE}{the input data (should be an SCE object)}
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 

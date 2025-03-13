@@ -7,17 +7,18 @@
 DGE_analysis(
   SCE,
   design,
-  pseudobulk_ID,
-  celltype_ID,
+  sampleID,
+  celltypeID,
   y = NULL,
   region = "single_region",
   coef = NULL,
   control = NULL,
   pval_adjust_method = "BH",
   adj_pval = 0.05,
-  folder = "sc.cell.type.de.graphs/",
-  rmv_zero_count_genes = TRUE,
-  verbose = F
+  output_path = "sc.cell.type.de.graphs/",
+  rmv_zero_count_genes = T,
+  verbose = F,
+  save = F
 )
 }
 \arguments{
@@ -25,9 +26,9 @@ DGE_analysis(
 
 \item{design}{Design formula of class type \code{formula}. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease.}
 
-\item{pseudobulk_ID}{Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach}
+\item{sampleID}{Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach}
 
-\item{celltype_ID}{Column name in the SCE object for the cell type variable. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will be automatically updated accordingly.}
+\item{celltypeID}{Column name in the SCE object for the cell type variable. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will be automatically updated accordingly.}
 
 \item{y}{Column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logisitc regression) or continuous (linear regression)}
 
@@ -41,11 +42,13 @@ DGE_analysis(
 
 \item{adj_pval}{Adjusted p-value cut-off for the differential expression analysis, 0-1 range}
 
-\item{folder}{Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.}
+\item{output_path}{Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.}
 
 \item{rmv_zero_count_genes}{Whether genes with no count values in any cell should be removed. Default is TRUE}
 
 \item{verbose}{Logical indicating if extra information about the differential expression analysis should be printed}
+
+\item{save}{Whether or not to save the DE analysis results as an RData file. Default is FALSE (down-sampling/power analysis saves these outputs itself)}
 }
 \value{
 A list containing:
@@ -67,19 +70,19 @@ library(SingleCellExperiment)
 SCE <- qs::qread("sce.qs")
 DGE_analysis.return_incl_sex<- DGE_analysis(SCE_small,
 design= ~ sex + pathological_diagnosis_original,
-pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
+sampleID="sample_id", celltypeID="allan_celltype",coef="AD")
 # If you only want to also account for other variables as well as sex, such as
 # postmortem interval (PMI):
 DGE_analysis.return_sex_pmi<- DGE_analysis(SCE_small,
 design= ~ sex + PMI + pathological_diagnosis_original,
-pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
+sampleID="sample_id", celltypeID="allan_celltype",coef="AD")
 # If you only want to compare disease and control across cell types w/o any other constraints:
 DGE_analysis.return<- DGE_analysis(SCE_small,design= ~ pathological_diagnosis_original,
-pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="AD")
+sampleID="sample_id", celltypeID="allan_celltype",coef="AD")
 # A good way to validate the DEG analysis approach is to run a sex comparison
 # You would expect genes on the sex chromosomes to be DEGs, this can be done:
 DGE_analysis.sex.return<- DGE_analysis(SCE,design= ~ sex,
-pseudobulk_ID="sample_id", celltype_ID="allan_celltype",coef="M")
+sampleID="sample_id", celltypeID="allan_celltype",coef="M")
 #get gene names of chromosomal DEGs
 library('biomaRt')
 mart <- useDataset("hsapiens_gene_ensembl", useMart("ensembl"))

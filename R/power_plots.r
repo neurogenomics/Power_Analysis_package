@@ -12,7 +12,7 @@ utils::globalVariables(c("design","PValue","logFC","name","variable"))
 #' @importFrom stringr str_sub
 #' @importFrom gridExtra arrangeGrob
 
-#' @param data the input data (should be an SCE object)
+#' @param SCE the input data (should be an SCE object)
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param output_path base path in which outputs will be stored
 #' @param inpath base path where downsampled DGE analysis output is stored (taken to be output_path if not provided)
@@ -31,7 +31,7 @@ utils::globalVariables(c("design","PValue","logFC","name","variable"))
 
 #' Saves all plots in the appropriate directory
 
-power_plots <- function(data,
+power_plots <- function(SCE,
                         range_downsampled="placeholder",
                         output_path=getwd(),
                         inpath="placeholder",
@@ -50,7 +50,7 @@ power_plots <- function(data,
 
     # alter range_downsampled
     if(identical(range_downsampled,"placeholder")){
-        range_downsampled <- downsampling_range(data, sampled, sampleID)
+        range_downsampled <- downsampling_range(SCE, sampled, sampleID)
     }
     # alter inpath
     if(inpath=="placeholder"){
@@ -61,7 +61,7 @@ power_plots <- function(data,
     setwd(output_path)
     dir.create(output_path,showWarnings=FALSE)
     # validate function input params
-    validate_input_parameters_power(data=data, range_downsampled=range_downsampled, output_path=output_path,
+    validate_input_parameters_power(SCE=SCE, range_downsampled=range_downsampled, output_path=output_path,
                                     inpath=inpath, sampled=sampled, sampleID=sampleID,
                                     celltypeID=celltypeID, coeff=coeff, fdr=fdr,
                                     nom_pval=nom_pval, Nperms=Nperms, y=y,
@@ -69,14 +69,14 @@ power_plots <- function(data,
                                     rmv_zero_count_genes=rmv_zero_count_genes)
 
     # get celltype name from dataset
-    celltype_name <- toString(unique(data[[celltypeID]]))
+    celltype_name <- toString(unique(SCE[[celltypeID]]))
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
         # run and save DE analysis
-        assign("DEout", DGE_analysis(data, design=design, pseudobulk_ID=sampleID, celltype_ID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
-        save(DEout,file=paste0(output_path,"/DEout.RData"))
+        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        save(DEout,file=file.path(output_path,"DEout.RData"))
     }else{
-        load(paste0(output_path,"/DEout.RData"))
+        load(file.path(output_path,"DEout.RData"))
     }
     DEGs_fdr <- subset(DEout$celltype_all_genes[[celltype_name]], adj_pval<fdr)$name
     DEGs_pval <- subset(DEout$celltype_all_genes[[celltype_name]], PValue<nom_pval)$name
@@ -198,13 +198,13 @@ power_plots <- function(data,
         
         #### plots using DEGs selected with an FDR cut-off
         # define path and folders
-        path <- paste0(inpath,"/DE_downsampling/")
-        savepath <- paste0(output_path,"/DE_downsampling/")
+        path <- file.path(inpath,"DE_downsampling/")
+        savepath <- file.path(output_path,"DE_downsampling/")
         dir.create(savepath,showWarnings=FALSE)
         downsampled_folders <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"samples")
         ## plot % DEGs detected
         # load df with number of DEGs for each iteration/number of samples
-        load(paste0(path, "/DEGs_detected_fdr.RData"))
+        load(file.path(path, "DEGs_detected_fdr.RData"))
         # remove iteration column
         DEGs_detected_fdr <- subset(DEGs_detected_fdr,select=-c(Iteration))
         # convert to percentage
@@ -223,8 +223,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_fdr.png"),degs_detected_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_fdr.pdf"),degs_detected_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_fdr.png"),degs_detected_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_fdr.pdf"),degs_detected_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
 
         ## plot % of DEGs detected in each effect size range
         setwd(path)
@@ -233,13 +233,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -311,8 +311,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_effects_fdr.png"),degs_effects_fdr.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_effects_fdr.pdf"),degs_effects_fdr.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_effects_fdr.png"),degs_effects_fdr.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_effects_fdr.pdf"),degs_effects_fdr.plot,width=35,height=25,units="cm",bg="white")
 
         ## upreg plot
         setwd(path)
@@ -321,13 +321,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -399,8 +399,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_upreg_effects_fdr.png"),degs_effects_fdr_upreg.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_upreg_effects_fdr.pdf"),degs_effects_fdr_upreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_upreg_effects_fdr.png"),degs_effects_fdr_upreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_upreg_effects_fdr.pdf"),degs_effects_fdr_upreg.plot,width=35,height=25,units="cm",bg="white")
         
         ## downreg plot
         setwd(path)
@@ -409,13 +409,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -487,8 +487,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_downreg_effects_fdr.png"),degs_effects_fdr_downreg.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_downreg_effects_fdr.pdf"),degs_effects_fdr_downreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_downreg_effects_fdr.png"),degs_effects_fdr_downreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_downreg_effects_fdr.pdf"),degs_effects_fdr_downreg.plot,width=35,height=25,units="cm",bg="white")
 
         ## plot False Positive Rate
         setwd(path)
@@ -497,13 +497,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FPRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -542,8 +542,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FPs_detected_boxplot_fdr.png"),FPs_detected_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_detected_boxplot_fdr.pdf"),FPs_detected_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_boxplot_fdr.png"),FPs_detected_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_boxplot_fdr.pdf"),FPs_detected_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
 
         ## plot False Discovery Rate
         setwd(path)
@@ -552,13 +552,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FDRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -596,8 +596,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FDRs_boxplot_fdr.png"),FDRs_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FDRs_boxplot_fdr.pdf"),FDRs_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")        
+        ggsave(file.path(savepath, "FDRs_boxplot_fdr.png"),FDRs_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_boxplot_fdr.pdf"),FDRs_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")        
 
         ## plot False Discovery Rate of DEGs in each effect size range
         setwd(path)
@@ -606,13 +606,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FDRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -683,13 +683,13 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FPs_effects_fdr.png"),FPs_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_effects_fdr.pdf"),FPs_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_effects_fdr.png"),FPs_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_effects_fdr.pdf"),FPs_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
 
         #### plots using DEGs selected with a nominal p-value cut-off
         ## plot % DEGs detected
         # load df with number of DEGs for each iteration/number of samples
-        load(paste0(path, "/DEGs_detected_pval.RData"))
+        load(file.path(path, "DEGs_detected_pval.RData"))
         # remove iteration column
         DEGs_detected_pval <- subset(DEGs_detected_pval,select=-c(Iteration))
         # convert to percentage
@@ -708,8 +708,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_pval.png"),degs_detected_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_pval.pdf"),degs_detected_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_pval.png"),degs_detected_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_pval.pdf"),degs_detected_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
 
         ## plot % of DEGs detected in each effect size range
         setwd(path)
@@ -718,13 +718,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -796,8 +796,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_effects_pval.png"),degs_effects_pval.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_effects_pval.pdf"),degs_effects_pval.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_effects_pval.png"),degs_effects_pval.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_effects_pval.pdf"),degs_effects_pval.plot,width=35,height=25,units="cm",bg="white")
 
         ## upreg plot
         setwd(path)
@@ -806,13 +806,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -884,8 +884,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_upreg_effects_pval.png"),degs_effects_pval_upreg.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_upreg_effects_pval.pdf"),degs_effects_pval_upreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_upreg_effects_pval.png"),degs_effects_pval_upreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_upreg_effects_pval.pdf"),degs_effects_pval_upreg.plot,width=35,height=25,units="cm",bg="white")
         
         ## downreg plot
         setwd(path)
@@ -894,13 +894,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -972,8 +972,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_downreg_effects_pval.png"),degs_effects_pval_downreg.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_downreg_effects_pval.pdf"),degs_effects_pval_downreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_downreg_effects_pval.png"),degs_effects_pval_downreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_downreg_effects_pval.pdf"),degs_effects_pval_downreg.plot,width=35,height=25,units="cm",bg="white")
 
         ## plot False Positive Rate
         setwd(path)
@@ -982,13 +982,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FPRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1027,8 +1027,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FPs_detected_boxplot_pval.png"),FPs_detected_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_detected_boxplot_pval.pdf"),FPs_detected_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_boxplot_pval.png"),FPs_detected_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_boxplot_pval.pdf"),FPs_detected_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
 
         ## plot False Discovery Rate
         setwd(path)
@@ -1037,13 +1037,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FDRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1081,8 +1081,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FDRs_boxplot_pval.png"),FDRs_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FDRs_boxplot_pval.pdf"),FDRs_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")        
+        ggsave(file.path(savepath, "FDRs_boxplot_pval.png"),FDRs_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_boxplot_pval.pdf"),FDRs_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")        
 
         ## plot False Discovery Rate of DEGs in each effect size range
         setwd(path)
@@ -1091,13 +1091,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FDRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1168,43 +1168,43 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FPs_effects_pval.png"),FPs_effects_pval.plot,width=30,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_effects_pval.pdf"),FPs_effects_pval.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_effects_pval.png"),FPs_effects_pval.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_effects_pval.pdf"),FPs_effects_pval.plot,width=30,height=25,units="cm",bg="white")
 
         ## save all FDR/pval plots as 2 subplots
         # DEGs detected
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot.png"),arrangeGrob(degs_detected_boxplot_fdr.plot,degs_detected_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot.pdf"),arrangeGrob(degs_detected_boxplot_fdr.plot,degs_detected_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot.png"),arrangeGrob(degs_detected_boxplot_fdr.plot,degs_detected_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot.pdf"),arrangeGrob(degs_detected_boxplot_fdr.plot,degs_detected_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
         # DEGs detected effect sizes
-        ggsave(paste0(savepath, "/DEGs_effects.png"),arrangeGrob(degs_effects_fdr.plot,degs_effects_pval.plot,ncol=2),width=70,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_effects.pdf"),arrangeGrob(degs_effects_fdr.plot,degs_effects_pval.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_effects.png"),arrangeGrob(degs_effects_fdr.plot,degs_effects_pval.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_effects.pdf"),arrangeGrob(degs_effects_fdr.plot,degs_effects_pval.plot,ncol=2),width=70,height=25,units="cm",bg="white")
         # upreg DEGs detected effect sizes
-        ggsave(paste0(savepath, "/DEGs_upreg_effects.png"),arrangeGrob(degs_effects_fdr_upreg.plot,degs_effects_pval_upreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_upreg_effects.pdf"),arrangeGrob(degs_effects_fdr_upreg.plot,degs_effects_pval_upreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_upreg_effects.png"),arrangeGrob(degs_effects_fdr_upreg.plot,degs_effects_pval_upreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_upreg_effects.pdf"),arrangeGrob(degs_effects_fdr_upreg.plot,degs_effects_pval_upreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
         # downreg DEGs detected effect sizes
-        ggsave(paste0(savepath, "/DEGs_downreg_effects.png"),arrangeGrob(degs_effects_fdr_downreg.plot,degs_effects_pval_downreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_downreg_effects.pdf"),arrangeGrob(degs_effects_fdr_downreg.plot,degs_effects_pval_downreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_downreg_effects.png"),arrangeGrob(degs_effects_fdr_downreg.plot,degs_effects_pval_downreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_downreg_effects.pdf"),arrangeGrob(degs_effects_fdr_downreg.plot,degs_effects_pval_downreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
         # FPs detected
-        ggsave(paste0(savepath, "/FPs_detected_boxplot.png"),arrangeGrob(FPs_detected_boxplot_fdr.plot,FPs_detected_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_detected_boxplot.pdf"),arrangeGrob(FPs_detected_boxplot_fdr.plot,FPs_detected_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_boxplot.png"),arrangeGrob(FPs_detected_boxplot_fdr.plot,FPs_detected_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_boxplot.pdf"),arrangeGrob(FPs_detected_boxplot_fdr.plot,FPs_detected_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
         # FDR
-        ggsave(paste0(savepath, "/FDRs_boxplot.png"),arrangeGrob(FDRs_boxplot_fdr.plot,FDRs_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FDRs_boxplot.pdf"),arrangeGrob(FDRs_boxplot_fdr.plot,FDRs_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_boxplot.png"),arrangeGrob(FDRs_boxplot_fdr.plot,FDRs_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_boxplot.pdf"),arrangeGrob(FDRs_boxplot_fdr.plot,FDRs_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
         # FDR by effect size
-        ggsave(paste0(savepath, "/FPs_effects.png"),arrangeGrob(FPs_effects_fdr.plot,FPs_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_effects.pdf"),arrangeGrob(FPs_effects_fdr.plot,FPs_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_effects.png"),arrangeGrob(FPs_effects_fdr.plot,FPs_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_effects.pdf"),arrangeGrob(FPs_effects_fdr.plot,FPs_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
 
     }else{
 
         #### plots using DEGs selected with an FDR cut-off
         # define path and folders        
-        path <- paste0(inpath,"/DE_downsampling_cells/")
-        savepath <- paste0(output_path,"/DE_downsampling_cells/")
+        path <- file.path(inpath,"DE_downsampling_cells/")
+        savepath <- file.path(output_path,"DE_downsampling_cells/")
         dir.create(savepath,showWarnings=FALSE)
         downsampled_folders <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"cells_persample")
         ## plot % DEGs detected
         # load df with number of DEGs for each iteration/number of samples
-        load(paste0(path, "/DEGs_detected_fdr.RData"))
+        load(file.path(path, "DEGs_detected_fdr.RData"))
         # remove iteration column
         DEGs_detected_fdr <- subset(DEGs_detected_fdr,select=-c(Iteration))
         # convert to percentage
@@ -1223,8 +1223,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_cells_fdr.png"),degs_detected_boxplot_cells_fdr.plot,width=30,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_cells_fdr.pdf"),degs_detected_boxplot_cells_fdr.plot,width=30,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_cells_fdr.png"),degs_detected_boxplot_cells_fdr.plot,width=30,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_cells_fdr.pdf"),degs_detected_boxplot_cells_fdr.plot,width=30,height=20,units="cm",bg="white")
 
         ## plot % of DEGs detected in each effect size range
         setwd(path)
@@ -1233,13 +1233,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1311,8 +1311,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_cells_effects_fdr.png"),degs_cells_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_effects_fdr.pdf"),degs_cells_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_effects_fdr.png"),degs_cells_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_effects_fdr.pdf"),degs_cells_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
 
         ## upreg plot
         setwd(path)
@@ -1321,13 +1321,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1399,8 +1399,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_cells_upreg_effects_fdr.png"),degs_cells_effects_fdr_upreg.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_upreg_effects_fdr.pdf"),degs_cells_effects_fdr_upreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_upreg_effects_fdr.png"),degs_cells_effects_fdr_upreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_upreg_effects_fdr.pdf"),degs_cells_effects_fdr_upreg.plot,width=35,height=25,units="cm",bg="white")
         
         ## downreg plot
         setwd(path)
@@ -1409,13 +1409,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1487,8 +1487,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_cells_downreg_effects_fdr.png"),degs_cells_effects_fdr_downreg.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_downreg_effects_fdr.pdf"),degs_cells_effects_fdr_downreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_downreg_effects_fdr.png"),degs_cells_effects_fdr_downreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_downreg_effects_fdr.pdf"),degs_cells_effects_fdr_downreg.plot,width=35,height=25,units="cm",bg="white")
 
         ## plot False Positive Rate
         setwd(path)
@@ -1497,13 +1497,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FPRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1542,8 +1542,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FPs_detected_cells_boxplot_fdr.png"),FPs_detected_cells_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_detected_cells_boxplot_fdr.pdf"),FPs_detected_cells_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_cells_boxplot_fdr.png"),FPs_detected_cells_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_cells_boxplot_fdr.pdf"),FPs_detected_cells_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
 
         ## plot False Discovery Rate
         setwd(path)
@@ -1552,13 +1552,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FDRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1596,8 +1596,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FDRs_cells_boxplot_fdr.png"),FDRs_cells_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FDRs_cells_boxplot_fdr.pdf"),FDRs_cells_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_cells_boxplot_fdr.png"),FDRs_cells_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_cells_boxplot_fdr.pdf"),FDRs_cells_boxplot_fdr.plot,width=25,height=20,units="cm",bg="white")
 
         ## plot False Discovery Rate of DEGs in each effect size range
         setwd(path)
@@ -1606,13 +1606,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FDRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1683,13 +1683,13 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FPs_cells_effects_fdr.png"),FPs_cells_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_cells_effects_fdr.pdf"),FPs_cells_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_cells_effects_fdr.png"),FPs_cells_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_cells_effects_fdr.pdf"),FPs_cells_effects_fdr.plot,width=30,height=25,units="cm",bg="white")
 
         #### plots using DEGs selected with a nominal p-value cut-off
         ## plot % DEGs detected
         # load df with number of DEGs for each iteration/number of samples
-        load(paste0(path, "/DEGs_detected_pval.RData"))
+        load(file.path(path, "DEGs_detected_pval.RData"))
         # remove iteration column
         DEGs_detected_pval <- subset(DEGs_detected_pval,select=-c(Iteration))
         # convert to percentage
@@ -1708,8 +1708,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_cells_pval.png"),degs_detected_boxplot_cells_pval.plot,width=30,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_cells_pval.pdf"),degs_detected_boxplot_cells_pval.plot,width=30,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_cells_pval.png"),degs_detected_boxplot_cells_pval.plot,width=30,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_cells_pval.pdf"),degs_detected_boxplot_cells_pval.plot,width=30,height=20,units="cm",bg="white")
 
         ## plot % of DEGs detected in each effect size range
         setwd(path)
@@ -1718,13 +1718,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1796,8 +1796,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_cells_effects_pval.png"),degs_cells_effects_pval.plot,width=30,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_effects_pval.pdf"),degs_cells_effects_pval.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_effects_pval.png"),degs_cells_effects_pval.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_effects_pval.pdf"),degs_cells_effects_pval.plot,width=30,height=25,units="cm",bg="white")
 
         ## upreg plot
         setwd(path)
@@ -1806,13 +1806,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1884,8 +1884,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_cells_upreg_effects_pval.png"),degs_cells_effects_pval_upreg.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_upreg_effects_pval.pdf"),degs_cells_effects_pval_upreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_upreg_effects_pval.png"),degs_cells_effects_pval_upreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_upreg_effects_pval.pdf"),degs_cells_effects_pval_upreg.plot,width=35,height=25,units="cm",bg="white")
         
         ## downreg plot
         setwd(path)
@@ -1894,13 +1894,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 DEGcounts <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -1972,8 +1972,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/DEGs_cells_downreg_effects_pval.png"),degs_cells_effects_pval_downreg.plot,width=35,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_downreg_effects_pval.pdf"),degs_cells_effects_pval_downreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_downreg_effects_pval.png"),degs_cells_effects_pval_downreg.plot,width=35,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_downreg_effects_pval.pdf"),degs_cells_effects_pval_downreg.plot,width=35,height=25,units="cm",bg="white")
 
         ## plot False Positive Rate
         setwd(path)
@@ -1982,13 +1982,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FPRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -2027,8 +2027,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FPs_detected_cells_boxplot_pval.png"),FPs_detected_cells_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_detected_cells_boxplot_pval.pdf"),FPs_detected_cells_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_cells_boxplot_pval.png"),FPs_detected_cells_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_cells_boxplot_pval.pdf"),FPs_detected_cells_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
 
         ## plot False Discovery Rate
         setwd(path)
@@ -2037,13 +2037,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FDRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -2081,8 +2081,8 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9),legend.position="none")+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FDRs_cells_boxplot_pval.png"),FDRs_cells_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FDRs_cells_boxplot_pval.pdf"),FDRs_cells_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_cells_boxplot_pval.png"),FDRs_cells_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_cells_boxplot_pval.pdf"),FDRs_cells_boxplot_pval.plot,width=25,height=20,units="cm",bg="white")
 
         ## plot False Discovery Rate of DEGs in each effect size range
         setwd(path)
@@ -2091,13 +2091,13 @@ power_plots <- function(data,
         for(folder in mixedsort(list.files())){
             # remove other files above
             if(folder%in%downsampled_folders){
-                newpath <- paste0(path,folder)
+                newpath <- file.path(path,folder)
                 # enter directory
                 setwd(newpath)
                 FDRs <- list()
                 for(subfolder in mixedsort(list.files())){
                     print(paste0(folder,",",subfolder))
-                    subpath <- paste0(newpath,"/",subfolder)
+                    subpath <- file.path(newpath,subfolder)
                     # enter subdirectory
                     setwd(subpath)
                     # get samples
@@ -2168,31 +2168,31 @@ power_plots <- function(data,
             theme_cowplot()+
             theme(axis.text = element_text(size=9))+
             scale_fill_viridis(discrete = T)
-        ggsave(paste0(savepath, "/FPs_cells_effects_pval.png"),FPs_cells_effects_pval.plot,width=30,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_cells_effects_pval.pdf"),FPs_cells_effects_pval.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_cells_effects_pval.png"),FPs_cells_effects_pval.plot,width=30,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_cells_effects_pval.pdf"),FPs_cells_effects_pval.plot,width=30,height=25,units="cm",bg="white")
 
         ## save all FDR/pval plots as 2 subplots
         # DEGs detected
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_cells.png"),arrangeGrob(degs_detected_boxplot_cells_fdr.plot,degs_detected_boxplot_cells_pval.plot,ncol=2),width=60,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_detected_boxplot_cells.pdf"),arrangeGrob(degs_detected_boxplot_cells_fdr.plot,degs_detected_boxplot_cells_pval.plot,ncol=2),width=60,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_cells.png"),arrangeGrob(degs_detected_boxplot_cells_fdr.plot,degs_detected_boxplot_cells_pval.plot,ncol=2),width=60,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_detected_boxplot_cells.pdf"),arrangeGrob(degs_detected_boxplot_cells_fdr.plot,degs_detected_boxplot_cells_pval.plot,ncol=2),width=60,height=20,units="cm",bg="white")
         # DEGs detected effect sizes
-        ggsave(paste0(savepath, "/DEGs_cells_effects.png"),arrangeGrob(degs_cells_effects_fdr.plot,degs_cells_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_effects.pdf"),arrangeGrob(degs_cells_effects_fdr.plot,degs_cells_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_effects.png"),arrangeGrob(degs_cells_effects_fdr.plot,degs_cells_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_effects.pdf"),arrangeGrob(degs_cells_effects_fdr.plot,degs_cells_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
         # upreg DEGs detected effect sizes
-        ggsave(paste0(savepath, "/DEGs_cells_upreg_effects.png"),arrangeGrob(degs_cells_effects_fdr_upreg.plot,degs_cells_effects_pval_upreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_upreg_effects.pdf"),arrangeGrob(degs_cells_effects_fdr_upreg.plot,degs_cells_effects_pval_upreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_upreg_effects.png"),arrangeGrob(degs_cells_effects_fdr_upreg.plot,degs_cells_effects_pval_upreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_upreg_effects.pdf"),arrangeGrob(degs_cells_effects_fdr_upreg.plot,degs_cells_effects_pval_upreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
         # downreg DEGs detected effect sizes
-        ggsave(paste0(savepath, "/DEGs_cells_downreg_effects.png"),arrangeGrob(degs_cells_effects_fdr_downreg.plot,degs_cells_effects_pval_downreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/DEGs_cells_downreg_effects.pdf"),arrangeGrob(degs_cells_effects_fdr_downreg.plot,degs_cells_effects_pval_downreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_downreg_effects.png"),arrangeGrob(degs_cells_effects_fdr_downreg.plot,degs_cells_effects_pval_downreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "DEGs_cells_downreg_effects.pdf"),arrangeGrob(degs_cells_effects_fdr_downreg.plot,degs_cells_effects_pval_downreg.plot,ncol=2),width=70,height=25,units="cm",bg="white")
         # FPs detected
-        ggsave(paste0(savepath, "/FPs_detected_cells_boxplot.png"),arrangeGrob(FPs_detected_cells_boxplot_fdr.plot,FPs_detected_cells_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_detected_cells_boxplot.pdf"),arrangeGrob(FPs_detected_cells_boxplot_fdr.plot,FPs_detected_cells_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_cells_boxplot.png"),arrangeGrob(FPs_detected_cells_boxplot_fdr.plot,FPs_detected_cells_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_detected_cells_boxplot.pdf"),arrangeGrob(FPs_detected_cells_boxplot_fdr.plot,FPs_detected_cells_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
         # FDR
-        ggsave(paste0(savepath, "/FDRs_cells_boxplot.png"),arrangeGrob(FDRs_cells_boxplot_fdr.plot,FDRs_cells_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FDRs_cells_boxplot.pdf"),arrangeGrob(FDRs_cells_boxplot_fdr.plot,FDRs_cells_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_cells_boxplot.png"),arrangeGrob(FDRs_cells_boxplot_fdr.plot,FDRs_cells_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
+        ggsave(file.path(savepath, "FDRs_cells_boxplot.pdf"),arrangeGrob(FDRs_cells_boxplot_fdr.plot,FDRs_cells_boxplot_pval.plot,ncol=2),width=50,height=20,units="cm",bg="white")
         # FDR by effect size
-        ggsave(paste0(savepath, "/FPs_cells_effects.png"),arrangeGrob(FPs_cells_effects_fdr.plot,FPs_cells_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
-        ggsave(paste0(savepath, "/FPs_cells_effects.pdf"),arrangeGrob(FPs_cells_effects_fdr.plot,FPs_cells_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_cells_effects.png"),arrangeGrob(FPs_cells_effects_fdr.plot,FPs_cells_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
+        ggsave(file.path(savepath, "FPs_cells_effects.pdf"),arrangeGrob(FPs_cells_effects_fdr.plot,FPs_cells_effects_pval.plot,ncol=2),width=60,height=25,units="cm",bg="white")
 
     }
 

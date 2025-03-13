@@ -5,16 +5,16 @@
 \title{Downsample the dataset, based either on the individuals or cells, and run DE analysis on each downsampled output. Save results in a dataframe}
 \usage{
 bulk_downsampling_DGEanalysis(
-  datasets,
+  SCEs,
   celltype_correspondence,
   sampled = "individuals",
   sampleID = "donor_id",
-  celltype_ID = "cell_type",
-  path = "placeholder"
+  celltypeID = "cell_type",
+  output_path = getwd()
 )
 }
 \arguments{
-\item{datasets}{list of the input data (elements should be SCE objects)}
+\item{SCEs}{list of the input data (elements should be SCE objects)}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
@@ -22,9 +22,9 @@ bulk_downsampling_DGEanalysis(
 
 \item{sampleID}{sample ID}
 
-\item{celltype_ID}{cell type ID}
+\item{celltypeID}{cell type ID}
 
-\item{path}{base output directory where down-sampled DGE analysis outputs will be saved
+\item{output_path}{base output directory where down-sampled DGE analysis outputs will be saved
 Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions}
 }
 \description{
