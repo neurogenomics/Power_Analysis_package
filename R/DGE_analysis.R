@@ -165,8 +165,8 @@ DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
         plot_de_analysis(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                          counts_celltypes,output_path)
         # save the DE analysis results if specified
-        DEout <- list("celltype_DEGs"=celltype_DEGs_dt,
-                      "celltype_all_genes"=celltype_all_genes_dt,
+        DEout <- list("celltype_DEGs"=celltype_DEGs,
+                      "celltype_all_genes"=celltype_de,
                       "celltype_counts"=counts_celltypes)
         if(isTRUE(save))
             save(DEout, file = file.path(output_path,"DEout.RData"))

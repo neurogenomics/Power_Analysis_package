@@ -50,58 +50,38 @@ To use the `DGE_analysis` function, specify the formula for comparison along wit
 · **`coef`**: A character string that specifies which group in the `design` formula you want to investigate for differential expression. <br>
 
 **Example Usage**: <br>
-<<<<<<< HEAD
 To validate the differential expression (DEG) analysis approach, you can run a comparison between sexes using the <i>design = ~ sex. </i> This will assess how gene expression differs between male and female groups. 
 
 ```{r, message=FALSE, warning=FALSE}
-=======
-To validate the differential expression (DEG) analysis approach, you can run a comparison between sexes using the <i>formula = ~ sex. </i>. This will assess how gene expression differs between male and female groups. 
-
-```{r, message=FALSE, warning=FALSE, eval=FALSE}
->>>>>>> origin/master
 # Run the DGE_analysis function for a sex comparison
 DGE_analysis.sex <- DGE_analysis(
   SCE,
   design = ~ sex,
   coef = "M",
-  pseudobulk_ID = "sample_id",
-  celltype_ID = "cluster_celltype"
+  celltypeID="cluster_celltype",
+  sampleID = "sample_id",
 )
 ```
 
 If you want to compare disease and control conditions, specify the disease status in the formula and the disease group of interest in the coef.
 
-<<<<<<< HEAD
 ```{r, message=FALSE, warning=FALSE}
-=======
-```{r, message=FALSE, warning=FALSE, eval=FALSE}
->>>>>>> origin/master
 # Run the DGE_analysis function for a disease vs. control comparison
 DGE_analysis.AD <- DGE_analysis(
   SCE,
   design = ~ pathological_diagnosis,
   coef = "AD",
-  pseudobulk_ID = "sample_id",
-  celltype_ID = "cluster_celltype"
+  sampleID = "sample_id",
+  celltypeID = "cluster_celltype"
 )
 ```
 
-<<<<<<< HEAD
 ## Power Analysis
 Assess the accuracy of DEG detection in scRNA-seq data by systematically down-sampling the dataset at varying numbers of individuals and cells. DEGs identified in each subset are compared to those from the full dataset to compute the percentage of True Positive (PTP) DEGs recovered and the False Discovery Rate (FDR). <br>
   
 To perform power analysis based on sex-specific DEGs, use the following function:
   
 ```{r, results='hide', message=FALSE, warning=FALSE}
-=======
-
-## Power Analysis
-Assess the accuracy of DEG detection in scRNA-seq data by systematically down-sampling the dataset at varying numbers of individuals and cells. DEGs identified in each subset are compared to those from the full dataset to compute the percentage of True Positive (PTP) DEGs recovered and the False Discovery Rate (FDR). <br>
-
-To perform power analysis based on sex-specific DEGs, use the following function:
-
-```{r, results='hide', message=FALSE, warning=FALSE, eval=FALSE}
->>>>>>> origin/master
 # Run the power_analysis function for a sex comparison
 power_analysis.sex <- power_analysis(
   SCE,
@@ -111,7 +91,6 @@ power_analysis.sex <- power_analysis(
   celltypeID = "cluster_celltype")
 ```
 
-<<<<<<< HEAD
 The `power_analysis` function generates several key outputs:
   
 - **QC plots** display distributions of effect sizes (log2 fold-change) across detected DEGs and the number of cells per individual in the full dataset.
@@ -153,12 +132,3 @@ Down-sampling cells: <br>
 knitr::include_graphics("corr_analysis/meanCorr_downsampling_cells_500.png")
 ```
 
-=======
-The `power_analysis` function generates several key outputs:  
-
-- **QC plots** display distributions of effect sizes (log2 fold-change) across detected DEGs and the number of cells per individual in the full dataset.  
-- **DGE analysis results** identify PTP DEGs and non-DEGs using a 0.05 cut-off on both nominal and adjusted p-values.  
-- **Power plots** show the mean percentage of PTP DEGs detected and FDR trends as sample size increases.  
-- **Effect size-specific detection rates** assess DEG recovery across different absolute log2 fold-change bins.  
-- **Correlation plots** compare effect sizes for significant DEGs across down-sampling levels.
->>>>>>> origin/master
