@@ -1,7 +1,7 @@
 # Define global variables
 utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 
-#' Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all cell types
+#' Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all common cell types
 
 #' @importFrom stringr str_split
 #' @importFrom utils tail

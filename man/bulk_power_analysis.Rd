@@ -6,13 +6,12 @@
 \usage{
 bulk_power_analysis(
   SCEs,
-  celltype,
   celltype_correspondence,
   output_path = getwd(),
   range_downsampled = "placeholder",
-  celltypeID = "cell_type",
+  celltypeIDs = "cell_type",
   sampled = "individuals",
-  sampleID = "donor_id",
+  sampleIDs = "donor_id",
   bulkDE = "placeholder",
   bulk_cutoff = 0.9,
   pvalue = 0.05,
@@ -28,19 +27,17 @@ bulk_power_analysis(
 \arguments{
 \item{SCEs}{list of the input data (elements should be SCE objects)}
 
-\item{celltype}{the cell type we are focusing on (name as it appears in cell type sub-directory name)}
-
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{output_path}{path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
-\item{celltypeID}{cell type ID}
+\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 
-\item{sampleID}{sample ID}
+\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
 
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
@@ -76,5 +73,7 @@ celltype_correspondence <- list([overall_celltype_name1] = c([celltype1.1], [cel
 celltype_correspondence <- list("Microglia" = c("micro", "microglial cells", "Micro"),
                                "Astrocytes" = c("Astrocytes", "astro"),
                                "Oligodendrocytes" = c("oligo", "Oligodendrocytes"))
+# If a celltype is not present in the dataset, the corresponding value should be set to NA. E.g.:
+celltype_correspondence <- list("Microglia" = c("micro",NA), "Endothelial" = c(NA,"endo"))
 }
 }

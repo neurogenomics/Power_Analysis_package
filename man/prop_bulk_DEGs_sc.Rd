@@ -2,7 +2,7 @@
 % Please edit documentation in R/prop_bulk_DEGs_sc.r
 \name{prop_bulk_DEGs_sc}
 \alias{prop_bulk_DEGs_sc}
-\title{Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all cell types}
+\title{Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all common cell types}
 \usage{
 prop_bulk_DEGs_sc(
   bulkDE,
@@ -43,5 +43,5 @@ prop_bulk_DEGs_sc(
 Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory}
 }
 \description{
-Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all cell types
+Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all common cell types
 }

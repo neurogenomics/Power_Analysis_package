@@ -5,9 +5,9 @@
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
-#' @param celltypeID cell type ID
+#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
-#' @param sampleID sample ID
+#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
 #' @param bulk_cutoff percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset
 #' @param pvalue the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)
@@ -26,9 +26,9 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
                                            celltype_correspondence="placeholder",
                                            output_path="placeholder",
                                            range_downsampled="placeholder",
-                                           celltypeID="placeholder",
+                                           celltypeIDs="placeholder",
                                            sampled="placeholder",
-                                           sampleID="placeholder",
+                                           sampleIDs="placeholder",
                                            bulkDE="placeholder",
                                            bulk_cutoff="placeholder",
                                            pvalue="placeholder",
@@ -56,8 +56,11 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
             stop("Error: celltype_correspondence should be a list of lists containing the names of cell types as they appear across all DGE analysis outputs.")
         }
         for (celltype_list in celltype_correspondence) {
-            if (!is.list(celltype_list)) {
-                stop("Error: each element of celltype_correspondence should be a list of cell type names.")
+            if (!is.character(celltype_list)) {
+                stop("Error: each element of celltype_correspondence should be a vector of cell type names.")
+            }
+            if(length(celltype_list)!=length(SCEs)){
+                stop("Error: each element of celltype_correspondence should have the same length as the number of datasets in SCEs.")
             }
         }
     }
@@ -82,9 +85,9 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
             }
         }
     }
-    if(celltypeID!="placeholder"){
-        if(!is.character(celltypeID)){
-            stop("Error: celltypeID should be a string specifying the cell type ID.")
+    if(!identical(celltypeIDs,"placeholder")){
+        if(!is.character(celltypeIDs)&!is.list(celltypeIDs)){
+            stop("Error: celltypeIDs should be a string or list/vector specifying the cell type IDs in order of SCEs.")
         }
     }
     if(sampled!="placeholder"){
@@ -97,9 +100,9 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
             }
         }
     }
-    if(sampleID!="placeholder"){
-        if(!is.character(sampleID)){
-            stop("Error: sampleID should be a string specifying the sample ID.")
+    if(!identical(sampleIDs,"placeholder")){
+        if(!is.character(sampleIDs)&!is.list(sampleIDs)){
+            stop("Error: sampleIDs should be a string or list/vector specifying the cell type IDs in order of SCEs.")
         }
     }
     if(bulkDE!="placeholder"){
