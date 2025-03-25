@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/R/DGE_analysis.R" class="external-link"><code>R/DGE_analysis.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/DGE_analysis.R" class="external-link"><code>R/DGE_analysis.R</code></a></small>
     <div class="hidden name"><code>DGE_analysis.Rd</code></div>
     </div>
 
@@ -172,7 +172,7 @@ celltype_counts: vector with the counts of cells after QC in each cell type</p>
 <span class="r-in"><span><span class="va">DGE_analysis.sex.return</span><span class="op">&lt;-</span> <span class="fu">DGE_analysis</span><span class="op">(</span><span class="va">SCE</span>,design<span class="op">=</span> <span class="op">~</span> <span class="va">sex</span>,</span></span>
 <span class="r-in"><span>sampleID<span class="op">=</span><span class="st">"sample_id"</span>, celltypeID<span class="op">=</span><span class="st">"allan_celltype"</span>,coef<span class="op">=</span><span class="st">"M"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#get gene names of chromosomal DEGs</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/grimbough/biomaRt" class="external-link">'biomaRt'</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/Huber-group-EMBL/biomaRt" class="external-link">'biomaRt'</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mart</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/biomaRt/man/useDataset.html" class="external-link">useDataset</a></span><span class="op">(</span><span class="st">"hsapiens_gene_ensembl"</span>, <span class="fu"><a href="https://rdrr.io/pkg/biomaRt/man/useMart.html" class="external-link">useMart</a></span><span class="op">(</span><span class="st">"ensembl"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">our_degs</span><span class="op">$</span><span class="va">name</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gene_IDs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/biomaRt/man/getBM.html" class="external-link">getBM</a></span><span class="op">(</span>filters<span class="op">=</span> <span class="st">"ensembl_gene_id"</span>,</span></span>

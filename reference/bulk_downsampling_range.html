@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain the range of values to downsample at (either for individuals, or mean number of cells per individual), for bulk analysis</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/R/bulk_downsampling_range.r" class="external-link"><code>R/bulk_downsampling_range.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/bulk_downsampling_range.r" class="external-link"><code>R/bulk_downsampling_range.r</code></a></small>
     <div class="hidden name"><code>bulk_downsampling_range.Rd</code></div>
     </div>
 
@@ -64,8 +64,8 @@
 <span>  <span class="va">SCEs</span>,</span>
 <span>  <span class="va">celltype_correspondence</span>,</span>
 <span>  sampled <span class="op">=</span> <span class="st">"individuals"</span>,</span>
-<span>  sampleID <span class="op">=</span> <span class="st">"donor_id"</span>,</span>
-<span>  celltypeID <span class="op">=</span> <span class="st">"cell_type"</span></span>
+<span>  sampleIDs <span class="op">=</span> <span class="st">"donor_id"</span>,</span>
+<span>  celltypeIDs <span class="op">=</span> <span class="st">"cell_type"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,12 +85,12 @@
 <dd><p>downsampling carried out based on what (either "individuals" or "cells")</p></dd>
 
 
-<dt id="arg-sampleid">sampleID<a class="anchor" aria-label="anchor" href="#arg-sampleid"></a></dt>
-<dd><p>sample ID</p></dd>
+<dt id="arg-sampleids">sampleIDs<a class="anchor" aria-label="anchor" href="#arg-sampleids"></a></dt>
+<dd><p>list or vector of sample IDs (in order of SCEs)</p></dd>
 
 
-<dt id="arg-celltypeid">celltypeID<a class="anchor" aria-label="anchor" href="#arg-celltypeid"></a></dt>
-<dd><p>cell type ID</p></dd>
+<dt id="arg-celltypeids">celltypeIDs<a class="anchor" aria-label="anchor" href="#arg-celltypeids"></a></dt>
+<dd><p>list or vector of cell type IDs (in order of SCEs)</p></dd>
 
 </dl></div>
     <div id="value">
