@@ -10,9 +10,9 @@ validate_input_parameters_bulk(
   celltype_correspondence = "placeholder",
   output_path = "placeholder",
   range_downsampled = "placeholder",
-  celltypeID = "placeholder",
+  celltypeIDs = "placeholder",
   sampled = "placeholder",
-  sampleID = "placeholder",
+  sampleIDs = "placeholder",
   bulkDE = "placeholder",
   bulk_cutoff = "placeholder",
   pvalue = "placeholder",
@@ -36,11 +36,11 @@ validate_input_parameters_bulk(
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
-\item{celltypeID}{cell type ID}
+\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 
-\item{sampleID}{sample ID}
+\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
 
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 

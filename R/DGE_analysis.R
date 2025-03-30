@@ -131,7 +131,9 @@ DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
         lapply(celltypes,function(x)
             make_pseudobulk(SCE[,SCE[[celltypeID]]==x],
                             sampleID=sampleID,
-                            pb_columns=pb_columns))
+                            pb_columns=pb_columns,
+                            region=region,
+                            rmv_zero_count_genes=rmv_zero_count_genes))
     names(pb_dat) <- celltypes
 
     # run edgeR LRT DE analysis

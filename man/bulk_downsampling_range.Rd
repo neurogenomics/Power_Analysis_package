@@ -8,8 +8,8 @@ bulk_downsampling_range(
   SCEs,
   celltype_correspondence,
   sampled = "individuals",
-  sampleID = "donor_id",
-  celltypeID = "cell_type"
+  sampleIDs = "donor_id",
+  celltypeIDs = "cell_type"
 )
 }
 \arguments{
@@ -19,9 +19,9 @@ bulk_downsampling_range(
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 
-\item{sampleID}{sample ID}
+\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
 
-\item{celltypeID}{cell type ID}
+\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 }
 \value{
 list containing values which the data will be downsampled at, in ascending order

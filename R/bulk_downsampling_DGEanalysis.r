@@ -5,8 +5,8 @@
 #' @param SCEs list of the input data (elements should be SCE objects)
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
-#' @param sampleID sample ID
-#' @param celltypeID cell type ID
+#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
+#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
 #' @param output_path base output directory where down-sampled DGE analysis outputs will be saved
 
 #' Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions
@@ -14,30 +14,38 @@
 bulk_downsampling_DGEanalysis <- function(SCEs,
                                           celltype_correspondence,
                                           sampled="individuals",
-                                          sampleID="donor_id",
-                                          celltypeID="cell_type",
+                                          sampleIDs="donor_id",
+                                          celltypeIDs="cell_type",
                                           output_path=getwd()){
                                     
     # validate function input params
     validate_input_parameters_bulk(SCEs=SCEs, celltype_correspondence=celltype_correspondence, sampled=sampled,
-                                   sampleID=sampleID, celltypeID=celltypeID, output_path=output_path)
+                                   sampleIDs=sampleIDs, celltypeIDs=celltypeIDs, output_path=output_path)
 
     # get biggest downsampling range
-    max_downsampling_range <- bulk_downsampling_range(SCEs=SCEs, sampled=sampled, sampleID=sampleID, celltypeID=celltypeID, celltype_correspondence=celltype_correspondence)
+    max_downsampling_range <- bulk_downsampling_range(SCEs=SCEs, sampled=sampled, sampleIDs=sampleIDs, celltypeIDs=celltypeIDs, celltype_correspondence=celltype_correspondence)
+    # check sampleIDs, celltypeIDs
+    if(length(sampleIDs) == 1){
+        sampleIDs <- rep(sampleIDs,length(SCEs))
+    }
+    if(length(celltypeIDs) == 1){
+        celltypeIDs <- rep(celltypeIDs,length(SCEs))
+    }
     # loop through all datasets and cell types
     for(standard_celltype in names(celltype_correspondence)){
         for(idx in seq_along(SCEs)){
             dataset <- SCEs[[idx]]
             celltype_name <- celltype_correspondence[[standard_celltype]][[idx]]
-            dataset1 <- dataset[, colData(dataset)[[celltypeID]] == celltype_name]
-            # run downsampling, DGE analysis
-            numsamples <- length(unique(colData(dataset1)[[sampleID]]))
-            range_dataset <- max_downsampling_range[max_downsampling_range <= numsamples]
-            savepath <- file.path(output_path,SCEs[idx],standard_celltype)
-            # run
-            downsampling_DEanalysis(dataset1,range_dataset,output_path=savepath,sampleID=sampleID,celltypeID=celltypeID,coeff="M")
+            if(!is.na(celltype_name)){
+                # subset dataset                
+                dataset1 <- dataset[, colData(dataset)[[celltypeIDs[[idx]]]] == celltype_name]
+                # run downsampling, DGE analysis
+                numsamples <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))
+                range_dataset <- max_downsampling_range[max_downsampling_range <= numsamples]
+                savepath <- file.path(output_path,SCEs[idx],standard_celltype)
+                # run
+                downsampling_DEanalysis(dataset1,range_dataset,output_path=savepath,sampleID=sampleIDs[[idx]],celltypeID=celltypeIDs[[idx]],coeff="M")
+            }
         }
-
     }
-
 }

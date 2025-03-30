@@ -8,8 +8,8 @@ bulk_downsampling_DGEanalysis(
   SCEs,
   celltype_correspondence,
   sampled = "individuals",
-  sampleID = "donor_id",
-  celltypeID = "cell_type",
+  sampleIDs = "donor_id",
+  celltypeIDs = "cell_type",
   output_path = getwd()
 )
 }
@@ -20,9 +20,9 @@ bulk_downsampling_DGEanalysis(
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 
-\item{sampleID}{sample ID}
+\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
 
-\item{celltypeID}{cell type ID}
+\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
 \item{output_path}{base output directory where down-sampled DGE analysis outputs will be saved
 Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions}
