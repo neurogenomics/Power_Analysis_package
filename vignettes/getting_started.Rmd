@@ -36,7 +36,7 @@ library(`r pkg`)
 Import an SCE object and perform differential expression analysis using a pseudobulking approach, enabling the robust identification of differentially expressed genes (DEGs) across conditions or groups from single-cell data. <br>
 To run the DGE analysis, first load your own SingleCellExperiment (SCE) object.
 
-```{r, message=FALSE, warning=FALSE, eval=FALSE}
+```{r, message=FALSE, warning=FALSE}
 # Load your SCE object (replace with actual file path)
 library(qs)
 
@@ -52,7 +52,7 @@ To use the `DGE_analysis` function, specify the formula for comparison along wit
 **Example Usage**: <br>
 To validate the differential expression (DEG) analysis approach, you can run a comparison between sexes using the <i>design = ~ sex. </i> This will assess how gene expression differs between male and female groups. 
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
 # Run the DGE_analysis function for a sex comparison
 DGE_analysis.sex <- DGE_analysis(
   SCE,
@@ -94,40 +94,40 @@ power_analysis.sex <- power_analysis(
 The `power_analysis` function generates several key outputs:
   
 - **QC plots** display distributions of effect sizes (log2 fold-change) across detected DEGs and the number of cells per individual in the full dataset.
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("QC_plots.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/QC_plots.png")
 ```
 - **DGE analysis results** identify PTP DEGs and non-DEGs using a 0.05 cut-off for both nominal and adjusted p-values over the down-sampling range of datasets.
 - **Power plots** show the mean percentage of PTP DEGs detected and FDR trends as sample size or number of cells per sample increases. <br>
 Down-sampling individuals: <br>
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("DE_downsampling/DEGs_detected_boxplot.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/DEGs_detected_boxplot.png")
 ```
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("DE_downsampling/FDRs_boxplot.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/FDRs_boxplot.png")
 ```
 Down-sampling cells: <br>
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("DE_downsampling_cells/DEGs_detected_boxplot_cells.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/DEGs_detected_boxplot_cells.png")
 ```
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("DE_downsampling_cells/FDRs_cells_boxplot.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/FDRs_cells_boxplot.png")
 ```
 - **Effect size-specific detection rates** assess the DEG recovery across different absolute log2 fold-change bins. <br>
 Down-sampling individuals: <br>
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("DE_downsampling/DEGs_effects.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/DEGs_downreg_effects.png")
 ```
 Down-sampling cells: <br>
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("DE_downsampling_cells/DEGs_cells_effects.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/DEGs_cells_effects.png")
 ```
 - **Correlation plots** assess the correlation of effect sizes for the top 500 and 1000 genes across down-sampling levels. <br>
 Down-sampling individuals: <br>
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("corr_analysis/meanCorr_downsampling_500.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/meanCorr_downsampling_500.png")
 ```
 Down-sampling cells: <br>
-```{r, echo=FALSE, out.width="100%", eval=FALSE}
-knitr::include_graphics("corr_analysis/meanCorr_downsampling_cells_500.png")
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("images/meanCorr_downsampling_cells_500.png")
 ```
