@@ -1,6 +1,7 @@
 #' Tests input parameters for functions
 
 #' @param SCEs list of the input data (elements should be SCE objects)
+#' @param dataset_names list of the names of the datasets (as you would like them to appear in the "output_path" directory)
 #' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
@@ -22,6 +23,7 @@
 #' Checks all bulk analysis parameters are specified correctly
 
 validate_input_parameters_bulk <- function(SCEs="placeholder",
+                                           dataset_names="placeholder",
                                            celltype="placeholder",
                                            celltype_correspondence="placeholder",
                                            output_path="placeholder",
@@ -44,6 +46,11 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
     if(!identical(SCEs, "placeholder")){
         if(!is.list(SCEs)){
             stop("Error: SCEs should be a list of SingleCellExperiment objects.")
+        }
+    }
+    if(!identical(dataset_names, "placeholder")){
+        if(!is.character(dataset_names)&!is.list(dataset_names)){
+            stop("Error: dataset_names should be a list of strings specifying the names of the datasets.")
         }
     }
     if(celltype!="placeholder"){

@@ -6,6 +6,7 @@
 \usage{
 bulk_downsampling_DGEanalysis(
   SCEs,
+  dataset_names,
   celltype_correspondence,
   sampled = "individuals",
   sampleIDs = "donor_id",
@@ -15,6 +16,8 @@ bulk_downsampling_DGEanalysis(
 }
 \arguments{
 \item{SCEs}{list of the input data (elements should be SCE objects)}
+
+\item{dataset_names}{list of the names of the datasets (as you would like them to appear in the "output_path" directory)}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 

@@ -6,6 +6,7 @@
 \usage{
 validate_input_parameters_bulk(
   SCEs = "placeholder",
+  dataset_names = "placeholder",
   celltype = "placeholder",
   celltype_correspondence = "placeholder",
   output_path = "placeholder",
@@ -27,6 +28,8 @@ validate_input_parameters_bulk(
 }
 \arguments{
 \item{SCEs}{list of the input data (elements should be SCE objects)}
+
+\item{dataset_names}{list of the names of the datasets (as you would like them to appear in the "output_path" directory)}
 
 \item{celltype}{the cell type we are focusing on (name as it appears in cell type sub-directory name)}
 
