@@ -41,7 +41,7 @@ preliminary_plots <- function(SCE,
 
     # create output path if doesn't already exist
     setwd(output_path)
-    dir.create(output_path,showWarnings=FALSE)
+    dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
     # alter design
     if(design=="placeholder"){
         design=as.formula(paste0("~",sexID))

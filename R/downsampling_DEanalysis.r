@@ -53,7 +53,7 @@ downsampling_DEanalysis <- function(SCE,
     }
 
     # create output path if doesn't already exist
-    dir.create(output_path,showWarnings=FALSE)
+    dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
     setwd(output_path)
     # validate function input params
     validate_input_parameters_power(SCE=SCE, range_downsampled=range_downsampled, output_path=output_path,
@@ -94,12 +94,12 @@ downsampling_DEanalysis <- function(SCE,
         # make sure directory is correct (to save output)
         output_path <- file.path(output_path,"DE_downsampling")
         # create path
-        dir.create(output_path,showWarnings=FALSE)
+        dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
         # loop through downsampled values
         for(value in range_downsampled){
             # create and redirect to new folder
             path_val <- file.path(output_path,paste0(toString(value),"samples"))
-            dir.create(path_val,showWarnings=FALSE)
+            dir.create(path_val,showWarnings=FALSE,recursive=TRUE)
             setwd(path_val)
             # create subsets
             samples <- sample_individuals(SCE, value, sampleID, sexID, Nperms)
@@ -112,7 +112,7 @@ downsampling_DEanalysis <- function(SCE,
             for(j in 1:Nperms){
                 # create sub-directory for each one
                 path <- file.path(path_val,paste0(toString(value),"_",j))
-                dir.create(path,showWarnings=FALSE)
+                dir.create(path,showWarnings=FALSE,recursive=TRUE)
                 setwd(path)
                 # ensure sexID isnt "Sex", has to be lower case (change this in SCE if needed)
                 assign(paste0("DEout_",toString(value)), DGE_analysis(samples[[j]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
@@ -149,12 +149,12 @@ downsampling_DEanalysis <- function(SCE,
         # make sure directory is correct (to save output)
         output_path <- file.path(output_path,"DE_downsampling_cells")
         # create path
-        dir.create(output_path,showWarnings=FALSE)
+        dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
         # loop through downsampled values
         for(value in range_downsampled){
             # create and redirect to new folder
             path_val <- file.path(output_path,paste0(toString(value),"cells_persample"))
-            dir.create(path_val,showWarnings=FALSE)
+            dir.create(path_val,showWarnings=FALSE,recursive=TRUE)
             setwd(path_val)
             # create subsets
             cells <- sample_cells(SCE, value, sampleID, Nperms)
@@ -167,7 +167,7 @@ downsampling_DEanalysis <- function(SCE,
             for(j in 1:Nperms){
                 # create sub-directory for each one
                 path <- file.path(path_val,paste0(toString(value),"_",j))
-                dir.create(path,showWarnings=FALSE)
+                dir.create(path,showWarnings=FALSE,recursive=TRUE)
                 setwd(path)
                 # ensure sexID isnt "Sex", has to be lower case (change this in SCE if needed)
                 assign(paste0("DEout_",toString(value)), DGE_analysis(cells[[j]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))

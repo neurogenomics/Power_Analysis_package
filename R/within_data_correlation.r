@@ -41,7 +41,7 @@ within_data_correlation <- function(SCE,
 
     # create output path if doesn't already exist
     setwd(output_path)
-    dir.create(output_path,showWarnings=FALSE)
+    dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
     # alter design
     if(design=="placeholder"){
         design=as.formula(paste0("~",sexID))
@@ -60,7 +60,7 @@ within_data_correlation <- function(SCE,
         load(file.path(output_path,"DEout.RData"))
     }
     # create directory for correlation analysis if doesn't already exist
-    dir.create(file.path(output_path, "corr_analysis"), showWarnings=FALSE)
+    dir.create(file.path(output_path, "corr_analysis"), showWarnings=FALSE,recursive=TRUE)
 
     # get all genes from main dataset
     allgenes_full <- DEout$celltype_all_genes
@@ -75,7 +75,7 @@ within_data_correlation <- function(SCE,
     # run DGE analysis on these
     for(perm in 1:N_randperms){
         # create relevant directory and move to it
-        dir.create(file.path(output_path, paste0("corr_analysis/randperm",toString(perm))),showWarnings=FALSE)
+        dir.create(file.path(output_path, paste0("corr_analysis/randperm",toString(perm))),showWarnings=FALSE,recursive=TRUE)
         savepath <- file.path(output_path, paste0("corr_analysis/randperm",toString(perm)))
         # run DE analysis
         assign(paste0("perm_",toString(perm),"DEout"), DGE_analysis(permutedData[[perm]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
@@ -97,7 +97,7 @@ within_data_correlation <- function(SCE,
     for(subset in 1:N_subsetpairs){
         ## subset a
         # create relevant directory and move to it
-        dir.create(file.path(output_path, paste0("corr_analysis/subset",toString(subset),"a")),showWarnings=FALSE)
+        dir.create(file.path(output_path, paste0("corr_analysis/subset",toString(subset),"a")),showWarnings=FALSE,recursive=TRUE)
         savepath_a <- file.path(output_path, paste0("corr_analysis/subset",toString(subset),"a"))
         # run DE analysis
         assign(paste0("subset",toString(subset),"a_DEout"), DGE_analysis(subsets[[subset]][[1]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
@@ -105,7 +105,7 @@ within_data_correlation <- function(SCE,
         save(list=eval(paste0("subset",toString(subset),"a_DEout")),file=file.path(savepath_a,paste0("subset",toString(subset),"a_DEout.RData")))
         ## subset b
         # create relevant directory and move to it
-        dir.create(file.path(output_path, paste0("corr_analysis/subset",toString(subset),"b")),showWarnings=FALSE)
+        dir.create(file.path(output_path, paste0("corr_analysis/subset",toString(subset),"b")),showWarnings=FALSE,recursive=TRUE)
         savepath_b <- file.path(output_path, paste0("corr_analysis/subset",toString(subset),"b"))
         # run DE analysis
         assign(paste0("subset",toString(subset),"b_DEout"), DGE_analysis(subsets[[subset]][[2]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
