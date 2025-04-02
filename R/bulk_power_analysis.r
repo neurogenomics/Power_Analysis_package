@@ -1,6 +1,7 @@
 #' Runs entire bulk RNA-seq power analysis pipeline
 
 #' @param SCEs list of the input data (elements should be SCE objects)
+#' @param dataset_names list of the names of the datasets (as you would like them to appear in the "output_path" directory)
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param output_path path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
@@ -36,6 +37,7 @@
 #'}
 
 bulk_power_analysis <- function(SCEs,
+                                dataset_names,
                                 celltype_correspondence,
                                 output_path=getwd(),
                                 range_downsampled="placeholder",
@@ -55,16 +57,17 @@ bulk_power_analysis <- function(SCEs,
 
     # Run bulk_downsampling_DGEanalysis for all cell types
     bulk_downsampling_DGEanalysis(SCEs = SCEs,
+                                  dataset_names = dataset_names,
+                                  celltype_correspondence = celltype_correspondence,
                                   sampled = sampled,
                                   sampleIDs = sampleIDs,
                                   celltypeIDs = celltypeIDs,
-                                  celltype_correspondence = celltype_correspondence,
                                   output_path = output_path)
 
     # Run gather_celltype_DEGs
     gather_celltype_DEGs(output_path = output_path,
-                         range_downsampled = range_downsampled,
                          celltype_correspondence = celltype_correspondence,
+                         range_downsampled = range_downsampled,
                          Nperms = Nperms,
                          pvalue = pvalue)
 

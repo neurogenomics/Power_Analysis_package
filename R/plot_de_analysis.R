@@ -33,7 +33,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
          counts_celltypes,output_path, file="temp.RData")
     logFC = name = NULL
     #if it doesn't exist already make folder for plots
-    dir.create(output_path,showWarnings = F)
+    dir.create(output_path,showWarnings = F,recursive=TRUE)
 
     celltype_DEGs_dt[,deg_direction:="Down"]
     celltype_DEGs_dt[logFC>0,deg_direction:="Up"]

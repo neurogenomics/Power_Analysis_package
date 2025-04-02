@@ -6,6 +6,7 @@
 \usage{
 bulk_power_analysis(
   SCEs,
+  dataset_names,
   celltype_correspondence,
   output_path = getwd(),
   range_downsampled = "placeholder",
@@ -26,6 +27,8 @@ bulk_power_analysis(
 }
 \arguments{
 \item{SCEs}{list of the input data (elements should be SCE objects)}
+
+\item{dataset_names}{list of the names of the datasets (as you would like them to appear in the "output_path" directory)}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 

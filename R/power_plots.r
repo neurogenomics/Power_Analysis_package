@@ -59,7 +59,7 @@ power_plots <- function(SCE,
 
     # create output path if doesn't already exist
     setwd(output_path)
-    dir.create(output_path,showWarnings=FALSE)
+    dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
     # validate function input params
     validate_input_parameters_power(SCE=SCE, range_downsampled=range_downsampled, output_path=output_path,
                                     inpath=inpath, sampled=sampled, sampleID=sampleID,
@@ -200,7 +200,7 @@ power_plots <- function(SCE,
         # define path and folders
         path <- file.path(inpath,"DE_downsampling/")
         savepath <- file.path(output_path,"DE_downsampling/")
-        dir.create(savepath,showWarnings=FALSE)
+        dir.create(savepath,showWarnings=FALSE,recursive=TRUE)
         downsampled_folders <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"samples")
         ## plot % DEGs detected
         # load df with number of DEGs for each iteration/number of samples
@@ -1200,7 +1200,7 @@ power_plots <- function(SCE,
         # define path and folders        
         path <- file.path(inpath,"DE_downsampling_cells/")
         savepath <- file.path(output_path,"DE_downsampling_cells/")
-        dir.create(savepath,showWarnings=FALSE)
+        dir.create(savepath,showWarnings=FALSE,recursive=TRUE)
         downsampled_folders <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"cells_persample")
         ## plot % DEGs detected
         # load df with number of DEGs for each iteration/number of samples

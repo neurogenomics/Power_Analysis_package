@@ -48,9 +48,9 @@ downsampling_corrplots <- function(SCE,
 
     # create output path if doesn't already exist
     setwd(output_path)
-    dir.create(output_path,showWarnings=FALSE)
+    dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
     # create directory for correlation analysis
-    dir.create(file.path(output_path, "corr_analysis"), showWarnings=FALSE)
+    dir.create(file.path(output_path, "corr_analysis"), showWarnings=FALSE,recursive=TRUE)
     # validate function input params
     validate_input_parameters_power(SCE=SCE, range_downsampled=range_downsampled, output_path=output_path,
                                     inpath=inpath, sampled=sampled, sampleID=sampleID,
