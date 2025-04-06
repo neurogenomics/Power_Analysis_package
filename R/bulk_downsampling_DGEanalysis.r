@@ -37,6 +37,7 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
     for(standard_celltype in names(celltype_correspondence)){
         for(idx in seq_along(SCEs)){
             dataset <- SCEs[[idx]]
+            coeff_use <- sort(unique(colData(dataset)$sex))[[2]]
             celltype_name <- celltype_correspondence[[standard_celltype]][[idx]]
             if(!is.na(celltype_name)){
                 # subset dataset                
@@ -46,7 +47,7 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
                 range_dataset <- max_downsampling_range[max_downsampling_range <= numsamples]
                 savepath <- file.path(output_path,dataset_names[[idx]],standard_celltype)
                 # run
-                downsampling_DEanalysis(dataset1,range_dataset,output_path=savepath,sampleID=sampleIDs[[idx]],celltypeID=celltypeIDs[[idx]],coeff="M")
+                downsampling_DEanalysis(dataset1,range_dataset,output_path=savepath,sampleID=sampleIDs[[idx]],celltypeID=celltypeIDs[[idx]],coeff=coeff_use)
             }
         }
     }

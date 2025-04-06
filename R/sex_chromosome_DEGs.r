@@ -26,7 +26,7 @@ sex_chromosome_DEGs <- function(all_genes,
     column_exists <- sapply(all_genes, function(x) ensemblID_colname %in% names(x))
     if(!all(column_exists)){
         stop("Error: every DGE analysis output in all_genes should contain the column with the name specified by ensemblID_colname")
-    }    
+    }
 
     # combine data for all celltypes into one dataframe
     combn_genes <- rbindlist(all_genes,idcol="celltype")
