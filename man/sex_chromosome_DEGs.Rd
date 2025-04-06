@@ -7,7 +7,7 @@
 sex_chromosome_DEGs(all_genes, ensemblID_colname = "name")
 }
 \arguments{
-\item{all_genes}{list whose elements are DGE analysis output for each celltype in a dataset (e.g. as returned by "DGE_analysis.R", but subsetted to "celltype_all_genes")}
+\item{all_genes}{a list whose elements are DGE analysis output for each celltype in a dataset (e.g. as returned by "DGE_analysis.R", but subsetted to "celltype_all_genes")}
 
 \item{ensemblID_colname}{the column name within each DGE analysis output in all_genes, which contains the ensembl IDs for each gene}
 }

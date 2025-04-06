@@ -37,7 +37,7 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
     for(standard_celltype in names(celltype_correspondence)){
         for(idx in seq_along(SCEs)){
             dataset <- SCEs[[idx]]
-            coeff_use <- sort(unique(colData(dataset)$sex))[[2]]
+            coeff_use <- as.character(sort(unique(colData(dataset)$sex))[[2]])
             celltype_name <- celltype_correspondence[[standard_celltype]][[idx]]
             if(!is.na(celltype_name)){
                 # subset dataset                
