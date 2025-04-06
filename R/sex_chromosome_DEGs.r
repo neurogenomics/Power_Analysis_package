@@ -6,7 +6,7 @@ utils::globalVariables(c(".","chromosome","x.chromosome_name"))
 #' @importFrom data.table rbindlist setkey setorder :=
 #' @importFrom biomaRt useDataset getBM useMart
 
-#' @param all_genes list whose elements are DGE analysis output for each celltype in a dataset (e.g. as returned by "DGE_analysis.R", but subsetted to "celltype_all_genes")
+#' @param all_genes a list whose elements are DGE analysis output for each celltype in a dataset (e.g. as returned by "DGE_analysis.R", but subsetted to "celltype_all_genes")
 #' @param ensemblID_colname the column name within each DGE analysis output in all_genes, which contains the ensembl IDs for each gene
 
 #' @return the DGE analysis output restricted to just the genes that lay on the sex chromosomes
