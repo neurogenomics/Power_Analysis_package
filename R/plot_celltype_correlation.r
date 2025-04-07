@@ -9,7 +9,6 @@ utils::globalVariables(c(".","name"))
 
 #' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in data_names)
 #' @param DEouts a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis
-#' @param celltype the celltype to compute correlation for
 #' @param celltypes_list list of different names specifying each cell type (in order for each dataset in DEouts)
 #' @param data_names names of the datasets as they will appear in the correlation plot
 #' @param pval the cut-off p-value which will be used to select DEGs (default is 1 to include all the genes)
@@ -18,7 +17,6 @@ utils::globalVariables(c(".","name"))
 
 plot_celltype_correlation <- function(dataset_name,
                                       DEouts,
-                                      celltype,
                                       celltypes_list,
                                       data_names,
                                       pval=1){
@@ -48,7 +46,7 @@ plot_celltype_correlation <- function(dataset_name,
     # for each study, select data corresponding only to celltype
     for(i in seq_along(DEouts)){
         # get corresponding cell type names for current study
-        celltype_name <- celltypes_list[[i]]
+        celltype_name <- celltypes_list[[i]][[1]]
         # redefine DEouts so each element only contains study/celltype
         allstudies[[i]] <- DEouts[[i]]$celltype_all_genes[[celltype_name]]
     }
@@ -63,7 +61,7 @@ plot_celltype_correlation <- function(dataset_name,
         allGenes[[j]] <- allstudies_dt[dataset==data_names[[j]],name]
     }
     # get set of genes in all studies
-    shared_genes <- Reduce(intersect,allGenes)  
+    shared_genes <- Reduce(intersect,allGenes)
     # number of [celltype] genes shared across all studies
     #print(length(shared_genes))
     #filter dataset (to only include shared genes)
@@ -74,12 +72,12 @@ plot_celltype_correlation <- function(dataset_name,
     genes <- allstudies_dt[dataset==dataset_name & PValue<pval, name]
     # filter to just these genes
     allstudies_dt <- allstudies_dt[name %in% genes,]
-    
+
     # make matrix for corr() - cols will be [datset, name, logFC]
     mat_lfc <- allstudies_dt[,.(dataset,name,logFC)]
     # reshape so cols now are [(gene) name, logFC.dataset1, logFC.dataset2,...,logFC.datasetN] (N being length(names(DEouts)))
     mat_lfc <-
-    reshape(mat_lfc, idvar = "name", timevar = "dataset", 
+    reshape(mat_lfc, idvar = "name", timevar = "dataset",
             direction = "wide")
     # remove logFC. from name (now cols are just [name, dataset1, dataset2,...,datasetN] with logFC values in each column)
     colnames(mat_lfc)<-
@@ -94,17 +92,17 @@ plot_celltype_correlation <- function(dataset_name,
 
     # get number of DEGs for this celltype
     num_genes <- dim(mat_lfc)[[1]]
-    print(paste0("Number of ",celltype," genes at given p value is ",num_genes))
+    print(paste0("Number of ",celltype_name," genes at given p value is ",num_genes))
     genes <- mat_lfc$name # (only updates if we remove NA genes, else is the same as "genes" above)
 
     # get correlation matrix
     corr_lfc <- cor(mat_lfc[,2:ncol(mat_lfc)],method = "spearman") #### could also try "pearson"...
 
     # plot correlation matrix
-    corr_plot.plot <- ggcorrplot(round(corr_lfc,2), 
+    corr_plot.plot <- ggcorrplot(round(corr_lfc,2),
             hc.order = F, insig="pch",pch=5,pch.col = "grey",
             pch.cex=9,
-            title=paste0("LFC Correlation Matrix, ",celltype," - pval < ",pval,": ",
+            title=paste0("LFC Correlation Matrix, ",celltype_name," - pval < ",pval,": ",
                         num_genes," genes"),
             colors = c("#FC4E07", "white", "#00AFBB"),
             outline.color = "white", lab = TRUE,

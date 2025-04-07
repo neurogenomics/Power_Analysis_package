@@ -7,7 +7,6 @@
 plot_celltype_correlation(
   dataset_name,
   DEouts,
-  celltype,
   celltypes_list,
   data_names,
   pval = 1
@@ -17,8 +16,6 @@ plot_celltype_correlation(
 \item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in data_names)}
 
 \item{DEouts}{a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis}
-
-\item{celltype}{the celltype to compute correlation for}
 
 \item{celltypes_list}{list of different names specifying each cell type (in order for each dataset in DEouts)}
 
