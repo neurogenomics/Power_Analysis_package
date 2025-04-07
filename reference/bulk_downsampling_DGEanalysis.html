@@ -67,7 +67,9 @@
 <span>  sampled <span class="op">=</span> <span class="st">"individuals"</span>,</span>
 <span>  sampleIDs <span class="op">=</span> <span class="st">"donor_id"</span>,</span>
 <span>  celltypeIDs <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
-<span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  pvalue <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  Nperms <span class="op">=</span> <span class="fl">20</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,7 +102,15 @@
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><p>base output directory where down-sampled DGE analysis outputs will be saved
+<dd><p>base output directory where down-sampled DGE analysis outputs will be saved</p></dd>
+
+
+<dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
+<dd><p>the cut-off p-value used to select DEGs</p></dd>
+
+
+<dt id="arg-nperms">Nperms<a class="anchor" aria-label="anchor" href="#arg-nperms"></a></dt>
+<dd><p>number of permutations of DGE analysis outputs for each sample
 Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions</p></dd>
 
 </dl></div>

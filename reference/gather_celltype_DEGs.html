@@ -63,8 +63,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gather_celltype_DEGs</span><span class="op">(</span></span>
 <span>  <span class="va">range_downsampled</span>,</span>
 <span>  <span class="va">celltype_correspondence</span>,</span>
-<span>  Nperms <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  pvalue <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  Nperms <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -81,12 +81,12 @@
 <dd><p>list of different names specifying each cell type</p></dd>
 
 
-<dt id="arg-nperms">Nperms<a class="anchor" aria-label="anchor" href="#arg-nperms"></a></dt>
-<dd><p>number of permutations of DGE analysis outputs for each sample</p></dd>
-
-
 <dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
 <dd><p>the cut-off p-value used to select DEGs</p></dd>
+
+
+<dt id="arg-nperms">Nperms<a class="anchor" aria-label="anchor" href="#arg-nperms"></a></dt>
+<dd><p>number of permutations of DGE analysis outputs for each sample</p></dd>
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
