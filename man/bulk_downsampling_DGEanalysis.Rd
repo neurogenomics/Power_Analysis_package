@@ -11,7 +11,9 @@ bulk_downsampling_DGEanalysis(
   sampled = "individuals",
   sampleIDs = "donor_id",
   celltypeIDs = "cell_type",
-  output_path = getwd()
+  output_path = getwd(),
+  pvalue = 0.05,
+  Nperms = 20
 )
 }
 \arguments{
@@ -27,7 +29,11 @@ bulk_downsampling_DGEanalysis(
 
 \item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
-\item{output_path}{base output directory where down-sampled DGE analysis outputs will be saved
+\item{output_path}{base output directory where down-sampled DGE analysis outputs will be saved}
+
+\item{pvalue}{the cut-off p-value used to select DEGs}
+
+\item{Nperms}{number of permutations of DGE analysis outputs for each sample
 Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions}
 }
 \description{

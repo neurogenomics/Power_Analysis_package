@@ -2,21 +2,21 @@
 
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param celltype_correspondence list of different names specifying each cell type
-#' @param Nperms number of permutations of DGE analysis outputs for each sample
 #' @param pvalue the cut-off p-value used to select DEGs
+#' @param Nperms number of permutations of DGE analysis outputs for each sample
 #' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
 
 #' Saves combined list of DEGs (across all cell types) in a subdirectory inside the dataset directory
 
 gather_celltype_DEGs <- function(range_downsampled,
                                  celltype_correspondence,
-                                 Nperms=20,
                                  pvalue=0.05,
+                                 Nperms=20,
                                  output_path=getwd()){
 
     # validate function input params
     validate_input_parameters_bulk(output_path=output_path, range_downsampled=range_downsampled, celltype_correspondence=celltype_correspondence,
-                                   Nperms=Nperms, pvalue=pvalue)
+                                   pvalue=pvalue, Nperms=Nperms)
 
     # loop through datasets
     for(dataset in list.dirs(output_path,recursive=F,full.names=F)){
