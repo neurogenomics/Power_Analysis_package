@@ -9,7 +9,6 @@ utils::globalVariables(c(".","name"))
 
 #' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in data_names)
 #' @param DEouts a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis
-#' @param celltype the celltype to compute correlation for
 #' @param celltypes_list list of different names specifying each cell type (in order for each dataset in DEouts)
 #' @param data_names names of the datasets as they will appear in the correlation plot
 #' @param pval the cut-off p-value which will be used to select DEGs (default is 1 to include all the genes)

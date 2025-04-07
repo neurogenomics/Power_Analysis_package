@@ -40,7 +40,7 @@ correlation_analysis(
 
 \item{N_subsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
 
-\item{sex_DEGs}{true if DEGs come from sex chromosomes, else false}
+\item{sex_DEGs}{If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.}
 
 \item{fontsize_yaxislabels}{font size for axis labels in plot}
 
