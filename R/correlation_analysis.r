@@ -8,7 +8,7 @@
 #' @param alphaval (alpha) transparency of the non-mean boxplots
 #' @param N_randperms number of random permutations of the dataset used to select significant DEGs from
 #' @param N_subsets number of pairs of random subsets of the dataset used to select significant DEGs from
-#' @param sex_DEGs true if DEGs come from sex chromosomes, else false
+#' @param sex_DEGs If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.
 #' @param fontsize_yaxislabels font size for axis labels in plot
 #' @param fontsize_yaxisticks font size for axis tick labels in plot
 #' @param fontsize_title font size for plot title
@@ -48,14 +48,31 @@ correlation_analysis <- function(dataset_name,
                                  fontsize_legendtitle=9,
                                  fontsize_facet_labels=9,
                                  output_path=getwd()){
-    
+
+    # Filter sex_DEGs
+    if (sex_DEGs) {
+        DEouts <- lapply(DEouts, function(x) {
+            x$celltype_all_genes <- sex_chromosome_DEGs(x$celltype_all_genes)
+
+            # Only keep DEGs for genes present in filtered all_genes
+            celltype_DEGs <- lapply(names(x$celltype_DEGs), function(y) {
+                celltype_DEG <- x$celltype_DEGs[[y]][x$celltype_DEGs[[y]]$name %in% x$celltype_all_genes[[y]]$name,]
+                return(celltype_DEG)
+            })
+            names(celltype_DEGs) <- names(x$celltype_DEGs)
+            x$celltype_DEGs <- celltype_DEGs
+            return(x)
+        })
+    }
+
+
     # run plot_mean_correlation for each p-value (saving outputs)
-    mean_correlation_results <- plot_mean_correlation(dataset_name,
-                                                      DEouts,
-                                                      celltype_correspondence,
-                                                      pvals,
-                                                      data_names,
-                                                      output_path)
+    mean_correlation_results <- plot_mean_correlation(dataset_name=dataset_name,
+                                                      DEouts=DEouts,
+                                                      celltype_correspondence=celltype_correspondence,
+                                                      pvals=pvals,
+                                                      data_names=data_names,
+                                                      output_path=output_path)
 
     # run correlation_boxplots for each p-value (saving outputs)
     correlation_boxplots(mean_correlation_results,

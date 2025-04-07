@@ -41,7 +41,7 @@ plot_mean_correlation <- function(dataset_name,
             # get correlation matrix for each celltype
             allCorrs[[i]] <- corrOut[[1]]
             # get all present genes for current celltype
-            genes[[i]] <- corrOut[[4]]
+            genes[[i]] <- list(corrOut[[4]])
         }
         # total number of unique genes across celltypes
         genes <- unlist(genes)
@@ -78,7 +78,6 @@ plot_mean_correlation <- function(dataset_name,
         }
         ggsave(file.path(output_path, paste0("mean_correlation_p", pvalue, ".png")), corr_plot.plot, width=fig_width, height=fig_height, units="cm", bg="white")
         ggsave(file.path(output_path, paste0("mean_correlation_p", pvalue, ".pdf")), corr_plot.plot, width=fig_width, height=fig_height, units="cm", bg="white")
-
     }
-
+    return(output_list)
 }

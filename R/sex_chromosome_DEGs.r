@@ -33,12 +33,12 @@ sex_chromosome_DEGs <- function(all_genes,
     # add symbol
     mart <- useDataset("hsapiens_gene_ensembl", useMart("ensembl"))
     genes <- unique(as.character(combn_genes$name))
-    gene_IDs <- getBM(filters = "ensembl_gene_id", 
+    gene_IDs <- getBM(filters = "ensembl_gene_id",
                       attributes = c("ensembl_gene_id","hgnc_symbol","chromosome_name"),
                       values = genes, mart = mart, useCache = FALSE)
     gene_IDs <- as.data.table(gene_IDs)
     setnames(gene_IDs,"ensembl_gene_id",ensemblID_colname)
-    
+
     # remove any duplicates from reference set - two names for one ENSEMBL ID
     gene_IDs <- unique(gene_IDs,by=ensemblID_colname)
     setkey(combn_genes,name)
@@ -51,7 +51,8 @@ sex_chromosome_DEGs <- function(all_genes,
     sexgenes <- combn_genes[combn_genes$chromosome == "X" | combn_genes$chromosome == "Y"]
     # remove unnecessary columns and reshape this as appropriate
     sexgenes <- split(sexgenes,sexgenes$celltype)
-    sexgenes <- sexgenes[[names(sexgenes)]][, c("logFC","logCPM","LR","PValue","adj_pvalue","name")]
+    # sexgenes <- sexgenes[[names(sexgenes)]][, c("logFC","logCPM","LR","PValue","adj_pval","name")]
+    sexgenes <- lapply(sexgenes, function(x) x[, c("logFC","logCPM","LR","PValue","adj_pval","name")])
 
     # output DGE analysis subset to sex chromosome genes
     return(sexgenes)
