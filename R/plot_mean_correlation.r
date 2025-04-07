@@ -11,7 +11,7 @@
 #' @param data_names names of the datasets as they appear in the correlation plot
 #' @param output_path base path in which outputs will be stored
 
-#' Saves mean correlation matrix (and actual values) in the appropriate directory 
+#' Saves mean correlation matrix (and actual values) in the appropriate directory
 
 plot_mean_correlation <- function(dataset_name,
                                   DEouts,
@@ -19,13 +19,13 @@ plot_mean_correlation <- function(dataset_name,
                                   celltype_correspondence,
                                   data_names,
                                   output_path=getwd()){
-    
+
     # validate function input params
-    validate_input_parameters_correlation(dataset_name=dataset_name, DEouts=DEouts, pvalues=pvals, 
+    validate_input_parameters_correlation(dataset_name=dataset_name, DEouts=DEouts, pvalues=pvals,
                                           celltype_correspondence=celltype_correspondence, data_names=data_names, output_path=output_path)
     # outputs
     output_list <- list()
-    
+
     # loop over each p-value
     for(pvalue in pvals){
         # list for genes of each celltype at specified p-value
@@ -36,7 +36,7 @@ plot_mean_correlation <- function(dataset_name,
             # get corresponding cell type names for each dataset
             celltype_names <- celltype_correspondence[[celltype]]
             # correlation for each celltype at specified p-value
-            corrOut <- plot_celltype_correlation(dataset_name, DEouts, celltype_names, pvalue)
+            corrOut <- plot_celltype_correlation(dataset_name, DEouts, celltype_names, data_names, pvalue)
             i <- i+1
             # get correlation matrix for each celltype
             allCorrs[[i]] <- corrOut[[1]]
@@ -55,7 +55,7 @@ plot_mean_correlation <- function(dataset_name,
         }
 
         # plot correlation matrix
-        corr_plot.plot <- ggcorrplot(round(meanCorr,3), 
+        corr_plot.plot <- ggcorrplot(round(meanCorr,3),
         hc.order = F,insig="pch",pch=5,pch.col = "grey",
         pch.cex=9,
         title=paste0("Total ", totNumGenes," DEGs"),
@@ -78,7 +78,7 @@ plot_mean_correlation <- function(dataset_name,
         }
         ggsave(file.path(output_path, paste0("mean_correlation_p", pvalue, ".png")), corr_plot.plot, width=fig_width, height=fig_height, units="cm", bg="white")
         ggsave(file.path(output_path, paste0("mean_correlation_p", pvalue, ".pdf")), corr_plot.plot, width=fig_width, height=fig_height, units="cm", bg="white")
-    
+
     }
 
 }

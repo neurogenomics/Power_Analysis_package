@@ -1,6 +1,5 @@
 .Rproj.user
 inst/doc
-
 Icon?
 # R project files
 *.Rproj
@@ -11,6 +10,7 @@ Icon?
 .Rapp.history
 # Session Data files
 .RData
+*.RData
 # User-specific files
 .Ruserdata
 # .DS_Store
@@ -45,7 +45,7 @@ vignettes/*.R
 *.knit.md
 # R Environment Variables
 .Renviron
-# MotifPeeker specific
+# Project-specific
 inst/markdown/*.html
 inst/markdown/test.Rmd
 .gitignore
@@ -54,3 +54,5 @@ codecov.yml
 docs/
 /doc/
 /Meta/
+_temp
+sc.cell.type.de.graphs/
