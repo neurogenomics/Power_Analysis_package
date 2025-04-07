@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Computes the correlation of the log-foldchange of the DEGs (at specified p-value) for a given celltype, across all datasets</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/R/plot_celltype_correlation.r" class="external-link"><code>R/plot_celltype_correlation.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/dev-hiru/R/plot_celltype_correlation.r" class="external-link"><code>R/plot_celltype_correlation.r</code></a></small>
     <div class="hidden name"><code>plot_celltype_correlation.Rd</code></div>
     </div>
 
@@ -63,7 +63,6 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_celltype_correlation</span><span class="op">(</span></span>
 <span>  <span class="va">dataset_name</span>,</span>
 <span>  <span class="va">DEouts</span>,</span>
-<span>  <span class="va">celltype</span>,</span>
 <span>  <span class="va">celltypes_list</span>,</span>
 <span>  <span class="va">data_names</span>,</span>
 <span>  pval <span class="op">=</span> <span class="fl">1</span></span>
@@ -80,10 +79,6 @@
 
 <dt id="arg-deouts">DEouts<a class="anchor" aria-label="anchor" href="#arg-deouts"></a></dt>
 <dd><p>a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis</p></dd>
-
-
-<dt id="arg-celltype">celltype<a class="anchor" aria-label="anchor" href="#arg-celltype"></a></dt>
-<dd><p>the celltype to compute correlation for</p></dd>
 
 
 <dt id="arg-celltypes-list">celltypes_list<a class="anchor" aria-label="anchor" href="#arg-celltypes-list"></a></dt>
