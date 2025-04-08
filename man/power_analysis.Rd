@@ -63,3 +63,24 @@ Saves all plots and DGE analysis outputs in the appropriate directories}
 \description{
 Runs entire power analysis pipeline
 }
+\examples{
+\dontrun{
+# Too slow to run with check()
+# 1. Prepare SCE
+micro_tsai <- system.file("extdata", "Tsai_Micro.qs", package="poweranalysis")
+SCE_tsai <- qs::qread(micro_tsai)
+
+# 2. Run Power Analysis
+PA_tsai <- poweranalysis::power_analysis(
+    SCE_tsai,
+    sampleID = "sample_id",
+    celltypeID = "cluster_celltype",
+    design = ~ sex,
+    coef = "M",
+    output_path = tempdir()
+)
+PA_tsai
+}
+
+
+}

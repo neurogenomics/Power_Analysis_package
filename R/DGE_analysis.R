@@ -70,6 +70,18 @@
 #' our_degs[chromosome_name %in% c("X","Y"),
 #'          .N,by=.(celltype,chromosome_name)]
 #'}
+#'
+#' # Simple runnable example with bundled data
+#' micro_tsai <- system.file("extdata", "Tsai_Micro.qs", package="poweranalysis")
+#' SCE_tsai <- qs::qread(micro_tsai)
+#' DGE_tsai <- poweranalysis::DGE_analysis(
+#'     SCE_tsai,
+#'     design = ~ sex,
+#'     celltypeID="cluster_celltype",
+#'     sampleID = "sample_id",
+#'     coef = "M"
+#' )
+#' DGE_tsai
 
 DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
                          region="single_region", coef=NULL, control=NULL,

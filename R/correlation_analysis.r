@@ -30,6 +30,29 @@
 #'celltype_correspondence <- list("Microglia" = c("micro", "microglial cells", "Micro"),
 #'                                "Astrocytes" = c("Astrocytes", "astro"),
 #'                                "Oligodendrocytes" = c("oligo", "Oligodendrocytes"))
+#'
+#' # Runnable example with bundled data
+#' # 1. Prepare DGE
+#' micro_tsai <- system.file("extdata", "Tsai_Micro.qs", package="poweranalysis")
+#' SCE_tsai <- qs::qread(micro_tsai)
+#' DGE_tsai <- poweranalysis::DGE_analysis(
+#'     SCE_tsai,
+#'     design = ~ sex,
+#'     celltypeID="cluster_celltype",
+#'     sampleID = "sample_id",
+#'     coef = "M"
+#' )
+#' celltype_names <- list("Microglia" = list("Micro"))
+#'
+#' # 2. Run correlation analysis
+#' correlation_analysis(
+#'     dataset_name = "tsai",
+#'     DEouts = list(DGE_tsai),
+#'     celltype_correspondence = celltype_names,
+#'     data_names = list("tsai"),
+#'     sex_DEGs = TRUE,    # Keep only genes on sex chromosomes
+#'     output_path = output_path
+#' )
 #'}
 
 correlation_analysis <- function(dataset_name,

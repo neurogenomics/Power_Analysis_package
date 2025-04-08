@@ -17,13 +17,41 @@ repo <- strsplit(URL,"/")[[1]][5]
 `r rworkflows::use_badges(add_hex = FALSE, add_authors = FALSE, add_codecov = FALSE, add_codecov_graphs = FALSE, add_license = FALSE)`
 `r badger::badge_license(license = rworkflows::get_description(refs = NULL)[[1]]$get_field("License"))`
 
-**Authors:** ***Salman Fawad, Alan Murphy, Nathan Skene, Yunning Yuan***  
+**Authors:** ***Salman Fawad, Alan Murphy, Yunning Yuan, Hiranyamaya (Hiru) Dash, Nathan Skene***  
 **Updated:** ***`r format(Sys.Date(), '%b-%d-%Y')`***  
 
 
 ## Introduction
 
+The poweranalysis R package is designed to run robust power analysis for differential gene expression in scRNA-seq studies and provides tools to estimate the optimal number of samples and cells needed to achieve reliable power levels.
+
 Wraps work from [this](https://github.com/neurogenomics/scRNA-seq_Power_Analysis) repository into an R package.
 
-To install (once made public), run:
-`devtools::install_github("neurogenomics/Power_Analysis")`
+To install:  
+```R
+devtools::install_github("neurogenomics/Power_Analysis")
+```
+
+Load:  
+```R
+library(poweranalysis)
+```
+
+## Contact
+
+### [Neurogenomics Lab](https://www.neurogenomics.co.uk)  
+UK Dementia Research Institute  
+Department of Brain Sciences  
+Faculty of Medicine  
+Imperial College London  
+[GitHub](https://github.com/neurogenomics)  
+
+<hr>
+
+### Session Info
+
+<details>
+```{r}
+utils::sessionInfo()
+```
+</details>
