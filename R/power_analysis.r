@@ -25,6 +25,27 @@ utils::globalVariables(c("dataset"))
 
 #' Saves all plots and DGE analysis outputs in the appropriate directories
 #' @export
+#'
+#' @examples
+#'\dontrun{
+#' # Too slow to run with check()
+#' # 1. Prepare SCE
+#' micro_tsai <- system.file("extdata", "Tsai_Micro.qs", package="poweranalysis")
+#' SCE_tsai <- qs::qread(micro_tsai)
+#'
+#' # 2. Run Power Analysis
+#' PA_tsai <- poweranalysis::power_analysis(
+#'     SCE_tsai,
+#'     sampleID = "sample_id",
+#'     celltypeID = "cluster_celltype",
+#'     design = ~ sex,
+#'     coef = "M",
+#'     output_path = tempdir()
+#' )
+#' PA_tsai
+#'}
+#'
+#'
 
 power_analysis <- function(SCE,
                            range_downsampled_individuals="placeholder",
@@ -43,7 +64,7 @@ power_analysis <- function(SCE,
                            control=NULL,
                            pval_adjust_method="BH",
                            rmv_zero_count_genes=TRUE){
-    
+
     setwd(output_path)
 
     # alter range_downsampled_individuals
@@ -57,18 +78,18 @@ power_analysis <- function(SCE,
     # alter design
     if(design=="placeholder"){
         design=as.formula(paste0("~",sexID))
-    }    
+    }
 
     # create preliminary plots
-    preliminary_plots(SCE=SCE, 
-                      output_path=output_path, 
-                      sampleID=sampleID, 
-                      design=design, 
-                      sexID=sexID, 
-                      celltypeID=celltypeID, 
-                      coeff=coeff, 
+    preliminary_plots(SCE=SCE,
+                      output_path=output_path,
+                      sampleID=sampleID,
+                      design=design,
+                      sexID=sexID,
+                      celltypeID=celltypeID,
+                      coeff=coeff,
                       fdr=fdr)
-    
+
     ## create power plots for down-sampling individuals, cells
     # down-sample individuals and run DE analysis
     downsampling_DEanalysis(SCE=SCE,
@@ -80,23 +101,23 @@ power_analysis <- function(SCE,
                             sexID=sexID,
                             celltypeID=celltypeID,
                             y=y,
-                            region=region, 
-                            control=control, 
-                            pval_adjust_method=pval_adjust_method, 
-                            rmv_zero_count_genes=rmv_zero_count_genes, 
-                            coeff=coeff, 
-                            fdr=fdr, 
-                            nom_pval=nom_pval, 
+                            region=region,
+                            control=control,
+                            pval_adjust_method=pval_adjust_method,
+                            rmv_zero_count_genes=rmv_zero_count_genes,
+                            coeff=coeff,
+                            fdr=fdr,
+                            nom_pval=nom_pval,
                             Nperms=Nperms)
     # create power plots
-    power_plots(SCE=SCE, 
-                range_downsampled=range_downsampled_individuals, 
+    power_plots(SCE=SCE,
+                range_downsampled=range_downsampled_individuals,
                 output_path=output_path,
-                sampled="individuals", 
-                sampleID=sampleID, 
-                celltypeID=celltypeID, 
-                fdr=fdr, 
-                nom_pval=nom_pval, 
+                sampled="individuals",
+                sampleID=sampleID,
+                celltypeID=celltypeID,
+                fdr=fdr,
+                nom_pval=nom_pval,
                 Nperms=Nperms)
     # down-sample cells and run DE analysis
     downsampling_DEanalysis(SCE=SCE,
@@ -108,36 +129,36 @@ power_analysis <- function(SCE,
                             sexID=sexID,
                             celltypeID=celltypeID,
                             y=y,
-                            region=region, 
-                            control=control, 
-                            pval_adjust_method=pval_adjust_method, 
-                            rmv_zero_count_genes=rmv_zero_count_genes, 
-                            coeff=coeff, 
-                            fdr=fdr, 
-                            nom_pval=nom_pval, 
+                            region=region,
+                            control=control,
+                            pval_adjust_method=pval_adjust_method,
+                            rmv_zero_count_genes=rmv_zero_count_genes,
+                            coeff=coeff,
+                            fdr=fdr,
+                            nom_pval=nom_pval,
                             Nperms=Nperms)
     # create power plots
-    power_plots(SCE=SCE, 
-                range_downsampled=range_downsampled_cells, 
+    power_plots(SCE=SCE,
+                range_downsampled=range_downsampled_cells,
                 output_path=output_path,
-                sampled="cells", 
-                sampleID=sampleID, 
-                celltypeID=celltypeID, 
-                fdr=fdr, 
-                nom_pval=nom_pval, 
+                sampled="cells",
+                sampleID=sampleID,
+                celltypeID=celltypeID,
+                fdr=fdr,
+                nom_pval=nom_pval,
                 Nperms=Nperms)
     # create down-sampling correlation plots (individuals)
-    downsampling_corrplots(SCE=SCE, 
-                           range_downsampled=range_downsampled_individuals, 
-                           output_path=output_path, 
-                           sampled="individuals", 
-                           celltypeID=celltypeID, 
+    downsampling_corrplots(SCE=SCE,
+                           range_downsampled=range_downsampled_individuals,
+                           output_path=output_path,
+                           sampled="individuals",
+                           celltypeID=celltypeID,
                            Nperms=Nperms)
     # create down-sampling correlation plots (cells)
-    downsampling_corrplots(SCE=SCE, 
-                           range_downsampled=range_downsampled_cells, 
-                           output_path=output_path, 
-                           sampled="cells", 
-                           celltypeID=celltypeID, 
+    downsampling_corrplots(SCE=SCE,
+                           range_downsampled=range_downsampled_cells,
+                           output_path=output_path,
+                           sampled="cells",
+                           celltypeID=celltypeID,
                            Nperms=Nperms)
 }
