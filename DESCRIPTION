@@ -4,9 +4,13 @@ Title: Carry out Power Analysis for Differential Expression in single-cell RNA-s
 Version: 0.0.0.9000
 Authors@R: c(
     person("Salman", "Fawad", email = "salman.fawad16@imperial.ac.uk", role = c("aut", "cre")),
+    person(given = "Alan", family = "Murphy", role = c("aut"), email = "alanmurph94@hotmail.com",
+           comment = c(ORCID = "0000-0002-2487-8753")),
     person("Yunning", "Yuan", email = "yunning.yuan.21@ucl.ac.uk", role = c("aut")),
     person("Hiranyamaya", "Dash", email = "hdash.work@gmail.com", role = c("ctb"),
-    comment = c(ORCID = "0009-0005-5514-505X")))
+    comment = c(ORCID = "0009-0005-5514-505X")),
+    person(given = "Nathan", family = "Skene", role = c("aut"), email = "nathan.skene@gmail.com",
+           comment = c(ORCID = "0000-0002-6807-3180")))
 Description: A pipeline for carrying out end-to-end Power Analysis for differential expression in scRNA-seq data.
              Allows the user to carry out sum-pseudobulk DGE analysis (implemented in edgeR), which can then be used
              as part of the main power analysis. A down-sampling approach is used, and the % of True Positive DEGs detected
