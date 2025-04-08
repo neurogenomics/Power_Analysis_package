@@ -66,8 +66,10 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
             if (!is.character(celltype_list)) {
                 stop("Error: each element of celltype_correspondence should be a vector of cell type names.")
             }
-            if(length(celltype_list)!=length(SCEs)){
-                stop("Error: each element of celltype_correspondence should have the same length as the number of datasets in SCEs.")
+            if(!identical(SCEs, "placeholder")){
+                if(length(celltype_list)!=length(SCEs)){
+                    stop("Error: each element of celltype_correspondence should have the same length as the number of datasets in SCEs.")
+                }
             }
         }
     }

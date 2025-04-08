@@ -5,7 +5,6 @@
 \title{Collate DEGs detected in DGE analysis outputs, across all celltypes in a dataset (datasets/DGE analysis outputs should have common celltypes as specified below)}
 \usage{
 gather_celltype_DEGs(
-  range_downsampled,
   celltype_correspondence,
   pvalue = 0.05,
   Nperms = 20,
@@ -13,8 +12,6 @@ gather_celltype_DEGs(
 )
 }
 \arguments{
-\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
-
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{pvalue}{the cut-off p-value used to select DEGs}

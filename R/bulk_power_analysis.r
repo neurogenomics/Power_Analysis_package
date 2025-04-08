@@ -67,8 +67,7 @@ bulk_power_analysis <- function(SCEs,
                                   Nperms = Nperms)
 
     # Run gather_celltype_DEGs
-    gather_celltype_DEGs(range_downsampled = range_downsampled,
-                         celltype_correspondence = celltype_correspondence,
+    gather_celltype_DEGs(celltype_correspondence = celltype_correspondence,
                          pvalue = pvalue,
                          Nperms = Nperms,
                          output_path = output_path)
