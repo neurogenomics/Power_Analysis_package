@@ -17,7 +17,9 @@ gather_celltype_DEGs <- function(celltype_correspondence,
                                    pvalue=pvalue, Nperms=Nperms)
 
     # loop through datasets
+    j <- 0
     for (dataset in list.dirs(output_path, recursive=FALSE, full.names=FALSE)) {
+        j <- j + 1
         print(paste0("Gathering data for ", dataset))
         # base dataset path
         base_dataset <- file.path(output_path, dataset)
@@ -45,16 +47,15 @@ gather_celltype_DEGs <- function(celltype_correspondence,
                     dir.create(target_sample_perm, recursive=TRUE, showWarnings=FALSE)
                     # check if the cell type directory exists
                     cell_sample_permpath <- file.path(cell_sample_path, sample_perm)
-                    deg_file <- file.path(cell_sample_permpath, "DEout", paste0(sample_perm, ".RData"))
+                    deg_file <- file.path(cell_sample_permpath, paste0("DEout", sample_perm, ".RData"))
                     if (file.exists(deg_file)) {
                         load(deg_file)
                         # get DEGs
-                        DEGs <- c(DEGs, subset(eval(as.name(paste0("DEout_", sample)))$celltype_all_genes[[standard_celltype]], PValue <= pvalue)$name)
+                        DEGs <- c(DEGs, subset(eval(as.name(paste0("DEout_", sample)))$celltype_all_genes[[celltype_correspondence[[standard_celltype]][j]]], PValue <= pvalue)$name)
                         DEGs <- unique(DEGs)
                     }
                     # save DEGs
-                    dir.create(file.path(target_sample_perm, "DEout"), recursive=TRUE, showWarnings=FALSE)
-                    save(DEGs, file = file.path(target_sample_perm, "DEout", paste0(sample_perm, ".RData")))
+                    save(DEGs, file = file.path(target_sample_perm, paste0("DEout", sample_perm, ".RData")))
                 }
             }
         }
