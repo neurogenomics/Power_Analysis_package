@@ -4,7 +4,6 @@
 #' @param dataset_names list of the names of the datasets (as you would like them to appear in the "output_path" directory)
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param output_path path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)
-#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleIDs list or vector of sample IDs (in order of SCEs)
@@ -40,7 +39,6 @@ bulk_power_analysis <- function(SCEs,
                                 dataset_names,
                                 celltype_correspondence,
                                 output_path=getwd(),
-                                range_downsampled="placeholder",
                                 celltypeIDs="cell_type",
                                 sampled="individuals",
                                 sampleIDs="donor_id",
@@ -76,16 +74,7 @@ bulk_power_analysis <- function(SCEs,
     # Run prop_bulk_DEGs_sc
     prop_bulk_DEGs_sc(bulkDE = bulkDE,
                       output_path = output_path,
-                      range_downsampled = range_downsampled,
                       bulk_cutoff = bulk_cutoff,
                       pvalue = pvalue)
-
-    # Run prop_bulk_DEGs_sc_celltype
-    #prop_bulk_DEGs_sc_celltype(bulkDE = bulkDE,
-    #                           output_path = output_path,
-    #                           range_downsampled = range_downsampled,
-    #                           celltype = celltype,
-    #                           celltype_correspondence = celltype_correspondence,
-    #                           pvalue = pvalue)
 
 }

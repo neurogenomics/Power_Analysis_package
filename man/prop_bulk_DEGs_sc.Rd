@@ -6,7 +6,6 @@
 \usage{
 prop_bulk_DEGs_sc(
   bulkDE,
-  range_downsampled,
   bulk_cutoff = 0.9,
   pvalue = 0.05,
   fontsize_axislabels = 12,
@@ -20,8 +19,6 @@ prop_bulk_DEGs_sc(
 }
 \arguments{
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
-
-\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
 \item{bulk_cutoff}{percentage (proportion), specified so that we select DEGs common across >=bulk_cutoff of the tissues in the Bulk dataset}
 

@@ -11,7 +11,6 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 #' @importFrom cowplot theme_cowplot
 
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param bulk_cutoff percentage (proportion), specified so that we select DEGs common across >=bulk_cutoff of the tissues in the Bulk dataset
 #' @param pvalue the cut-off p-value used to select DEGs (for bulk data)
 #' @param fontsize_axislabels font size for axis labels in plot
@@ -25,7 +24,6 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 #' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory 
 
 prop_bulk_DEGs_sc <- function(bulkDE,
-                              range_downsampled,
                               bulk_cutoff=0.9,
                               pvalue=0.05,
                               fontsize_axislabels=12,
@@ -37,7 +35,7 @@ prop_bulk_DEGs_sc <- function(bulkDE,
                               output_path=getwd()){
 
     # validate function input params
-    validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path, range_downsampled=range_downsampled,
+    validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path,
                                    bulk_cutoff=bulk_cutoff,pvalue=pvalue, fontsize_axislabels=fontsize_axislabels,
                                    fontsize_axisticks=fontsize_axisticks, fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels,
                                    fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)    
@@ -72,36 +70,24 @@ prop_bulk_DEGs_sc <- function(bulkDE,
         print(paste0("Downsampling ",dataset))
         # go inside dataset directory overall folder, downsampling folder
         data_dir <- file.path(output_path, dataset, "Overall/DE_downsampling")
-        setwd(data_dir)
+        downsampled_folders <- list.dirs(data_dir, recursive=FALSE, full.names=FALSE)
         # go inside numSamples, if exists
-        for(sample in range_downsampled){
-            print(paste0(sample," samples"))
-            # add "samples"
-            sample_samples <- paste0(sample,"samples")
+        for(sample_samples in downsampled_folders){
+            sample <- as.numeric(gsub("[^0-9]", "", sample_samples))
+            print(paste0("Processing ", sample_samples, "..."))
+            # perms
             data_sample_dir <- file.path(data_dir,sample_samples)
             # check if this sample point exists
             if(dir.exists(data_sample_dir)){
-                # go into directory
-                setwd(data_sample_dir)
                 # loop through perms
-                for(perm in list.dirs(data_sample_dir,recursive=F,full.names=F)){
-                    data_sample_perm_dir <- file.path(data_sample_dir,perm)
-                    # go into each perm
-                    setwd(data_sample_perm_dir)
+                for(sample_perm in list.dirs(data_sample_dir,recursive=F,full.names=F)){
+                    data_sample_perm_dir <- file.path(data_sample_dir,sample_perm)
                     # load DGE analysis output for this permutation
-                    load(paste0("DEout",perm,".RData"))
+                    load(file.path(data_sample_perm_dir,paste0("DEout",sample_perm,".RData")))
                     # get % DEGs from Bulk Data DE here, add to vars, name dataset appropriately
-                    if(length(str_split(dataset,"_")[[1]])==1){
-                        dataset_name <- sub("^\\w", toupper(substring(dataset, 1, 1)), dataset)
-                    }else{
-                        split_name <- str_split(sub("^\\w", toupper(substring(dataset, 1, 1)), dataset),"_")[[1]]
-                        tmp_splitname <- split_name[-length(split_name)]
-                        tmp_celltype <- tail(split_name,1)
-                        dataset_name <- paste0(paste(tmp_splitname,collapse=" ")," (",tmp_celltype,")")
-                    }
-                    Dataset <- c(Dataset, dataset_name)
+                    Dataset <- c(Dataset, dataset)
                     NumSamples <- c(NumSamples, sample)
-                    Perm <- c(Perm, str_split(perm,"_")[[1]][2])
+                    Perm <- c(Perm, str_split(sample_perm,"_")[[1]][2])
                     PctDEGs <- c(PctDEGs, sum((bulk_DEGs%in%DEGs)*1)/length(bulk_DEGs))
                 }
             }

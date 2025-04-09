@@ -9,7 +9,6 @@ bulk_power_analysis(
   dataset_names,
   celltype_correspondence,
   output_path = getwd(),
-  range_downsampled = "placeholder",
   celltypeIDs = "cell_type",
   sampled = "individuals",
   sampleIDs = "donor_id",
@@ -33,8 +32,6 @@ bulk_power_analysis(
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{output_path}{path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)}
-
-\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
 \item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
