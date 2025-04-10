@@ -199,8 +199,9 @@ celltype_counts: vector with the counts of cells after QC in each cell type</p>
 <span class="r-in"><span><span class="va">DGE_tsai</span> <span class="op">&lt;-</span> <span class="fu">poweranalysis</span><span class="fu">::</span><span class="fu">DGE_analysis</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">SCE_tsai</span>,</span></span>
 <span class="r-in"><span>    design <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span>,</span></span>
-<span class="r-in"><span>    celltypeID<span class="op">=</span><span class="st">"cluster_celltype"</span>,</span></span>
+<span class="r-in"><span>    celltypeID <span class="op">=</span><span class="st">"cluster_celltype"</span>,</span></span>
 <span class="r-in"><span>    sampleID <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>    output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    coef <span class="op">=</span> <span class="st">"M"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Computation failed in `stat_summary()`.</span>
