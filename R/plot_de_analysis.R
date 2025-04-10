@@ -29,8 +29,8 @@ utils::globalVariables(c("deg_direction",".I","adj_pval","celltype","i.deg_direc
 
 plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                              counts_celltypes,output_path){
-    save(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
-         counts_celltypes,output_path, file="temp.RData")
+    # save(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
+    #      counts_celltypes,output_path, file="temp.RData")
     logFC = name = NULL
     #if it doesn't exist already make folder for plots
     dir.create(output_path,showWarnings = F,recursive=TRUE)
@@ -127,13 +127,13 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
 
     #plot DEGs per cell type
     deg_per_cell_type_plot <-
-        ggplot(data = celltype_DEGs_dt[,.N,by=celltype], 
-               aes(x = factor(celltype), y = N, fill = factor(celltype))) + 
-        geom_bar(stat = "identity") + 
-        labs(y = "Number of DEGs identified", x = "Cell Type", fill = "Cell Type") + 
-        geom_text(aes(label = N), vjust = -0.25, size = 3) + 
-        theme_cowplot() + 
-        theme(axis.text = element_text(size = 9)) + 
+        ggplot(data = celltype_DEGs_dt[,.N,by=celltype],
+               aes(x = factor(celltype), y = N, fill = factor(celltype))) +
+        geom_bar(stat = "identity") +
+        labs(y = "Number of DEGs identified", x = "Cell Type", fill = "Cell Type") +
+        geom_text(aes(label = N), vjust = -0.25, size = 3) +
+        theme_cowplot() +
+        theme(axis.text = element_text(size = 9)) +
         scale_fill_viridis(discrete = T)
     #save the graph to output_path
     suppressMessages(ggsave(path = output_path,
@@ -150,13 +150,13 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
     degs_prop[,prop:=N/num_cells]
     degs_prop[,N_prop:=num_cells/sum(num_cells)]
 
-    deg_prop_plot <- ggplot(data = degs_prop, 
-                        aes(x = factor(celltype), y = prop)) +  
-    geom_bar(stat = "identity") +  
-    labs(y = "Proportion of DEGs identified", x = "Cell Type", fill = "Cell Type") + 
-    geom_text(aes(label = scales::percent(prop, accuracy = 0.1)), vjust = -0.25, size = 3) + 
-    theme_cowplot() + 
-    theme(axis.text = element_text(size = 9)) + 
+    deg_prop_plot <- ggplot(data = degs_prop,
+                        aes(x = factor(celltype), y = prop)) +
+    geom_bar(stat = "identity") +
+    labs(y = "Proportion of DEGs identified", x = "Cell Type", fill = "Cell Type") +
+    geom_text(aes(label = scales::percent(prop, accuracy = 0.1)), vjust = -0.25, size = 3) +
+    theme_cowplot() +
+    theme(axis.text = element_text(size = 9)) +
     scale_fill_viridis(discrete = T)
     #save the graph to output_path
     suppressMessages(ggsave(path = output_path,
