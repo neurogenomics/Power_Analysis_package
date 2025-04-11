@@ -82,8 +82,8 @@ To perform power analysis based on sex-specific DEGs, use the following function
     
 ```{r, results='hide', message=FALSE, warning=FALSE, eval=FALSE}
 # Specify the down-sampling range (or use the default range)
-range_ind = c(10,25,40)
-range_cell = c(20,40,60)
+range_ind = c(10,20,30,40)
+range_cell = c(10,30,50,70)
 
 # Run the power_analysis function for a sex comparison
 power_analysis.sex <- power_analysis(
@@ -93,7 +93,8 @@ power_analysis.sex <- power_analysis(
   design = ~ sex,
   coef = "M",
   sampleID = "sample_id",
-  celltypeID = "cluster_celltype")
+  celltypeID = "cluster_celltype",
+  Nperms = 3)
 ```
 
 The `power_analysis` function generates several key outputs:
