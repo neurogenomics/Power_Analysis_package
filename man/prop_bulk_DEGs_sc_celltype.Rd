@@ -6,7 +6,6 @@
 \usage{
 prop_bulk_DEGs_sc_celltype(
   bulkDE,
-  range_downsampled,
   celltype_correspondence,
   celltype,
   sampled = "individuals",
@@ -23,8 +22,6 @@ prop_bulk_DEGs_sc_celltype(
 }
 \arguments{
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
-
-\item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 

@@ -111,7 +111,7 @@ SCE_tsai <- qs::qread(micro_tsai)
 DGE_tsai <- poweranalysis::DGE_analysis(
     SCE_tsai,
     design = ~ sex,
-    celltypeID ="cluster_celltype",
+    celltypeID = "cluster_celltype",
     sampleID = "sample_id",
     output_path = tempdir(),
     coef = "M"

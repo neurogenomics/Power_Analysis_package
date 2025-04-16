@@ -21,7 +21,7 @@ bulk_downsampling_DGEanalysis(
 
 \item{dataset_names}{list of the names of the datasets (as you would like them to appear in the "output_path" directory)}
 
-\item{celltype_correspondence}{list of different names specifying each cell type}
+\item{celltype_correspondence}{list of different names specifying each cell type, where the order of celltype_names correspond to the order of SCEs}
 
 \item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
 

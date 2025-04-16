@@ -11,7 +11,7 @@ LICENSE](https://img.shields.io/badge/license-MIT%20+%20file%20LICENSE-blue.svg)
 
 **Authors:** ***Salman Fawad, Alan Murphy, Yunning Yuan, Hiranyamaya
 (Hiru) Dash, Nathan Skene***  
-**Updated:** ***Apr-08-2025***
+**Updated:** ***Apr-16-2025***
 
 ## Introduction
 
@@ -58,7 +58,7 @@ utils::sessionInfo()
 
     ## R version 4.4.3 (2025-02-28)
     ## Platform: aarch64-apple-darwin20
-    ## Running under: macOS Sequoia 15.3.2
+    ## Running under: macOS Sequoia 15.4
     ## 
     ## Matrix products: default
     ## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
@@ -67,7 +67,7 @@ utils::sessionInfo()
     ## locale:
     ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
     ## 
-    ## time zone: Europe/London
+    ## time zone: Asia/Kolkata
     ## tzcode source: internal
     ## 
     ## attached base packages:
