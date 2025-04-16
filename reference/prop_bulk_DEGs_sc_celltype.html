@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, for a specified cell type</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/prop_bulk_DEGs_sc_celltype.r" class="external-link"><code>R/prop_bulk_DEGs_sc_celltype.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/dev-hiru/R/prop_bulk_DEGs_sc_celltype.r" class="external-link"><code>R/prop_bulk_DEGs_sc_celltype.r</code></a></small>
     <div class="hidden name"><code>prop_bulk_DEGs_sc_celltype.Rd</code></div>
     </div>
 
@@ -62,7 +62,6 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prop_bulk_DEGs_sc_celltype</span><span class="op">(</span></span>
 <span>  <span class="va">bulkDE</span>,</span>
-<span>  <span class="va">range_downsampled</span>,</span>
 <span>  <span class="va">celltype_correspondence</span>,</span>
 <span>  <span class="va">celltype</span>,</span>
 <span>  sampled <span class="op">=</span> <span class="st">"individuals"</span>,</span>
@@ -84,10 +83,6 @@
 
 <dl><dt id="arg-bulkde">bulkDE<a class="anchor" aria-label="anchor" href="#arg-bulkde"></a></dt>
 <dd><p>DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels</p></dd>
-
-
-<dt id="arg-range-downsampled">range_downsampled<a class="anchor" aria-label="anchor" href="#arg-range-downsampled"></a></dt>
-<dd><p>vector or list containing values which the data will be downsampled at, in ascending order</p></dd>
 
 
 <dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
