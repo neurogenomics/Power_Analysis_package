@@ -62,15 +62,15 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
         if (!is.list(celltype_correspondence)) {
             stop("Error: celltype_correspondence should be a list of lists containing the names of cell types as they appear across all DGE analysis outputs.")
         }
-        for (celltype_list in celltype_correspondence) {
-            if (!is.character(celltype_list)) {
-                stop("Error: each element of celltype_correspondence should be a vector of cell type names.")
-            }
-            if(!identical(SCEs, "placeholder")){
-                if(length(celltype_list)!=length(SCEs)){
-                    stop("Error: each element of celltype_correspondence should have the same length as the number of datasets in SCEs.")
-                }
-            }
+
+        # Check for string inputs
+        if (!all(sapply(celltype_correspondence, isSingleString))) {
+            stop("Error: Each element of celltype_correspondence should be a string.")
+        }
+
+        # Check for length
+        if (!identical(SCEs, "placeholder") && length(celltype_correspondence) != length(SCEs)) {
+            stop("Error: celltype_correspondence should have the same length as the number of datasets in SCEs.")
         }
     }
     if(output_path!="placeholder"){
@@ -81,7 +81,7 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
         }
         if(!dir.exists(output_path)){
             stop("Error: the specified output_path directory does not exist.")
-        }    
+        }
     }
     if(!identical(range_downsampled,"placeholder")){
         if(class(range_downsampled)=="character"){
@@ -114,10 +114,10 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
             stop("Error: sampleIDs should be a string or list/vector specifying the cell type IDs in order of SCEs.")
         }
     }
-    if(bulkDE!="placeholder"){
-        if(class(bulkDE)!="data.frame"){
+    if(is.character(bulkDE) && bulkDE=="placeholder"){
+        # Do nothing
+        }else if(class(bulkDE)!="data.frame"){
             stop("Error: bulkDE should be a dataframe with rows being genes, columns being tissues and entries being significance level")
-        }
     }
     if(bulk_cutoff!="placeholder"){
         if(class(bulk_cutoff)!="numeric"){
