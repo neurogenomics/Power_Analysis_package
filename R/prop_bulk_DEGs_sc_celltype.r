@@ -11,6 +11,7 @@ utils::globalVariables(c("numSamples","pctDEGs"))
 #' @importFrom cowplot theme_cowplot
 
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
+#' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
@@ -24,9 +25,10 @@ utils::globalVariables(c("numSamples","pctDEGs"))
 #' @param plot_title plot title
 #' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset
 
-#' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, for a specified cell type, in the appropriate directory
+#' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, for a specified cell type, in the appropriate directory 
 
 prop_bulk_DEGs_sc_celltype <- function(bulkDE,
+                                       range_downsampled,
                                        celltype_correspondence,
                                        celltype,
                                        sampled="individuals",
@@ -41,11 +43,11 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
                                        output_path=getwd()){
 
     # validate function input params
-    validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path,
+    validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path, range_downsampled=range_downsampled,
                                    celltype=celltype, sampled=sampled, bulk_cutoff=bulk_cutoff,
                                    pvalue=pvalue, celltype_correspondence=celltype_correspondence, fontsize_axislabels=fontsize_axislabels,
                                    fontsize_axisticks=fontsize_axisticks, fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels,
-                                   fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)
+                                   fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)    
 
     # default placeholder
     if(plot_title=="placeholder"){
@@ -136,10 +138,10 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
     DEGs$numSamples <- NumSamples
     DEGs$perm <- Perm
     DEGs$pctDEGs <- PctDEGs
-
+    
     # function to select colours appropriately for boxplots
     generate_color_palette <- function(N, palette = "Set1") {
-        max_colors <- 9  # the maximum number of colors available for the chosen palette
+        max_colors <- 9  # the maximum number of colors available for the chosen palette    
         if (N <= max_colors) {
             return(brewer.pal(N, palette))
         }else{
