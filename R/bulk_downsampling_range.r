@@ -15,7 +15,7 @@ bulk_downsampling_range <- function(SCEs,
                                     sampled="individuals",
                                     sampleIDs="donor_id",
                                     celltypeIDs="cell_type"){
-
+    
     # check sampleIDs, celltypeIDs
     if(length(sampleIDs) == 1){
         sampleIDs <- rep(sampleIDs,length(SCEs))
@@ -27,23 +27,25 @@ bulk_downsampling_range <- function(SCEs,
     max_samples <- 0
     largest_dataset <- NULL
     # loop through cell type mapping
+    for(standard_celltype in names(celltype_correspondence)){
         # loop through datasets to get downsampled range
-    for(idx in seq_along(SCEs)){
-        celltype_name <- celltype_correspondence[[idx]]
-        dataset <- SCEs[[idx]]
-        if(!is.na(celltype_name)){
-            # subset dataset
-            dataset1 <- dataset[, colData(dataset)[[celltypeIDs[[idx]]]] == celltype_name]
-            num_samples <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))
-            # check if this dataset/celltype has the most samples
-            if(num_samples > max_samples){
-                max_samples <- num_samples
-                largest_dataset <- dataset1
-                sampleID <- sampleIDs[[idx]]
+        for(idx in seq_along(SCEs)){
+            dataset <- SCEs[[idx]]
+            celltype_name <- celltype_correspondence[[standard_celltype]][[idx]]
+            if(!is.na(celltype_name)){
+                # subset dataset
+                dataset1 <- dataset[, colData(dataset)[[celltypeIDs[[idx]]]] == celltype_name]
+                num_samples <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))
+                # check if this dataset/celltype has the most samples
+                if(num_samples > max_samples){
+                    max_samples <- num_samples
+                    largest_dataset <- dataset1
+                    sampleID <- sampleIDs[[idx]]
+                }
             }
         }
     }
-
+    
     # get downsampling range, return
     range_downsampled <- downsampling_range(largest_dataset,sampled,sampleID)
     return(range_downsampled)
