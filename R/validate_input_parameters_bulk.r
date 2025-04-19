@@ -114,7 +114,7 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
             stop("Error: sampleIDs should be a string or list/vector specifying the cell type IDs in order of SCEs.")
         }
     }
-    if(bulkDE!="placeholder"){
+    if(!identical(bulkDE,"placeholder")){
         if(class(bulkDE)!="data.frame"){
             stop("Error: bulkDE should be a dataframe with rows being genes, columns being tissues and entries being significance level")
         }
