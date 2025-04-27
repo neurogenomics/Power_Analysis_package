@@ -82,11 +82,9 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
                aes(x = phenotype, y = expression,colour=deg_direction)) +
         geom_jitter(height=0) +
         stat_summary(fun.data = "mean_cl_normal",
-                     #aes(shape="mean"),
                      colour = "grey",
                      geom = "crossbar",
                      show.legend = T)+
-        scale_shape_manual("", values=c("mean"="x"))+
         labs(y= "Sum pseudobulk expression counts (unnormalised)",
                 x = "Phenotype",
              colour="DEG direction") +
