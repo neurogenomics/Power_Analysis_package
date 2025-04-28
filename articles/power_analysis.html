@@ -83,10 +83,10 @@ Skene</i><br>
             
             <h4 data-toc-skip class="date"><h4>
 <br>
-Vignette updated: <i>Apr-27-2025</i><br>
+Vignette updated: <i>Apr-28-2025</i><br>
 </h4></h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/vignettes/power_analysis.Rmd" class="external-link"><code>vignettes/power_analysis.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/Yunning/vignettes/power_analysis.Rmd" class="external-link"><code>vignettes/power_analysis.Rmd</code></a></small>
       <div class="hidden name"><code>power_analysis.Rmd</code></div>
 
     </div>
@@ -151,13 +151,15 @@ coef.</p>
 <div class="section level2">
 <h2 id="power-analysis">Power Analysis<a class="anchor" aria-label="anchor" href="#power-analysis"></a>
 </h2>
-<p>Assess the accuracy of DEG detection in scRNA-seq data by
-systematically down-sampling the dataset at varying numbers of
-individuals and cells. DEGs identified in each subset are compared to
-those from the full dataset to compute the percentage of True Positive
-(PTP) DEGs recovered and the False Discovery Rate (FDR). <br></p>
-<p>To perform power analysis based on sex-specific DEGs, use the
-following function:</p>
+<p>Perform power analysis to estimate the accuracy and reliability of
+DEG detection in your scRNA‑seq dataset under different levels of
+sampling. This evaluates how well DEGs can be recovered at varying
+numbers of individuals and cells. DEGs identified in each down‑sampled
+subset are compared to those from the full dataset to compute the
+percentage of true positives recovered, along with the False Discovery
+Rate (FDR).</p>
+<p>To assess power based on sex‑specific DEGs, use the following
+function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Specify the down-sampling range (or use the default range)</span></span>
 <span><span class="va">range_ind</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">20</span>,<span class="fl">30</span>,<span class="fl">40</span><span class="op">)</span></span>
