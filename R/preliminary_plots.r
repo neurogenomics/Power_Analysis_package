@@ -4,7 +4,7 @@ utils::globalVariables(c("..density.."))
 #' Create preliminary plots for data exploration
 
 #' @importFrom stats as.formula
-#' @importFrom ggplot2 ggplot labs theme ggsave aes element_text element_blank geom_histogram
+#' @importFrom ggplot2 ggplot labs theme ggsave aes element_text element_blank geom_density
 #' @importFrom cowplot theme_cowplot
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom SingleCellExperiment colData
@@ -48,7 +48,7 @@ preliminary_plots <- function(SCE,
     }
     # validate function input params
     validate_input_parameters_power(SCE=SCE, output_path=output_path, sampleID=sampleID,
-                                    design=design, sexID=sexID, celltypeID=celltypeID, 
+                                    design=design, sexID=sexID, celltypeID=celltypeID,
                                     coeff=coeff, fdr=fdr, y=y,
                                     region=region, control=control, pval_adjust_method=pval_adjust_method,
                                     rmv_zero_count_genes=rmv_zero_count_genes)
@@ -63,22 +63,22 @@ preliminary_plots <- function(SCE,
     }else{
         load(file.path(output_path,"DEout.RData"))
     }
-    
+
     ## plot histogram of effect sizes in DEGs and all genes
     # for DEGs (at fdr cut-off)
     DEGs_full <- subset(DEout$celltype_all_genes[[celltype_name]], adj_pval<fdr)
-    logFCdist.plot <- ggplot(DEGs_full,aes(x=logFC)) + 
-                            geom_histogram(aes(y=..density..), color="grey1", fill="grey1", alpha=0.5, bins=25) + 
-                            labs(title=paste0("Distribution of LogFC (DEGs at ", fdr,"%)"),y="Density",x ="LogFC") + 
+    logFCdist.plot <- ggplot(DEGs_full,aes(x=logFC)) +
+        geom_density(color="grey1", fill="grey1", alpha=0.5) +
+                            labs(title=paste0("Distribution of LogFC (DEGs at ", fdr,"%)"),y="Density",x ="LogFC") +
                             theme_cowplot() +
                             theme(axis.text=element_text(size=20),axis.title=element_text(size=22),plot.title=element_text(size=22))
     ggsave(file.path(output_path, "logFCdist.png"),logFCdist.plot,width=20,height=20,units="cm",bg="white")
     ggsave(file.path(output_path, "logFCdist.pdf"),logFCdist.plot,width=20,height=20,units="cm",bg="white")
     # for all genes
     allgenes <- DEout$celltype_all_genes[[celltype_name]]
-    logFCdist_allgenes.plot <- ggplot(allgenes,aes(x=logFC)) + 
-                            geom_histogram(aes(y=..density..), color="grey1", fill="grey1", alpha=0.5, bins=25) + 
-                            labs(title=paste0("Distribution of LogFC (all genes)"),y="Density",x ="LogFC") + 
+    logFCdist_allgenes.plot <- ggplot(allgenes,aes(x=logFC)) +
+        geom_density(color="grey1", fill="grey1", alpha=0.5) +
+                            labs(title=paste0("Distribution of LogFC (all genes)"),y="Density",x ="LogFC") +
                             theme_cowplot() +
                             theme(axis.text=element_text(size=20),axis.title=element_text(size=22),plot.title=element_text(size=22))
     ggsave(file.path(output_path, "logFCdist_allgenes.png"),logFCdist_allgenes.plot,width=20,height=20,units="cm",bg="white")
@@ -100,9 +100,9 @@ preliminary_plots <- function(SCE,
     cellcount <- data.frame(IDs)
     cellcount$numCells <- numCells
     # create and save histogram
-    cellcount.plot <- ggplot(cellcount,aes(x=numCells)) + 
-                            geom_histogram(aes(y=..density..), color="grey1", fill="grey1", alpha=0.5, bins=25) + 
-                            labs(title="Distribution of numbers of cells across individuals",y="Density",x ="Number of cells") + 
+    cellcount.plot <- ggplot(cellcount,aes(x=numCells)) +
+        geom_density(color="grey1", fill="grey1", alpha=0.5) +
+                            labs(title="Distribution of numbers of cells across individuals",y="Density",x ="Number of cells") +
                             theme_cowplot()+
                             theme(axis.text.y=element_blank(),axis.ticks.y=element_blank(),axis.text=element_text(size=20),axis.title=element_text(size=22),plot.title=element_text(size=22),axis.text.x = element_text(hjust=0.8))
     ggsave(file.path(output_path, "cellcount.png"),cellcount.plot,width=20,height=20,units="cm",bg="white")

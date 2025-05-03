@@ -76,10 +76,10 @@ DGE_analysis.AD <- DGE_analysis(
 ```
 
 ## Power Analysis
-Assess the accuracy of DEG detection in scRNA-seq data by systematically down-sampling the dataset at varying numbers of individuals and cells. DEGs identified in each subset are compared to those from the full dataset to compute the percentage of True Positive (PTP) DEGs recovered and the False Discovery Rate (FDR). <br>
-  
-To perform power analysis based on sex-specific DEGs, use the following function:
-    
+Perform power analysis to estimate the accuracy and reliability of DEG detection in your scRNA‑seq dataset under different levels of sampling. This evaluates how well DEGs can be recovered at varying numbers of individuals and cells. DEGs identified in each down‑sampled subset are compared to those from the full dataset to compute the percentage of true positives recovered, along with the False Discovery Rate (FDR).  
+
+To assess power based on sex‑specific DEGs, use the following function:
+
 ```{r, results='hide', message=FALSE, warning=FALSE, eval=FALSE}
 # Specify the down-sampling range (or use the default range)
 range_ind = c(10,20,30,40)
