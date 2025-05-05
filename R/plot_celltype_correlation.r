@@ -30,8 +30,8 @@ plot_celltype_correlation <- function(main_dataset,
     if(class(DEouts)!="list"){
         stop("Error: DEouts should be a list.")
     }
-    if(!is.list(celltypes_list)){
-        stop("Error: celltypes_list should be a list containing the names of the cell type of concern, as they appear across each DGE analysis output (in order).")
+    if(!is.list(celltypes_list) & !is.vector(celltypes_list)){
+        stop("Error: celltypes_list should be a vector or list containing the names of the cell type of concern, as they appear across each DGE analysis output (in order).")
     }
     if(class(sex_DEGs)!="logical"){
         stop("Error: sex_DEGs should be TRUE (if DEGs are chosen only from sex chromosomes) or FALSE")
