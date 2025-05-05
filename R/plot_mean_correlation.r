@@ -39,7 +39,7 @@ plot_mean_correlation <- function(main_dataset,
         dataset <- SCEs[[idx]]
         coeff_use <- as.character(sort(unique(colData(dataset)$sex))[[2]])
         savepath <- file.path(output_path,dataset_names[[idx]])
-        DEouts[[idx]] <- DGE_analysis(SCE=dataset, design="~sex", sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath)
+        DEouts[[idx]] <- DGE_analysis(SCE=dataset, design=~sex, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath)
     }
 
     # loop over each p-value
