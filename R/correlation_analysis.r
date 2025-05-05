@@ -1,6 +1,6 @@
 #' Runs correlation analysis pipeline
 
-#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)
+#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)
 #' @param SCEs list of the input data (elements should be SCE objects)
 #' @param sampleIDs list or vector of sample IDs (in order of SCEs)
 #' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)

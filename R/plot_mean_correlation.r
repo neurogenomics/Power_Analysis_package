@@ -4,7 +4,7 @@
 #' @importFrom ggplot2 theme element_text
 #' @importFrom utils write.csv
 
-#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)
+#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)
 #' @param SCEs list of the input data (elements should be SCE objects)
 #' @param sampleIDs list or vector of sample IDs (in order of SCEs)
 #' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
@@ -39,7 +39,7 @@ plot_mean_correlation <- function(main_dataset,
         dataset <- SCEs[[idx]]
         coeff_use <- as.character(sort(unique(colData(dataset)$sex))[[2]])
         savepath <- file.path(output_path,dataset_names[[idx]])
-        DEouts[[idx]] <- DGE_analysis(SCE=dataset, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath)
+        DEouts[[idx]] <- DGE_analysis(SCE=dataset, design="~sex", sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath)
     }
 
     # loop over each p-value

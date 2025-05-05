@@ -26,7 +26,7 @@ correlation_analysis(
 )
 }
 \arguments{
-\item{main_dataset}{name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)}
+\item{main_dataset}{name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)}
 
 \item{SCEs}{list of the input data (elements should be SCE objects)}
 
