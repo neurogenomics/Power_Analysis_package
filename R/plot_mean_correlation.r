@@ -28,7 +28,8 @@ plot_mean_correlation <- function(main_dataset,
 
     # validate function input params
     validate_input_parameters_correlation(main_dataset=main_dataset, SCEs=SCEs, sampleIDs=sampleIDs, celltypeIDs=celltypeIDs, pvalues=pvals,
-                                          celltype_correspondence=celltype_correspondence, dataset_names=dataset_names, sex_DEGs=sex_DEGs, output_path=output_path)
+                                          celltype_correspondence=celltype_correspondence, dataset_names=dataset_names, sex_DEGs=sex_DEGs,
+                                          output_path=output_path)
     # outputs
     output_list <- list()
 
