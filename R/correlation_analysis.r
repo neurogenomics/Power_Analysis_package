@@ -1,10 +1,12 @@
 #' Runs correlation analysis pipeline
 
-#' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in DEouts)
-#' @param DEouts a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis
+#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)
+#' @param SCEs list of the input data (elements should be SCE objects)
+#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
+#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param pvals list of p-value cut-offs which will be used to select DEGs
-#' @param data_names names of the datasets as they appear in the correlation plot
+#' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
 #' @param alphaval (alpha) transparency of the non-mean boxplots
 #' @param N_randperms number of random permutations of the dataset used to select significant DEGs from
 #' @param N_subsets number of pairs of random subsets of the dataset used to select significant DEGs from
@@ -46,20 +48,22 @@
 #'
 #' # 2. Run correlation analysis
 #' correlation_analysis(
-#'     dataset_name = "tsai",
-#'     DEouts = list(DGE_tsai),
+#'     main_dataset = "tsai",
+#'     SCEs = list(tsai),
 #'     celltype_correspondence = celltype_names,
-#'     data_names = list("tsai"),
+#'     dataset_names = list("tsai"),
 #'     sex_DEGs = TRUE,    # Keep only genes on sex chromosomes
 #'     output_path = output_path
 #' )
 #'}
 
-correlation_analysis <- function(dataset_name,
-                                 DEouts,
+correlation_analysis <- function(main_dataset,
+                                 SCEs,
+                                 sampleIDs,
+                                 celltypeIDs,
                                  celltype_correspondence,
                                  pvals=c(0.05,0.025,0.01,0.001,0.0001),
-                                 data_names="placeholder",
+                                 dataset_names="placeholder",
                                  alphaval=0.25,
                                  N_randperms=5,
                                  N_subsets=5,
@@ -72,34 +76,20 @@ correlation_analysis <- function(dataset_name,
                                  fontsize_facet_labels=9,
                                  output_path=getwd()){
 
-    # Filter sex_DEGs
-    if (sex_DEGs) {
-        DEouts <- lapply(DEouts, function(x) {
-            x$celltype_all_genes <- sex_chromosome_DEGs(x$celltype_all_genes)
-
-            # Only keep DEGs for genes present in filtered all_genes
-            celltype_DEGs <- lapply(names(x$celltype_DEGs), function(y) {
-                celltype_DEG <- x$celltype_DEGs[[y]][x$celltype_DEGs[[y]]$name %in% x$celltype_all_genes[[y]]$name,]
-                return(celltype_DEG)
-            })
-            names(celltype_DEGs) <- names(x$celltype_DEGs)
-            x$celltype_DEGs <- celltype_DEGs
-            return(x)
-        })
-    }
-
-
     # run plot_mean_correlation for each p-value (saving outputs)
-    mean_correlation_results <- plot_mean_correlation(dataset_name=dataset_name,
-                                                      DEouts=DEouts,
+    mean_correlation_results <- plot_mean_correlation(main_dataset=main_dataset,
+                                                      SCEs=SCEs,
+                                                      sampleIDs=sampleIDs,
+                                                      celltypeIDs=celltypeIDs,
                                                       celltype_correspondence=celltype_correspondence,
                                                       pvals=pvals,
-                                                      data_names=data_names,
+                                                      dataset_names=dataset_names,
+                                                      sex_DEGs=sex_DEGs,
                                                       output_path=output_path)
 
     # run correlation_boxplots for each p-value (saving outputs)
     correlation_boxplots(mean_correlation_results,
-                         num_real_datasets=length(DEouts),
+                         num_real_datasets=length(SCEs),
                          pvals=pvals,
                          N_randperms=N_randperms,
                          N_subsets=N_subsets,

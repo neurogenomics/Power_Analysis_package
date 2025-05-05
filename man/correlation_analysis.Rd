@@ -5,11 +5,13 @@
 \title{Runs correlation analysis pipeline}
 \usage{
 correlation_analysis(
-  dataset_name,
-  DEouts,
+  main_dataset,
+  SCEs,
+  sampleIDs,
+  celltypeIDs,
   celltype_correspondence,
   pvals = c(0.05, 0.025, 0.01, 0.001, 1e-04),
-  data_names = "placeholder",
+  dataset_names = "placeholder",
   alphaval = 0.25,
   N_randperms = 5,
   N_subsets = 5,
@@ -24,15 +26,19 @@ correlation_analysis(
 )
 }
 \arguments{
-\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in DEouts)}
+\item{main_dataset}{name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)}
 
-\item{DEouts}{a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis}
+\item{SCEs}{list of the input data (elements should be SCE objects)}
+
+\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
+
+\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{pvals}{list of p-value cut-offs which will be used to select DEGs}
 
-\item{data_names}{names of the datasets as they appear in the correlation plot}
+\item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
 
 \item{alphaval}{(alpha) transparency of the non-mean boxplots}
 
@@ -86,10 +92,10 @@ celltype_names <- list("Microglia" = list("Micro"))
 
 # 2. Run correlation analysis
 correlation_analysis(
-    dataset_name = "tsai",
-    DEouts = list(DGE_tsai),
+    main_dataset = "tsai",
+    SCEs = list(tsai),
     celltype_correspondence = celltype_names,
-    data_names = list("tsai"),
+    dataset_names = list("tsai"),
     sex_DEGs = TRUE,    # Keep only genes on sex chromosomes
     output_path = output_path
 )

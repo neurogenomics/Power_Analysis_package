@@ -5,11 +5,13 @@
 \title{Tests input parameters for functions}
 \usage{
 validate_input_parameters_correlation(
-  dataset_name = "placeholder",
-  DEouts = "placeholder",
+  main_dataset = "placeholder",
+  SCEs = "placeholder",
+  sampleIDs = "placeholder",
+  celltypeIDs = "placeholder",
   celltype_correspondence = "placeholder",
   pvalues = "placeholder",
-  data_names = "placeholder",
+  dataset_names = "placeholder",
   corr_mats = "placeholder",
   num_real_datasets = "placeholder",
   alphaval = "placeholder",
@@ -26,15 +28,19 @@ validate_input_parameters_correlation(
 )
 }
 \arguments{
-\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in allStudies)}
+\item{main_dataset}{name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)}
 
-\item{DEouts}{a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis}
+\item{SCEs}{list of the input data (elements should be SCE objects)}
+
+\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
+
+\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{pvalues}{the list of cut-off p-values which will be used to select DEGs (can just provide a list with one as well)}
 
-\item{data_names}{names of the datasets as they appear in the correlation plot}
+\item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
 
 \item{corr_mats}{(named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value}
 

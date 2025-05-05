@@ -5,24 +5,33 @@
 \title{Obtain the average correlation (across celltypes) at a specified cutoff p-value}
 \usage{
 plot_mean_correlation(
-  dataset_name,
-  DEouts,
+  main_dataset,
+  SCEs,
+  sampleIDs,
+  celltypeIDs,
   pvals,
   celltype_correspondence,
-  data_names,
+  dataset_names,
+  sex_DEGs = FALSE,
   output_path = getwd()
 )
 }
 \arguments{
-\item{dataset_name}{name of the dataset used to select significant DEGs from (specified as a string, name as in DEouts)}
+\item{main_dataset}{name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)}
 
-\item{DEouts}{a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis}
+\item{SCEs}{list of the input data (elements should be SCE objects)}
+
+\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
+
+\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
 \item{pvals}{the cut-off p-value which will be used to select DEGs}
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
-\item{data_names}{names of the datasets as they appear in the correlation plot}
+\item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
+
+\item{sex_DEGs}{If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.}
 
 \item{output_path}{base path in which outputs will be stored
 Saves mean correlation matrix (and actual values) in the appropriate directory}

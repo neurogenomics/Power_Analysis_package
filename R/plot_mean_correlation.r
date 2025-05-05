@@ -4,27 +4,42 @@
 #' @importFrom ggplot2 theme element_text
 #' @importFrom utils write.csv
 
-#' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in DEouts)
-#' @param DEouts a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis
+#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)
+#' @param SCEs list of the input data (elements should be SCE objects)
+#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
+#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
 #' @param pvals the cut-off p-value which will be used to select DEGs
 #' @param celltype_correspondence list of different names specifying each cell type
-#' @param data_names names of the datasets as they appear in the correlation plot
+#' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
+#' @param sex_DEGs If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.
 #' @param output_path base path in which outputs will be stored
 
 #' Saves mean correlation matrix (and actual values) in the appropriate directory
 
-plot_mean_correlation <- function(dataset_name,
-                                  DEouts,
+plot_mean_correlation <- function(main_dataset,
+                                  SCEs,
+                                  sampleIDs,
+                                  celltypeIDs,
                                   pvals,
                                   celltype_correspondence,
-                                  data_names,
+                                  dataset_names,
+                                  sex_DEGs=FALSE,
                                   output_path=getwd()){
 
     # validate function input params
-    validate_input_parameters_correlation(dataset_name=dataset_name, DEouts=DEouts, pvalues=pvals,
-                                          celltype_correspondence=celltype_correspondence, data_names=data_names, output_path=output_path)
+    validate_input_parameters_correlation(main_dataset=main_dataset, SCEs=SCEs, sampleIDs=sampleIDs, celltypeIDs=celltypeIDs, pvalues=pvals,
+                                          celltype_correspondence=celltype_correspondence, dataset_names=dataset_names, sex_DEGs=sex_DEGs, output_path=output_path)
     # outputs
     output_list <- list()
+
+    # get DEouts
+    DEouts <- list()
+    for(idx in seq_along(SCEs)){
+        dataset <- SCEs[[idx]]
+        coeff_use <- as.character(sort(unique(colData(dataset)$sex))[[2]])
+        savepath <- file.path(output_path,dataset_names[[idx]])
+        DEouts[[idx]] <- DGE_analysis(SCE=dataset, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath)
+    }
 
     # loop over each p-value
     for(pvalue in pvals){
@@ -36,7 +51,7 @@ plot_mean_correlation <- function(dataset_name,
             # get corresponding cell type names for each dataset
             celltype_names <- celltype_correspondence[[celltype]]
             # correlation for each celltype at specified p-value
-            corrOut <- plot_celltype_correlation(dataset_name, DEouts, celltype_names, data_names, pvalue)
+            corrOut <- plot_celltype_correlation(main_dataset, DEouts, celltype_names, dataset_names, sex_DEGs, pvalue)
             i <- i+1
             # get correlation matrix for each celltype
             allCorrs[[i]] <- corrOut[[1]]
@@ -50,8 +65,8 @@ plot_mean_correlation <- function(dataset_name,
         meanCorr <- Reduce("+",allCorrs)/length(allCorrs)
 
         # rename columns and rows
-        if(is.vector(data_names)){
-            rownames(meanCorr) <- colnames(meanCorr) <- data_names
+        if(is.vector(dataset_names)){
+            rownames(meanCorr) <- colnames(meanCorr) <- dataset_names
         }
 
         # plot correlation matrix

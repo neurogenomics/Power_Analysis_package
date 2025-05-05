@@ -1,10 +1,12 @@
 #' Tests input parameters for functions
 
-#' @param dataset_name name of the dataset used to select significant DEGs from (specified as a string, name as in allStudies)
-#' @param DEouts a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis
+#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)
+#' @param SCEs list of the input data (elements should be SCE objects)
+#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
+#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param pvalues the list of cut-off p-values which will be used to select DEGs (can just provide a list with one as well)
-#' @param data_names names of the datasets as they appear in the correlation plot
+#' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
 #' @param corr_mats (named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value
 #' @param num_real_datasets total number of *real* datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)
 #' @param alphaval (alpha) transparency of the non-mean boxplots
@@ -21,11 +23,13 @@
 
 #' Checks all correlation analysis parameters are specified correctly
 
-validate_input_parameters_correlation <- function(dataset_name="placeholder",
-                                                  DEouts="placeholder",
+validate_input_parameters_correlation <- function(main_dataset="placeholder",
+                                                  SCEs="placeholder",
+                                                  sampleIDs="placeholder",
+                                                  celltypeIDs="placeholder",
                                                   celltype_correspondence="placeholder",
                                                   pvalues="placeholder",
-                                                  data_names="placeholder",
+                                                  dataset_names="placeholder",
                                                   corr_mats="placeholder",
                                                   num_real_datasets="placeholder",
                                                   alphaval="placeholder",
@@ -41,19 +45,29 @@ validate_input_parameters_correlation <- function(dataset_name="placeholder",
                                                   output_path="placeholder"){
 
     # test each parameter to check if it works
-    if(dataset_name!="placeholder"){
-        if(!is.character(dataset_name)){
-            stop("Error: dataset_name should be a string")
+    if(main_dataset!="placeholder"){
+        if(!is.character(main_dataset)){
+            stop("Error: main_dataset should be a string")
         }
     }
-    if(!identical(DEouts,"placeholder")){
-        if(class(DEouts)!="list"){
-            stop("Error: DEouts should be a list")
+    if(!identical(SCEs, "placeholder")){
+        if(!is.list(SCEs)){
+            stop("Error: SCEs should be a list of SingleCellExperiment objects.")
+        }
+    }
+    if(!identical(sampleIDs,"placeholder")){
+        if(!is.character(sampleIDs)&!is.list(sampleIDs)){
+            stop("Error: sampleIDs should be a string or list/vector specifying the cell type IDs in order of SCEs.")
+        }
+    }
+    if(!identical(celltypeIDs,"placeholder")){
+        if(!is.character(celltypeIDs)&!is.list(celltypeIDs)){
+            stop("Error: celltypeIDs should be a string or list/vector specifying the cell type IDs in order of SCEs.")
         }
     }
     if(!identical(celltype_correspondence,"placeholder")){    
         if(class(celltype_correspondence)!="list"){
-            stop("Error: celltype_correspondence should be a list of lists of all cell type names, as they appear in each of the DEouts")
+            stop("Error: celltype_correspondence should be a list of lists of all cell type names, as they appear in each of the SCEs")
         }
     }
     if(!identical(pvalues,"placeholder")){
@@ -63,8 +77,8 @@ validate_input_parameters_correlation <- function(dataset_name="placeholder",
             }
         }
     }
-    if(!identical(data_names,"placeholder") && !is.vector(data_names)){
-        stop("Error: data_names should be a list containing the names of all datasets as should appear in the final output (if these are different to the names in DEouts)")
+    if(!identical(dataset_names,"placeholder") && !is.vector(dataset_names)){
+        stop("Error: dataset_names should be a list containing the names of all datasets as should appear in the final output (if these are different to the names in SCEs)")
     }
     if(!identical(corr_mats,"placeholder")){
         if(class(corr_mats)!="list"){
