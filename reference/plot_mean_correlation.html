@@ -61,11 +61,14 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_mean_correlation</span><span class="op">(</span></span>
-<span>  <span class="va">dataset_name</span>,</span>
-<span>  <span class="va">DEouts</span>,</span>
+<span>  <span class="va">main_dataset</span>,</span>
+<span>  <span class="va">SCEs</span>,</span>
+<span>  <span class="va">sampleIDs</span>,</span>
+<span>  <span class="va">celltypeIDs</span>,</span>
 <span>  <span class="va">pvals</span>,</span>
 <span>  <span class="va">celltype_correspondence</span>,</span>
-<span>  <span class="va">data_names</span>,</span>
+<span>  <span class="va">dataset_names</span>,</span>
+<span>  sex_DEGs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -74,12 +77,20 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-dataset-name">dataset_name<a class="anchor" aria-label="anchor" href="#arg-dataset-name"></a></dt>
-<dd><p>name of the dataset used to select significant DEGs from (specified as a string, name as in DEouts)</p></dd>
+<dl><dt id="arg-main-dataset">main_dataset<a class="anchor" aria-label="anchor" href="#arg-main-dataset"></a></dt>
+<dd><p>name of the dataset used to select significant DEGs from (specified as a string, name as in SCEs)</p></dd>
 
 
-<dt id="arg-deouts">DEouts<a class="anchor" aria-label="anchor" href="#arg-deouts"></a></dt>
-<dd><p>a list containing outputs of DGE analysis (as returned/optionally saved by DGE_analysis) for datasets to be used in the correlation analysis</p></dd>
+<dt id="arg-sces">SCEs<a class="anchor" aria-label="anchor" href="#arg-sces"></a></dt>
+<dd><p>list of the input data (elements should be SCE objects)</p></dd>
+
+
+<dt id="arg-sampleids">sampleIDs<a class="anchor" aria-label="anchor" href="#arg-sampleids"></a></dt>
+<dd><p>list or vector of sample IDs (in order of SCEs)</p></dd>
+
+
+<dt id="arg-celltypeids">celltypeIDs<a class="anchor" aria-label="anchor" href="#arg-celltypeids"></a></dt>
+<dd><p>list or vector of cell type IDs (in order of SCEs)</p></dd>
 
 
 <dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>
@@ -90,8 +101,12 @@
 <dd><p>list of different names specifying each cell type</p></dd>
 
 
-<dt id="arg-data-names">data_names<a class="anchor" aria-label="anchor" href="#arg-data-names"></a></dt>
-<dd><p>names of the datasets as they appear in the correlation plot</p></dd>
+<dt id="arg-dataset-names">dataset_names<a class="anchor" aria-label="anchor" href="#arg-dataset-names"></a></dt>
+<dd><p>names of the datasets as they appear in the correlation plot (in order of SCEs)</p></dd>
+
+
+<dt id="arg-sex-degs">sex_DEGs<a class="anchor" aria-label="anchor" href="#arg-sex-degs"></a></dt>
+<dd><p>If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.</p></dd>
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>

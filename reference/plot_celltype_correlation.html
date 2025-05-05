@@ -61,10 +61,11 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_celltype_correlation</span><span class="op">(</span></span>
-<span>  <span class="va">dataset_name</span>,</span>
+<span>  <span class="va">main_dataset</span>,</span>
 <span>  <span class="va">DEouts</span>,</span>
 <span>  <span class="va">celltypes_list</span>,</span>
-<span>  <span class="va">data_names</span>,</span>
+<span>  <span class="va">dataset_names</span>,</span>
+<span>  sex_DEGs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  pval <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -73,8 +74,8 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-dataset-name">dataset_name<a class="anchor" aria-label="anchor" href="#arg-dataset-name"></a></dt>
-<dd><p>name of the dataset used to select significant DEGs from (specified as a string, name as in data_names)</p></dd>
+<dl><dt id="arg-main-dataset">main_dataset<a class="anchor" aria-label="anchor" href="#arg-main-dataset"></a></dt>
+<dd><p>name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)</p></dd>
 
 
 <dt id="arg-deouts">DEouts<a class="anchor" aria-label="anchor" href="#arg-deouts"></a></dt>
@@ -85,8 +86,12 @@
 <dd><p>list of different names specifying each cell type (in order for each dataset in DEouts)</p></dd>
 
 
-<dt id="arg-data-names">data_names<a class="anchor" aria-label="anchor" href="#arg-data-names"></a></dt>
+<dt id="arg-dataset-names">dataset_names<a class="anchor" aria-label="anchor" href="#arg-dataset-names"></a></dt>
 <dd><p>names of the datasets as they will appear in the correlation plot</p></dd>
+
+
+<dt id="arg-sex-degs">sex_DEGs<a class="anchor" aria-label="anchor" href="#arg-sex-degs"></a></dt>
+<dd><p>If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.</p></dd>
 
 
 <dt id="arg-pval">pval<a class="anchor" aria-label="anchor" href="#arg-pval"></a></dt>
