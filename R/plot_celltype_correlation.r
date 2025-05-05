@@ -30,9 +30,6 @@ plot_celltype_correlation <- function(main_dataset,
     if(class(DEouts)!="list"){
         stop("Error: DEouts should be a list.")
     }
-    if(!is.character(celltype)){
-        stop("Error: celltype should be a string specifying the cell type to compute correlation for.")
-    }
     if(!is.list(celltypes_list)){
         stop("Error: celltypes_list should be a list containing the names of the cell type of concern, as they appear across each DGE analysis output (in order).")
     }
