@@ -34,6 +34,9 @@
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/power_analysis.html">Get Started</a>
     </li>
+    <li>
+      <a href="../articles/validation_analysis.html">Validation and Evaluation</a>
+    </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/neurogenomics/Power_Analysis_package/" class="external-link">
@@ -51,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, for a specified cell type</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/prop_bulk_DEGs_sc_celltype.r" class="external-link"><code>R/prop_bulk_DEGs_sc_celltype.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/R/prop_bulk_DEGs_sc_celltype.r" class="external-link"><code>R/prop_bulk_DEGs_sc_celltype.r</code></a></small>
     <div class="hidden name"><code>prop_bulk_DEGs_sc_celltype.Rd</code></div>
     </div>
 
@@ -83,7 +86,7 @@
 
 
 <dl><dt id="arg-bulkde">bulkDE<a class="anchor" aria-label="anchor" href="#arg-bulkde"></a></dt>
-<dd><p>DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels</p></dd>
+<dd><p>DGE analysis output for a bulk RNA-seq dataset (e.g., <code>LFSR.tsv</code>): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels</p></dd>
 
 
 <dt id="arg-range-downsampled">range_downsampled<a class="anchor" aria-label="anchor" href="#arg-range-downsampled"></a></dt>
@@ -91,7 +94,7 @@
 
 
 <dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
-<dd><p>list of different names specifying each cell type</p></dd>
+<dd><p>A named vector that maps a standard cell type label (e.g., <code>"Endo"</code>, <code>"Micro"</code>) to how that cell type appears in each dataset. Use <code>NA</code> if the cell type is not present in a given dataset.</p></dd>
 
 
 <dt id="arg-celltype">celltype<a class="anchor" aria-label="anchor" href="#arg-celltype"></a></dt>
@@ -99,15 +102,15 @@
 
 
 <dt id="arg-sampled">sampled<a class="anchor" aria-label="anchor" href="#arg-sampled"></a></dt>
-<dd><p>downsampling carried out based on what (either "individuals" or "cells")</p></dd>
+<dd><p>Specifies the unit of down-sampling. Can be either <code>"individuals"</code> or <code>"cells"</code>, depending on whether the analysis downsamples across samples or cells.</p></dd>
 
 
 <dt id="arg-bulk-cutoff">bulk_cutoff<a class="anchor" aria-label="anchor" href="#arg-bulk-cutoff"></a></dt>
-<dd><p>percentage (proportion between 0 and 1), specified so that we select DEGs common across &gt;= bulk_cutoff of the tissues in the Bulk dataset</p></dd>
+<dd><p>Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).</p></dd>
 
 
 <dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
-<dd><p>the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)</p></dd>
+<dd><p>Numeric. P-value threshold for defining DEGs in the bulk dataset.</p></dd>
 
 
 <dt id="arg-fontsize-axislabels">fontsize_axislabels<a class="anchor" aria-label="anchor" href="#arg-fontsize-axislabels"></a></dt>

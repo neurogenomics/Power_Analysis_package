@@ -34,6 +34,9 @@
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/power_analysis.html">Get Started</a>
     </li>
+    <li>
+      <a href="../articles/validation_analysis.html">Validation and Evaluation</a>
+    </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/neurogenomics/Power_Analysis_package/" class="external-link">
@@ -51,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all common cell types</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/prop_bulk_DEGs_sc.r" class="external-link"><code>R/prop_bulk_DEGs_sc.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/R/prop_bulk_DEGs_sc.r" class="external-link"><code>R/prop_bulk_DEGs_sc.r</code></a></small>
     <div class="hidden name"><code>prop_bulk_DEGs_sc.Rd</code></div>
     </div>
 
@@ -79,15 +82,15 @@
 
 
 <dl><dt id="arg-bulkde">bulkDE<a class="anchor" aria-label="anchor" href="#arg-bulkde"></a></dt>
-<dd><p>DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels</p></dd>
+<dd><p>DGE analysis output for a bulk RNA-seq dataset (e.g., <code>LFSR.tsv</code>): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels</p></dd>
 
 
 <dt id="arg-bulk-cutoff">bulk_cutoff<a class="anchor" aria-label="anchor" href="#arg-bulk-cutoff"></a></dt>
-<dd><p>percentage (proportion), specified so that we select DEGs common across &gt;=bulk_cutoff of the tissues in the Bulk dataset</p></dd>
+<dd><p>Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).</p></dd>
 
 
 <dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
-<dd><p>the cut-off p-value used to select DEGs (for bulk data)</p></dd>
+<dd><p>Numeric. P-value threshold for defining DEGs in the bulk dataset.</p></dd>
 
 
 <dt id="arg-fontsize-axislabels">fontsize_axislabels<a class="anchor" aria-label="anchor" href="#arg-fontsize-axislabels"></a></dt>
@@ -115,7 +118,7 @@
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><p>path storing the down-sampled DGE analysis outputs for each dataset
+<dd><p>A directory path where down-sampled outputs and diagnostic plots will be saved.
 Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory</p></dd>
 
 </dl></div>
