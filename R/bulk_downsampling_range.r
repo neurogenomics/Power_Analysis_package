@@ -2,11 +2,12 @@
 
 #' @importFrom SingleCellExperiment colData
 
-#' @param SCEs list of the input data (elements should be SCE objects)
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
-#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
-#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
+#' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
+#' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
+
 
 #' @return list containing values which the data will be downsampled at, in ascending order
 
@@ -15,7 +16,7 @@ bulk_downsampling_range <- function(SCEs,
                                     sampled="individuals",
                                     sampleIDs="donor_id",
                                     celltypeIDs="cell_type"){
-    
+
     # check sampleIDs, celltypeIDs
     if(length(sampleIDs) == 1){
         sampleIDs <- rep(sampleIDs,length(SCEs))
@@ -45,7 +46,7 @@ bulk_downsampling_range <- function(SCEs,
             }
         }
     }
-    
+
     # get downsampling range, return
     range_downsampled <- downsampling_range(largest_dataset,sampled,sampleID)
     return(range_downsampled)
