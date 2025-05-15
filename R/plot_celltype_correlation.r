@@ -60,22 +60,41 @@ plot_celltype_correlation <- function(main_dataset,
 
     # variable to redefine DEouts
     allstudies <- list()
+    valid_datasets <- list()
     # for each study, select data corresponding only to celltype
     for(i in seq_along(DEouts)){
         # get corresponding cell type names for current study
-        celltype_name <- celltypes_list[[i]][[1]]
+        celltype_name <- celltypes_list[[i]]
         # redefine DEouts so each element only contains study/celltype
-        allstudies[[i]] <- DEouts[[i]]$celltype_all_genes[[celltype_name]]
+        if (!is.null(DEouts[[i]]$celltype_all_genes[[celltype_name]])) {
+            allstudies[[i]] <- DEouts[[i]]$celltype_all_genes[[celltype_name]]
+            valid_datasets[[i]] <- dataset_names[[i]]  # track valid dataset names
+        } else {
+            print(paste0("Dataset ", dataset_names[[i]], " has no data for cell type ", celltype_name))
+            allstudies[[i]] <- NULL  # keep the placeholder for consistency
+            valid_datasets[[i]] <- dataset_names[[i]]
+        }
     }
+    
     # get names of datasets
     names(allstudies) <- dataset_names
+    # filter out NULL entries for processing
+    non_null_indices <- !sapply(allstudies, is.null)
+    valid_allstudies <- allstudies[non_null_indices]
+    valid_dataset_names <- dataset_names[non_null_indices]
+    # check if there are any valid datasets left
+    if (length(valid_allstudies) == 0) {
+        warning("No valid datasets found for the specified cell types. Returning 0 correlation.")
+        return(list(matrix(0, nrow = length(dataset_names), ncol = length(dataset_names), 
+                        dimnames = list(dataset_names, dataset_names)), NULL, 0, NULL))
+    }
 
     # reshape data so "dataset" is now a variable
-    allstudies_dt <- rbindlist(allstudies,idcol="dataset")
+    allstudies_dt <- rbindlist(valid_allstudies,idcol="dataset")
     # create list of all genes across datasets
     allGenes <- list()
-    for(j in 1:length(dataset_names)){
-        allGenes[[j]] <- allstudies_dt[dataset==dataset_names[[j]],name]
+    for (j in seq_along(valid_dataset_names)) {
+        allGenes[[j]] <- allstudies_dt[dataset == valid_dataset_names[[j]], name]
     }
     # get set of genes in all studies
     shared_genes <- Reduce(intersect,allGenes)
@@ -106,17 +125,25 @@ plot_celltype_correlation <- function(main_dataset,
     #### either above line (remove NA) OR below 2 (NAs to 0)
     #mat_lfc <- as.data.frame(mat_lfc)
     #mat_lfc[is.na(mat_lfc)] <- 0
-
     # get number of DEGs for this celltype
     num_genes <- dim(mat_lfc)[[1]]
     print(paste0("Number of ",celltype_name," genes at given p value is ",num_genes))
     genes <- mat_lfc$name # (only updates if we remove NA genes, else is the same as "genes" above)
 
     # get correlation matrix
-    corr_lfc <- cor(mat_lfc[,2:ncol(mat_lfc)],method = "spearman") #### could also try "pearson"...
+    if (ncol(mat_lfc) > 2) {
+        corr_lfc <- cor(mat_lfc[, 2:ncol(mat_lfc)], method = "spearman")  # Could also try "pearson"
+    } else {
+        corr_lfc <- matrix(0, nrow = length(valid_dataset_names), ncol = length(valid_dataset_names))
+    }
+    full_corr_matrix <- matrix(0, nrow = length(dataset_names), ncol = length(dataset_names),
+                            dimnames = list(dataset_names, dataset_names))
+    if (length(valid_dataset_names) > 0) {
+        full_corr_matrix[valid_dataset_names, valid_dataset_names] <- corr_lfc
+    }
 
     # plot correlation matrix
-    corr_plot.plot <- ggcorrplot(round(corr_lfc,2),
+    corr_plot.plot <- ggcorrplot(round(full_corr_matrix,2),
             hc.order = F, insig="pch",pch=5,pch.col = "grey",
             pch.cex=9,
             title=paste0("LFC Correlation Matrix, ",celltype_name," - pval < ",pval,": ",
@@ -126,6 +153,6 @@ plot_celltype_correlation <- function(main_dataset,
             sig.level=0.05) # add/remove type="upper" in ggcorrplot (after hc.order) to get upper triangular/full matrix
 
     # output matrix, plot and genecount
-    return(list(corr_lfc, corr_plot.plot, num_genes, genes))
+    return(list(full_corr_matrix, corr_plot.plot, num_genes, genes))
 
 }
