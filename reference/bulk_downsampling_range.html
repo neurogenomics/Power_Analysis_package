@@ -34,6 +34,9 @@
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/power_analysis.html">Get Started</a>
     </li>
+    <li>
+      <a href="../articles/validation_analysis.html">Validation and Evaluation</a>
+    </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/neurogenomics/Power_Analysis_package/" class="external-link">
@@ -74,23 +77,23 @@
 
 
 <dl><dt id="arg-sces">SCEs<a class="anchor" aria-label="anchor" href="#arg-sces"></a></dt>
-<dd><p>list of the input data (elements should be SCE objects)</p></dd>
+<dd><p>A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.</p></dd>
 
 
 <dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
-<dd><p>list of different names specifying each cell type</p></dd>
+<dd><p>A named vector that maps a standard cell type label (e.g., <code>"Endo"</code>, <code>"Micro"</code>) to how that cell type appears in each dataset. Use <code>NA</code> if the cell type is not present in a given dataset.</p></dd>
 
 
 <dt id="arg-sampled">sampled<a class="anchor" aria-label="anchor" href="#arg-sampled"></a></dt>
-<dd><p>downsampling carried out based on what (either "individuals" or "cells")</p></dd>
+<dd><p>Specifies the unit of down-sampling. Can be either <code>"individuals"</code> or <code>"cells"</code>, depending on whether the analysis downsamples across samples or cells.</p></dd>
 
 
 <dt id="arg-sampleids">sampleIDs<a class="anchor" aria-label="anchor" href="#arg-sampleids"></a></dt>
-<dd><p>list or vector of sample IDs (in order of SCEs)</p></dd>
+<dd><p>A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).</p></dd>
 
 
 <dt id="arg-celltypeids">celltypeIDs<a class="anchor" aria-label="anchor" href="#arg-celltypeids"></a></dt>
-<dd><p>list or vector of cell type IDs (in order of SCEs)</p></dd>
+<dd><p>A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).</p></dd>
 
 </dl></div>
     <div id="value">
