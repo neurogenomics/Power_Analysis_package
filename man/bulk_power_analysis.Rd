@@ -25,27 +25,27 @@ bulk_power_analysis(
 )
 }
 \arguments{
-\item{SCEs}{list of the input data (elements should be SCE objects)}
+\item{SCEs}{A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.}
 
-\item{dataset_names}{list of the names of the datasets (as you would like them to appear in the "output_path" directory)}
+\item{dataset_names}{A vector of names corresponding to each dataset (as you would like them to appear in output plots).}
 
-\item{celltype_correspondence}{list of different names specifying each cell type}
+\item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., \code{"Endo"}, \code{"Micro"}) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
-\item{output_path}{path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)}
+\item{output_path}{A directory path where down-sampled outputs and plots will be saved.}
 
-\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
+\item{celltypeIDs}{A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).}
 
-\item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
+\item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.}
 
-\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
+\item{sampleIDs}{A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).}
 
-\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
+\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset (e.g., \code{LFSR.tsv}): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
-\item{bulk_cutoff}{percentage (proportion), specified so that we select DEGs common across >=bulk_cutoff of the tissues in the Bulk dataset}
+\item{bulk_cutoff}{Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues).}
 
-\item{pvalue}{the cut-off p-value used to select DEGs (for bulk data)}
+\item{pvalue}{Numeric. P-value threshold for defining DEGs in the bulk dataset.}
 
-\item{Nperms}{number of permutations of DGE analysis outputs for each sample}
+\item{Nperms}{Number of permutations to perform for each down-sampling level. Default is 20; for quick testing, use a smaller value (e.g., \code{Nperms = 3}).}
 
 \item{fontsize_axislabels}{font size for axis labels in plot}
 

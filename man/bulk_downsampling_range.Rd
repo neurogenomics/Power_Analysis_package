@@ -13,15 +13,15 @@ bulk_downsampling_range(
 )
 }
 \arguments{
-\item{SCEs}{list of the input data (elements should be SCE objects)}
+\item{SCEs}{A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.}
 
-\item{celltype_correspondence}{list of different names specifying each cell type}
+\item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., \code{"Endo"}, \code{"Micro"}) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
-\item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
+\item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.}
 
-\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
+\item{sampleIDs}{A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).}
 
-\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
+\item{celltypeIDs}{A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).}
 }
 \value{
 list containing values which the data will be downsampled at, in ascending order

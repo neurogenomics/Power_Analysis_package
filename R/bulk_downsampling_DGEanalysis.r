@@ -2,13 +2,13 @@
 
 #' @importFrom SingleCellExperiment colData
 
-#' @param SCEs list of the input data (elements should be SCE objects)
-#' @param dataset_names list of the names of the datasets (as you would like them to appear in the "output_path" directory)
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
-#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
-#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
-#' @param output_path base output directory where down-sampled DGE analysis outputs will be saved
+#' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
+#' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param output_path A directory path where down-sampled outputs and plots will be saved.
+#' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
+#' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
 #' @param pvalue the cut-off p-value used to select DEGs
 #' @param Nperms number of permutations of DGE analysis outputs for each sample
 
@@ -23,7 +23,7 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
                                           output_path=getwd(),
                                           pvalue=0.05,
                                           Nperms=20){
-                                    
+
     # validate function input params
     validate_input_parameters_bulk(SCEs=SCEs, dataset_names=dataset_names, celltype_correspondence=celltype_correspondence, sampled=sampled,
                                    sampleIDs=sampleIDs, celltypeIDs=celltypeIDs, output_path=output_path, pvalue=pvalue, Nperms=Nperms)
@@ -44,7 +44,7 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
             coeff_use <- as.character(sort(unique(colData(dataset)$sex))[[2]])
             celltype_name <- celltype_correspondence[[standard_celltype]][[idx]]
             if(!is.na(celltype_name)){
-                # subset dataset                
+                # subset dataset
                 dataset1 <- dataset[, colData(dataset)[[celltypeIDs[[idx]]]] == celltype_name]
                 # run downsampling, DGE analysis
                 numsamples <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))

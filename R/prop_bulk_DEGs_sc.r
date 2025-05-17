@@ -10,18 +10,18 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 #' @importFrom ggplot2 ggplot labs theme aes element_text geom_boxplot position_dodge2 scale_y_continuous guides guide_legend scale_fill_manual scale_alpha
 #' @importFrom cowplot theme_cowplot
 
-#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param bulk_cutoff percentage (proportion), specified so that we select DEGs common across >=bulk_cutoff of the tissues in the Bulk dataset
-#' @param pvalue the cut-off p-value used to select DEGs (for bulk data)
+#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
+#' @param bulk_cutoff Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
+#' @param pvalue Numeric. P-value threshold for defining DEGs in the bulk dataset.
 #' @param fontsize_axislabels font size for axis labels in plot
 #' @param fontsize_axisticks font size for axis tick labels in plot
 #' @param fontsize_title font size for plot title
 #' @param fontsize_legendlabels font size for legend labels in plot
 #' @param fontsize_legendtitle font size for legend title in plot
 #' @param plot_title plot title
-#' @param output_path path storing the down-sampled DGE analysis outputs for each dataset
+#' @param output_path A directory path where down-sampled outputs and diagnostic plots will be saved.
 
-#' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory 
+#' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory
 
 prop_bulk_DEGs_sc <- function(bulkDE,
                               bulk_cutoff=0.9,
@@ -38,7 +38,7 @@ prop_bulk_DEGs_sc <- function(bulkDE,
     validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path,
                                    bulk_cutoff=bulk_cutoff,pvalue=pvalue, fontsize_axislabels=fontsize_axislabels,
                                    fontsize_axisticks=fontsize_axisticks, fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels,
-                                   fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)    
+                                   fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)
 
     # default placeholder
     if(plot_title=="placeholder"){
@@ -98,10 +98,10 @@ prop_bulk_DEGs_sc <- function(bulkDE,
     DEGs_df$numSamples <- NumSamples
     DEGs_df$perm <- Perm
     DEGs_df$pctDEGs <- PctDEGs
-    
+
     # function to select colours appropriately for boxplots
     generate_color_palette <- function(N, palette = "Set1") {
-        max_colors <- 9  # the maximum number of colors available for the chosen palette    
+        max_colors <- 9  # the maximum number of colors available for the chosen palette
         if (N <= max_colors) {
             return(brewer.pal(N, palette))
         }else{
