@@ -10,13 +10,13 @@ utils::globalVariables(c("numSamples","pctDEGs"))
 #' @importFrom ggplot2 ggplot labs theme aes element_text geom_boxplot position_dodge2 scale_y_continuous guides guide_legend scale_fill_manual scale_alpha
 #' @importFrom cowplot theme_cowplot
 
-#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
+#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
-#' @param celltype_correspondence list of different names specifying each cell type
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
 #' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
-#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
-#' @param bulk_cutoff percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset
-#' @param pvalue the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)
+#' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
+#' @param bulk_cutoff Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
+#' @param pvalue Numeric. P-value threshold for defining DEGs in the bulk dataset.
 #' @param fontsize_axislabels font size for axis labels in plot
 #' @param fontsize_axisticks font size for axis tick labels in plot
 #' @param fontsize_title font size for plot title
@@ -25,7 +25,7 @@ utils::globalVariables(c("numSamples","pctDEGs"))
 #' @param plot_title plot title
 #' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset
 
-#' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, for a specified cell type, in the appropriate directory 
+#' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, for a specified cell type, in the appropriate directory
 
 prop_bulk_DEGs_sc_celltype <- function(bulkDE,
                                        range_downsampled,
@@ -47,7 +47,7 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
                                    celltype=celltype, sampled=sampled, bulk_cutoff=bulk_cutoff,
                                    pvalue=pvalue, celltype_correspondence=celltype_correspondence, fontsize_axislabels=fontsize_axislabels,
                                    fontsize_axisticks=fontsize_axisticks, fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels,
-                                   fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)    
+                                   fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)
 
     # default placeholder
     if(plot_title=="placeholder"){
@@ -138,10 +138,10 @@ prop_bulk_DEGs_sc_celltype <- function(bulkDE,
     DEGs$numSamples <- NumSamples
     DEGs$perm <- Perm
     DEGs$pctDEGs <- PctDEGs
-    
+
     # function to select colours appropriately for boxplots
     generate_color_palette <- function(N, palette = "Set1") {
-        max_colors <- 9  # the maximum number of colors available for the chosen palette    
+        max_colors <- 9  # the maximum number of colors available for the chosen palette
         if (N <= max_colors) {
             return(brewer.pal(N, palette))
         }else{

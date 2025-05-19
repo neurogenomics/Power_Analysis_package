@@ -1,6 +1,6 @@
 ---
 title: "Get Started" 
-author: "<h4>Authors: <i>Salman Fawad, Yunning Yuan, Alan Murphy, Nathan Skene</i></h4>"
+author: "<h4>Authors: <i>Yunning Yuan, Salman Fawad, Nathan Skene</i></h4>"
 date: "<h4>Vignette updated: <i>`r format( Sys.Date(), '%b-%d-%Y')`</i></h4>"
 output: rmarkdown::html_vignette
 vignette: >

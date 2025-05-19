@@ -18,11 +18,11 @@ prop_bulk_DEGs_sc(
 )
 }
 \arguments{
-\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
+\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset (e.g., \code{LFSR.tsv}): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
-\item{bulk_cutoff}{percentage (proportion), specified so that we select DEGs common across >=bulk_cutoff of the tissues in the Bulk dataset}
+\item{bulk_cutoff}{Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues).}
 
-\item{pvalue}{the cut-off p-value used to select DEGs (for bulk data)}
+\item{pvalue}{Numeric. P-value threshold for defining DEGs in the bulk dataset.}
 
 \item{fontsize_axislabels}{font size for axis labels in plot}
 
@@ -36,7 +36,7 @@ prop_bulk_DEGs_sc(
 
 \item{plot_title}{plot title}
 
-\item{output_path}{path storing the down-sampled DGE analysis outputs for each dataset
+\item{output_path}{A directory path where down-sampled outputs and diagnostic plots will be saved.
 Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory}
 }
 \description{

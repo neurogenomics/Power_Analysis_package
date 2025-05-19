@@ -1,16 +1,16 @@
 #' Runs entire bulk RNA-seq power analysis pipeline
 
-#' @param SCEs list of the input data (elements should be SCE objects)
-#' @param dataset_names list of the names of the datasets (as you would like them to appear in the "output_path" directory)
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param output_path path storing the down-sampled DGE analysis outputs for each dataset (and saves outputs)
-#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
-#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
-#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
-#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param bulk_cutoff percentage (proportion), specified so that we select DEGs common across >=bulk_cutoff of the tissues in the Bulk dataset
-#' @param pvalue the cut-off p-value used to select DEGs (for bulk data)
-#' @param Nperms number of permutations of DGE analysis outputs for each sample
+#' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
+#' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param output_path A directory path where down-sampled outputs and plots will be saved.
+#' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
+#' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
+#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
+#' @param bulk_cutoff Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
+#' @param pvalue Numeric. P-value threshold for defining DEGs in the bulk dataset.
+#' @param Nperms Number of permutations to perform for each down-sampling level. Default is 20; for quick testing, use a smaller value (e.g., `Nperms = 3`).
 #' @param fontsize_axislabels font size for axis labels in plot
 #' @param fontsize_axisticks font size for axis tick labels in plot
 #' @param fontsize_title font size for plot title
@@ -69,7 +69,7 @@ bulk_power_analysis <- function(SCEs,
                          pvalue = pvalue,
                          Nperms = Nperms,
                          output_path = output_path)
-                         
+
 
     # Run prop_bulk_DEGs_sc
     prop_bulk_DEGs_sc(bulkDE = bulkDE,

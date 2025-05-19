@@ -22,19 +22,19 @@ prop_bulk_DEGs_sc_celltype(
 )
 }
 \arguments{
-\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
+\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset (e.g., \code{LFSR.tsv}): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
-\item{celltype_correspondence}{list of different names specifying each cell type}
+\item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., \code{"Endo"}, \code{"Micro"}) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
 \item{celltype}{the cell type we are focusing on (name as it appears in cell type sub-directory name)}
 
-\item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
+\item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.}
 
-\item{bulk_cutoff}{percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset}
+\item{bulk_cutoff}{Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues).}
 
-\item{pvalue}{the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)}
+\item{pvalue}{Numeric. P-value threshold for defining DEGs in the bulk dataset.}
 
 \item{fontsize_axislabels}{font size for axis labels in plot}
 
