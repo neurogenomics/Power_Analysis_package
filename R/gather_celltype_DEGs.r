@@ -1,20 +1,26 @@
 #' Collate DEGs detected in DGE analysis outputs, across all celltypes in a dataset (datasets/DGE analysis outputs should have common celltypes as specified below)
 
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param pvalue the cut-off p-value used to select DEGs
-#' @param Nperms number of permutations of DGE analysis outputs for each sample
-#' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param pvalue Numeric. P-value threshold for defining DEGs in the bulk dataset.
+#' @param Nperms Number of permutations to perform for each down-sampling level. Default is 20; for quick testing, use a smaller value (e.g., `Nperms = 3`).
+#' @param output_path A clean directory path where down-sampled outputs and plots will be saved.
+#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 
 #' Saves combined list of DEGs (across all cell types) in a subdirectory inside the dataset directory
 
 gather_celltype_DEGs <- function(celltype_correspondence,
                                  pvalue=0.05,
                                  Nperms=20,
+                                 sampled="individuals",
                                  output_path=getwd()){
 
     # validate function input params
     validate_input_parameters_bulk(output_path=output_path, celltype_correspondence=celltype_correspondence,
                                    pvalue=pvalue, Nperms=Nperms)
+
+    # folder tag to specify the down-sampling style
+    sampled <- match.arg(sampled)
+    folder_tag <- if (sampled == "cells") "DE_downsampling_cells" else "DE_downsampling"
 
     # loop through datasets
     j <- 0
@@ -29,7 +35,7 @@ gather_celltype_DEGs <- function(celltype_correspondence,
         # loop through each cell type
         for (standard_celltype in names(celltype_correspondence)) {
             # sampling point paths
-            celltype_path <- file.path(base_dataset, standard_celltype, "DE_downsampling")
+            celltype_path <- file.path(base_dataset, standard_celltype, folder_tag)
             downsampled_folders <- list.dirs(celltype_path, recursive=FALSE, full.names=FALSE)
             # loop through sampling points
             for (sample_samples in downsampled_folders) {

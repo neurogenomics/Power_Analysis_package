@@ -12,13 +12,13 @@ gather_celltype_DEGs(
 )
 }
 \arguments{
-\item{celltype_correspondence}{list of different names specifying each cell type}
+\item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., \code{"Endo"}, \code{"Micro"}) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
-\item{pvalue}{the cut-off p-value used to select DEGs}
+\item{pvalue}{Numeric. P-value threshold for defining DEGs in the bulk dataset.}
 
-\item{Nperms}{number of permutations of DGE analysis outputs for each sample}
+\item{Nperms}{Number of permutations to perform for each down-sampling level. Default is 20; for quick testing, use a smaller value (e.g., \code{Nperms = 3}).}
 
-\item{output_path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+\item{output_path}{A directory path where down-sampled outputs and plots will be saved.
 Saves combined list of DEGs (across all cell types) in a subdirectory inside the dataset directory}
 }
 \description{

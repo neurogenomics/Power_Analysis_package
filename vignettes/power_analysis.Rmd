@@ -4,7 +4,7 @@ author: "<h4>Authors: <i>Yunning Yuan, Salman Fawad, Nathan Skene</i></h4>"
 date: "<h4>Vignette updated: <i>`r format( Sys.Date(), '%b-%d-%Y')`</i></h4>"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{getting_started}
+  %\VignetteIndexEntry{get_started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -39,7 +39,8 @@ To run the DGE analysis, first load your own SingleCellExperiment (SCE) object.
 # Load your SCE object (replace with actual file path)
 library(qs)
 
-SCE <- qs::qread("sce.qs")
+tsai_path <- system.file("extdata", "Tsai_Micro.qs", package="poweranalysis")
+SCE <- qs::qread(tsai_path)
 ```
 
 To use the `DGE_analysis` function, specify the formula for comparison along with the pseudobulk ID and celltype ID. The function requires the following key arguments:

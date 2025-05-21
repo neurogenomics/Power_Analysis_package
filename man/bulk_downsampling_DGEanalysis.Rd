@@ -31,9 +31,9 @@ bulk_downsampling_DGEanalysis(
 
 \item{output_path}{A directory path where down-sampled outputs and plots will be saved.}
 
-\item{pvalue}{the cut-off p-value used to select DEGs}
+\item{pvalue}{Numeric. P-value threshold for defining DEGs in the bulk dataset.}
 
-\item{Nperms}{number of permutations of DGE analysis outputs for each sample
+\item{Nperms}{Number of permutations to perform for each down-sampling level. Default is 20; for quick testing, use a smaller value (e.g., \code{Nperms = 3}).
 Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions}
 }
 \description{

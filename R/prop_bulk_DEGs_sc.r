@@ -19,7 +19,7 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 #' @param fontsize_legendlabels font size for legend labels in plot
 #' @param fontsize_legendtitle font size for legend title in plot
 #' @param plot_title plot title
-#' @param output_path A directory path where down-sampled outputs and diagnostic plots will be saved.
+#' @param output_path A clean directory path where down-sampled outputs and diagnostic plots will be saved.
 
 #' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory
 
