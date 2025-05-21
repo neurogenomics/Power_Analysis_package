@@ -68,13 +68,15 @@ bulk_power_analysis <- function(SCEs,
     gather_celltype_DEGs(celltype_correspondence = celltype_correspondence,
                          pvalue = pvalue,
                          Nperms = Nperms,
-                         output_path = output_path)
+                         output_path = output_path,
+                         sampled = sampled)
 
 
     # Run prop_bulk_DEGs_sc
     prop_bulk_DEGs_sc(bulkDE = bulkDE,
                       output_path = output_path,
                       bulk_cutoff = bulk_cutoff,
-                      pvalue = pvalue)
+                      pvalue = pvalue,
+                      sampled = sampled)
 
 }

@@ -4,17 +4,23 @@
 #' @param pvalue the cut-off p-value used to select DEGs
 #' @param Nperms number of permutations of DGE analysis outputs for each sample
 #' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+#' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
 
 #' Saves combined list of DEGs (across all cell types) in a subdirectory inside the dataset directory
 
 gather_celltype_DEGs <- function(celltype_correspondence,
                                  pvalue=0.05,
                                  Nperms=20,
+                                 sampled = c("individuals", "cells"),
                                  output_path=getwd()){
 
     # validate function input params
     validate_input_parameters_bulk(output_path=output_path, celltype_correspondence=celltype_correspondence,
                                    pvalue=pvalue, Nperms=Nperms)
+
+    # reference the appropriate subdirectory regarding the down-sampling type
+    sampled <- match.arg(sampled)
+    folder_tag <- if (sampled == "cells") "DE_downsampling_cells" else "DE_downsampling"
 
     # loop through datasets
     j <- 0
@@ -29,7 +35,7 @@ gather_celltype_DEGs <- function(celltype_correspondence,
         # loop through each cell type
         for (standard_celltype in names(celltype_correspondence)) {
             # sampling point paths
-            celltype_path <- file.path(base_dataset, standard_celltype, "DE_downsampling")
+            celltype_path <- file.path(base_dataset, standard_celltype, folder_tag)
             downsampled_folders <- list.dirs(celltype_path, recursive=FALSE, full.names=FALSE)
             # loop through sampling points
             for (sample_samples in downsampled_folders) {

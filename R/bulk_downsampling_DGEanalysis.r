@@ -17,7 +17,7 @@
 bulk_downsampling_DGEanalysis <- function(SCEs,
                                           dataset_names,
                                           celltype_correspondence,
-                                          sampled="individuals",
+                                          sampled = c("individuals", "cells"),
                                           sampleIDs="donor_id",
                                           celltypeIDs="cell_type",
                                           output_path=getwd(),

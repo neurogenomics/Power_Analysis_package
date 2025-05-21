@@ -8,6 +8,7 @@ gather_celltype_DEGs(
   celltype_correspondence,
   pvalue = 0.05,
   Nperms = 20,
+  sampled = c("individuals", "cells"),
   output_path = getwd()
 )
 }
@@ -18,8 +19,10 @@ gather_celltype_DEGs(
 
 \item{Nperms}{number of permutations of DGE analysis outputs for each sample}
 
-\item{output_path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+\item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.
 Saves combined list of DEGs (across all cell types) in a subdirectory inside the dataset directory}
+
+\item{output_path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis}
 }
 \description{
 Collate DEGs detected in DGE analysis outputs, across all celltypes in a dataset (datasets/DGE analysis outputs should have common celltypes as specified below)
