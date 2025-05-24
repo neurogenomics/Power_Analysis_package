@@ -8,7 +8,7 @@ prop_bulk_DEGs_sc(
   bulkDE,
   bulk_cutoff = 0.9,
   pvalue = 0.05,
-  sampled = c("individuals", "cells"),
+  sampled = "individuals",
   fontsize_axislabels = 12,
   fontsize_axisticks = 9,
   fontsize_title = 14,

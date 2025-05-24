@@ -8,7 +8,7 @@ bulk_downsampling_DGEanalysis(
   SCEs,
   dataset_names,
   celltype_correspondence,
-  sampled = c("individuals", "cells"),
+  sampled = "individuals",
   sampleIDs = "donor_id",
   celltypeIDs = "cell_type",
   output_path = getwd(),

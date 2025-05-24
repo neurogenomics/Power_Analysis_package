@@ -8,7 +8,7 @@ gather_celltype_DEGs(
   celltype_correspondence,
   pvalue = 0.05,
   Nperms = 20,
-  sampled = c("individuals", "cells"),
+  sampled = "individuals",
   output_path = getwd()
 )
 }
