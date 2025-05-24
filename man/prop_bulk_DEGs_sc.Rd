@@ -8,6 +8,7 @@ prop_bulk_DEGs_sc(
   bulkDE,
   bulk_cutoff = 0.9,
   pvalue = 0.05,
+  sampled = "individuals",
   fontsize_axislabels = 12,
   fontsize_axisticks = 9,
   fontsize_title = 14,
@@ -23,6 +24,8 @@ prop_bulk_DEGs_sc(
 \item{bulk_cutoff}{Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues).}
 
 \item{pvalue}{Numeric. P-value threshold for defining DEGs in the bulk dataset.}
+
+\item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.}
 
 \item{fontsize_axislabels}{font size for axis labels in plot}
 

@@ -20,7 +20,7 @@ downsampling_range <- function(SCE,
     numSamples <- length(IDs)
 
     if(sampled=="individuals"){
-        
+
         # want to pick 10 (equally spaced out) sampling points
         range_downsampled <- round(ceiling(seq(from=0,to=numSamples,length.out=12))/5)*5
         range_downsampled <- unique(range_downsampled[2:11])
@@ -41,4 +41,4 @@ downsampling_range <- function(SCE,
 
     return(range_downsampled)
 
-} 
+}

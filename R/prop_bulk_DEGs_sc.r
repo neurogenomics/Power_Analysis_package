@@ -13,6 +13,7 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
 #' @param bulk_cutoff Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
 #' @param pvalue Numeric. P-value threshold for defining DEGs in the bulk dataset.
+#' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
 #' @param fontsize_axislabels font size for axis labels in plot
 #' @param fontsize_axisticks font size for axis tick labels in plot
 #' @param fontsize_title font size for plot title
@@ -26,6 +27,7 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 prop_bulk_DEGs_sc <- function(bulkDE,
                               bulk_cutoff=0.9,
                               pvalue=0.05,
+                              sampled="individuals",
                               fontsize_axislabels=12,
                               fontsize_axisticks=9,
                               fontsize_title=14,
@@ -33,6 +35,8 @@ prop_bulk_DEGs_sc <- function(bulkDE,
                               fontsize_legendtitle=9,
                               plot_title="placeholder",
                               output_path=getwd()){
+
+    sampled <- match.arg(sampled, choices = c("individuals", "cells"))
 
     # validate function input params
     validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path,
@@ -66,10 +70,12 @@ prop_bulk_DEGs_sc <- function(bulkDE,
     NumSamples <- c()
     Perm <- c()
     PctDEGs <- c()
+    # reference the appropriate subdirectory based on the down-sampling unit
+    folder_tag <- if (sampled == "individuals") "DE_downsampling" else "DE_downsampling_cells"
     for(dataset in list.dirs(output_path,recursive=F,full.names=F)){
         print(paste0("Downsampling ",dataset))
-        # go inside dataset directory overall folder, downsampling folder
-        data_dir <- file.path(output_path, dataset, "Overall/DE_downsampling")
+        # go inside dataset directory overall folder, down-sampling folder
+        data_dir <- file.path(output_path, dataset, "Overall", folder_tag)
         downsampled_folders <- list.dirs(data_dir, recursive=FALSE, full.names=FALSE)
         # go inside numSamples, if exists
         for(sample_samples in downsampled_folders){
@@ -114,6 +120,13 @@ prop_bulk_DEGs_sc <- function(bulkDE,
         }
     }
 
+    # specify x-axis label according to the down-sampling style
+    x_label <- if (sampled == "individuals") {
+        "Number of samples"
+    } else {
+        "Number of cells per samples"
+    }
+
     # create and return plot
     propDEGs_overall.plot <- ggplot(DEGs_df,aes(x=factor(numSamples),y=100*pctDEGs))+
                                     geom_boxplot(outlier.shape=NA,aes(fill=factor(Dataset)),position = position_dodge2(width = 1, preserve = "single"))+
@@ -121,7 +134,7 @@ prop_bulk_DEGs_sc <- function(bulkDE,
                                     guides(fill = guide_legend(label.format = function(x) round(as.numeric(x))))+
                                     theme_cowplot()+
                                     scale_fill_manual(values=generate_color_palette(length(list.dirs(output_path,recursive=F,full.names=F)),palette="Set1"))+
-                                    labs(y="% DEGs", x="Number of Samples", fill="Dataset",title="Percentage DEGs from Bulk data detected when down-sampling scRNA-seq datasets (across all cell types)")+
+                                    labs(y="% DEGs", x=x_label, fill="Dataset",title="Percentage DEGs from Bulk data detected when down-sampling scRNA-seq datasets (across all cell types)")+
                                     scale_alpha(guide = 'none')+
                                     theme(axis.title = element_text(size = fontsize_axislabels),
                                           axis.text.x = element_text(size = fontsize_axisticks),
