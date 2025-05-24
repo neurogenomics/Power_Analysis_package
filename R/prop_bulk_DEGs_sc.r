@@ -27,7 +27,7 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 prop_bulk_DEGs_sc <- function(bulkDE,
                               bulk_cutoff=0.9,
                               pvalue=0.05,
-                              sampled = c("individuals", "cells"),
+                              sampled="individuals",
                               fontsize_axislabels=12,
                               fontsize_axisticks=9,
                               fontsize_title=14,
@@ -35,6 +35,8 @@ prop_bulk_DEGs_sc <- function(bulkDE,
                               fontsize_legendtitle=9,
                               plot_title="placeholder",
                               output_path=getwd()){
+
+    sampled <- match.arg(sampled, choices = c("individuals", "cells"))
 
     # validate function input params
     validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path,
@@ -68,10 +70,12 @@ prop_bulk_DEGs_sc <- function(bulkDE,
     NumSamples <- c()
     Perm <- c()
     PctDEGs <- c()
+    # reference the appropriate subdirectory based on the down-sampling unit
+    folder_tag <- if (sampled == "individuals") "DE_downsampling" else "DE_downsampling_cells"
     for(dataset in list.dirs(output_path,recursive=F,full.names=F)){
         print(paste0("Downsampling ",dataset))
-        # go inside dataset directory overall folder, downsampling folder
-        data_dir <- file.path(output_path, dataset, "Overall/DE_downsampling")
+        # go inside dataset directory overall folder, down-sampling folder
+        data_dir <- file.path(output_path, dataset, "Overall", folder_tag)
         downsampled_folders <- list.dirs(data_dir, recursive=FALSE, full.names=FALSE)
         # go inside numSamples, if exists
         for(sample_samples in downsampled_folders){
@@ -117,11 +121,10 @@ prop_bulk_DEGs_sc <- function(bulkDE,
     }
 
     # specify x-axis label according to the down-sampling style
-    sampled <- match.arg(sampled)
-    x_label <- if (sampled == "cells") {
-        "Number of cells per sample"
-    } else {
+    x_label <- if (sampled == "individuals") {
         "Number of samples"
+    } else {
+        "Number of cells per samples"
     }
 
     # create and return plot

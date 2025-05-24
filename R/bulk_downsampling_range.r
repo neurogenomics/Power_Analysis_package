@@ -17,6 +17,8 @@ bulk_downsampling_range <- function(SCEs,
                                     sampleIDs="donor_id",
                                     celltypeIDs="cell_type"){
 
+    sampled <- match.arg(sampled, choices = c("individuals", "cells"))
+
     # check sampleIDs, celltypeIDs
     if(length(sampleIDs) == 1){
         sampleIDs <- rep(sampleIDs,length(SCEs))
@@ -24,9 +26,11 @@ bulk_downsampling_range <- function(SCEs,
     if(length(celltypeIDs) == 1){
         celltypeIDs <- rep(celltypeIDs,length(SCEs))
     }
-    # initialise list to hold samples, largest dataset
-    max_samples <- 0
+
+    # initialise list to hold maximum number of samples/cells, largest dataset
+    max_number <- 0
     largest_dataset <- NULL
+
     # loop through cell type mapping
     for(standard_celltype in names(celltype_correspondence)){
         # loop through datasets to get downsampled range
@@ -37,9 +41,17 @@ bulk_downsampling_range <- function(SCEs,
                 # subset dataset
                 dataset1 <- dataset[, colData(dataset)[[celltypeIDs[[idx]]]] == celltype_name]
                 num_samples <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))
-                # check if this dataset/celltype has the most samples
-                if(num_samples > max_samples){
-                    max_samples <- num_samples
+
+                # get number of samples or cells of the sub-dataset
+                if (sampled == "individuals") {
+                    num_units <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))
+                } else {  # sampled == "cells"
+                    num_units <- ncol(dataset1)
+                }
+
+                # check if this dataset/celltype has the most samples/cells
+                if (num_units > max_number) {
+                    max_number  <- num_units
                     largest_dataset <- dataset1
                     sampleID <- sampleIDs[[idx]]
                 }

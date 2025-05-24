@@ -17,12 +17,14 @@
 bulk_downsampling_DGEanalysis <- function(SCEs,
                                           dataset_names,
                                           celltype_correspondence,
-                                          sampled = c("individuals", "cells"),
+                                          sampled="individuals",
                                           sampleIDs="donor_id",
                                           celltypeIDs="cell_type",
                                           output_path=getwd(),
                                           pvalue=0.05,
                                           Nperms=20){
+
+    sampled <- match.arg(sampled, choices = c("individuals", "cells"))
 
     # validate function input params
     validate_input_parameters_bulk(SCEs=SCEs, dataset_names=dataset_names, celltype_correspondence=celltype_correspondence, sampled=sampled,
@@ -46,11 +48,18 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
             if(!is.na(celltype_name)){
                 # subset dataset
                 dataset1 <- dataset[, colData(dataset)[[celltypeIDs[[idx]]]] == celltype_name]
-                # run downsampling, DGE analysis
-                numsamples <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))
-                range_dataset <- max_downsampling_range[max_downsampling_range <= numsamples]
+
+
+                # get maximum down-sampling range based on individuals or cells
+                if (sampled == "individuals") {
+                    num_units <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))
+                } else {  # sampled == "cells"
+                    num_units <- ncol(dataset1)
+                }
+                range_dataset <- max_downsampling_range[max_downsampling_range <= num_units]
                 savepath <- file.path(output_path,dataset_names[[idx]],standard_celltype)
-                # run
+
+                # run downsampling, DGE analysis
                 downsampling_DEanalysis(dataset1,range_dataset,output_path=savepath,sampled=sampled,
                                         sampleID=sampleIDs[[idx]],celltypeID=celltypeIDs[[idx]],coeff=coeff_use,
                                         nom_pval=pvalue,Nperms=Nperms)

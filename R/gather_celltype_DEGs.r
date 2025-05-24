@@ -11,16 +11,17 @@
 gather_celltype_DEGs <- function(celltype_correspondence,
                                  pvalue=0.05,
                                  Nperms=20,
-                                 sampled = c("individuals", "cells"),
+                                 sampled="individuals",
                                  output_path=getwd()){
+
+    sampled <- match.arg(sampled, choices = c("individuals", "cells"))
 
     # validate function input params
     validate_input_parameters_bulk(output_path=output_path, celltype_correspondence=celltype_correspondence,
                                    pvalue=pvalue, Nperms=Nperms)
 
     # reference the appropriate subdirectory regarding the down-sampling type
-    sampled <- match.arg(sampled)
-    folder_tag <- if (sampled == "cells") "DE_downsampling_cells" else "DE_downsampling"
+    folder_tag <- if (sampled == "individuals") "DE_downsampling" else "DE_downsampling_cells"
 
     # loop through datasets
     j <- 0
@@ -30,7 +31,7 @@ gather_celltype_DEGs <- function(celltype_correspondence,
         # base dataset path
         base_dataset <- file.path(output_path, dataset)
         # create path
-        target_base <- file.path(base_dataset, "Overall/DE_downsampling")
+        target_base <- file.path(base_dataset, "Overall",folder_tag)
         dir.create(target_base, recursive=TRUE, showWarnings=FALSE)
         # loop through each cell type
         for (standard_celltype in names(celltype_correspondence)) {

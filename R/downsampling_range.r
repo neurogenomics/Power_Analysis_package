@@ -10,7 +10,7 @@
 #' @return list containing values which the data will be downsampled at, in ascending order
 
 downsampling_range <- function(SCE,
-                               sampled = c("individuals", "cells"),
+                               sampled="individuals",
                                sampleID="Donor.ID"){
 
     # get list of sample IDs
