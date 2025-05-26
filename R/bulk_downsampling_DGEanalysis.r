@@ -48,8 +48,6 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
             if(!is.na(celltype_name)){
                 # subset dataset
                 dataset1 <- dataset[, colData(dataset)[[celltypeIDs[[idx]]]] == celltype_name]
-
-
                 # get maximum down-sampling range based on individuals or cells
                 if (sampled == "individuals") {
                     num_units <- length(unique(colData(dataset1)[[sampleIDs[[idx]]]]))
