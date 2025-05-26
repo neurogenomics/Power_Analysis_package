@@ -1,7 +1,7 @@
 pandoc: 3.6.4
-pkgdown: 2.1.2
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   power_analysis: power_analysis.html
   validation_analysis: validation_analysis.html
-last_built: 2025-05-24T14:26Z
+last_built: 2025-05-26T02:29Z
