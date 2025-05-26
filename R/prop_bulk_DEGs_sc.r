@@ -124,7 +124,7 @@ prop_bulk_DEGs_sc <- function(bulkDE,
     x_label <- if (sampled == "individuals") {
         "Number of samples"
     } else {
-        "Number of cells per samples"
+        "Mean number of cells per sample"
     }
 
     # create and return plot
