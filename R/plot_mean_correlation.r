@@ -66,9 +66,13 @@ plot_mean_correlation <- function(main_dataset,
         print(paste0("Creating ", N_subsets, " independent subsets of the main dataset..."))
         rand_subsets <- subset_pairs(SCEs[[idx_main]], sampleID=sampleIDs[[idx_main]], Noutputs=N_subsets)
         for(i in seq_along(rand_subsets)){
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_subsets[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i)))
+            subset_1 <- rand_subsets[[i]][[1]]
+            subset_2 <- rand_subsets[[i]][[2]]
+            # run DGE analysis for each subset pair
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_subsets[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "a")))
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_subsets[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "b")))
+            dataset_names <- c(dataset_names, paste0(main_dataset, "_RandSubset_", i, "a"), paste0(main_dataset, "_RandSubset_", i, "b"))
         }
-        dataset_names <- c(dataset_names, paste0(main_dataset, "_RandSubset_", seq_len(N_subsets)))
     }
 
     # loop over each p-value
