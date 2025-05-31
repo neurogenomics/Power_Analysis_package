@@ -9,15 +9,17 @@ plot_mean_correlation(
   SCEs,
   sampleIDs,
   celltypeIDs,
-  pvals,
   celltype_correspondence,
   dataset_names,
+  N_randperms = 5,
+  N_subsets = 5,
+  pvals = c(0.05, 0.025, 0.01, 0.001, 1e-04),
   sex_DEGs = FALSE,
   output_path = getwd()
 )
 }
 \arguments{
-\item{main_dataset}{name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)}
+\item{main_dataset}{name of the dataset used to select significant DEGs from, and for which random permutations and subset pairs will be created (to be specified as a string, name as in dataset_names)}
 
 \item{SCEs}{list of the input data (elements should be SCE objects)}
 
@@ -25,11 +27,15 @@ plot_mean_correlation(
 
 \item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
-\item{pvals}{the cut-off p-value which will be used to select DEGs}
-
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
 \item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
+
+\item{N_randperms}{number of random permutations of the dataset to be created}
+
+\item{N_subsets}{number of pairs of random subsets of the dataset to be created}
+
+\item{pvals}{the cut-off p-value which will be used to select DEGs}
 
 \item{sex_DEGs}{If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.}
 

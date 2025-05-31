@@ -51,62 +51,45 @@ correlation_boxplots <- function(corr_mats,
     for(pval in pvals){
         # midCor submatrix limits
         midCorLim <- N_randperms + num_real_datasets
-        # list to hold results
-        corrOuts <- c()
+        # correlation matrix for this p-value
+        corr_mats_pval <- corr_mats[[as.character(pval)]]
+        # df to hold results
+        df <- data.frame()
         # index
         j <- 1
 
         # get lists with all correlations
-        if(length(corr_mats) > 0){
-            for(corrMat in corr_mats){
-                if (!is.matrix(corrMat) || length(dim(corrMat)) != 2) {
-                    print("Invalid correlation matrix encountered - skipping.")
-                    next
-                }
-                # specify submatrices with upper/middle/lower bounds
-                lower <- corrMat[1:N_randperms,1:N_randperms]
-                middle <- corrMat[(N_randperms+1):midCorLim,(N_randperms+1):midCorLim]
-                upper <- corrMat[(midCorLim+1):(midCorLim+N_subsets),(midCorLim+1):(midCorLim+N_subsets)]
-                # convert each one to a list and remove "1" (selfcorrelation)
-                lower <- unique(unlist(as.list(lower)))
-                lower <- lower[-c(1)]
-                middle <- unique(unlist(as.list(middle)))
-                middle <- middle[-c(1)]
-                upper <- unique(unlist(as.list(upper)))
-                upper <- upper[-c(1)]
-                # store in list
-                corrOuts[[j]] <- list(lower,middle,upper)
-                names(corrOuts)[[j]] <- names(corr_mats)[[j]]
-                # increment
-                j <- j+1
+        for(celltype in names(corr_mats_pval)){
+            # skip if invalid matrix
+            corrMat <- corr_mats_pval[[celltype]]
+            # check if corrMat is a valid matrix
+            if (!is.matrix(corrMat) || length(dim(corrMat)) != 2) {
+                warning(paste0("Invalid correlation matrix for cell type ", celltype, " at p-value ", pval, ". Skipping."))
+                next
             }
-        }else{
-            # if no correlation matrices are provided, create empty lists
-            corrOuts <- list()
+            # specify submatrices with upper/middle/lower bounds
+            lower <- corrMat[1:N_randperms,1:N_randperms]
+            middle <- corrMat[(N_randperms+1):midCorLim,(N_randperms+1):midCorLim]
+            upper <- corrMat[(midCorLim+1):(midCorLim+N_subsets),(midCorLim+1):(midCorLim+N_subsets)]
+            # convert each one to a list and remove "1" (self-correlation)
+            lower <- unique(unlist(as.list(lower)))
+            lower <- lower[-c(1)]
+            middle <- unique(unlist(as.list(middle)))
+            middle <- middle[-c(1)]
+            upper <- unique(unlist(as.list(upper)))
+            upper <- upper[-c(1)]
+            # variables for df
+            var1 <- replicate(length(lower) + length(middle) + length(upper), celltype)
+            var2 <- c(replicate(length(lower), "Random Permutations"), replicate(length(middle), "Between Study"), replicate(length(upper), "Within-study subsamples"))
+            val <- c(lower, middle, upper)
+            # create a new dataframe for the current cell type
+            df_new <- data.frame(var1 = var1, var2 = var2, val = val)
+            # append to the main dataframe
+            df <- rbind(df, df_new)
         }
-        # store in dataframe
-        i <- 1
-        # empty dataframe
-        df <- data.frame()
-        if(length(corrOuts > 0)){
-            # fill dataframe
-            for(out in corrOuts){
-                # define variables
-                var1 <- replicate(length(out[[1]])+length(out[[2]])+length(out[[3]]), names(corrOuts)[[i]]) #celltype
-                var2 <- c(replicate(length(out[[1]]),"Random Permutations"),replicate(length(out[[2]]),"Between Study"),replicate(length(out[[3]]),"Within-study subsamples"))
-                val <- unlist(out)
-                # put in dataframe
-                df_new <- data.frame(var1=var1, var2=var2, val=val)
-                # join
-                df <- rbind(df,df_new)
-                i <- i+1
-            }
-        }else{
-            # if no correlation matrices are provided, create empty dataframe
-            df <- data.frame(var1=character(), var2=character(), val=numeric())
-        }
+        # add alpha col.
         df$alpha <- replicate(dim(df)[[1]],alphaval)
-        df$alpha <- ifelse(df$var1=="Mean", 1, ifelse(df$var1!="Mean",alphaval,alphaval))
+        df$alpha <- ifelse(df$var1=="Mean", 1, alphaval)
         unique_alphas <- df[!duplicated(df[,c("var1")]),]$alpha
 
         # check if df is valid (non-empty and contains required columns)
@@ -117,88 +100,30 @@ correlation_boxplots <- function(corr_mats,
         # levels
         unique_levels <- unique(df$var1)
         unique_levels <- c("Mean", setdiff(unique_levels, "Mean"))  # ensure "Mean" is always first
+        # title
+        plt_title <- ifelse(pval==1 && sex_DEGs==FALSE, "Using all DEGs (from all chromosomes)",
+                     ifelse(pval==1 && sex_DEGs==TRUE, "Using all DEGs (from sex chromosomes)",
+                     ifelse(pval!=1 && sex_DEGs==FALSE, paste0("DEGs selected at a ", pval*100, "% cut-off (from all chromosomes)"),
+                     ifelse(pval!=1 && sex_DEGs==TRUE, paste0("DEGs selected at a ", pval*100, "% cut-off (from sex chromosomes)")))))
         # box plot
-        if(pval == 1){
-            if(sex_DEGs == FALSE){
-                fig.plot <- ggplot(df,
-                    aes(x=factor(var1,levels=unique_levels),y=val))+
-                    geom_boxplot(outlier.shape=NA,aes(fill=factor(var1,levels=unique_levels),alpha=alpha),width=5)+
-                    theme_cowplot()+
-                    scale_colour_brewer(palette = "Set1")+
-                    labs(y="Correlation", x="Type", fill="Cell Type",title=paste0("Using all DEGs (from all chromosomes)"))+
-                    facet_wrap(factor(df$var2,levels=c("Random Permutations","Between Study","Within-study subsamples")), scales="fixed")+
-                    theme(axis.title.x=element_blank(),
-                        axis.text.x=element_blank(),
-                        axis.ticks.x=element_blank(),
-                        axis.title.y = element_text(size = fontsize_yaxislabels),
-                        axis.text.y = element_text(size = fontsize_yaxisticks),
-                        plot.title = element_text(size = fontsize_title),
-                        legend.text = element_text(size = fontsize_legendlabels),
-                        legend.title = element_text(size = fontsize_legendtitle),
-                        strip.text = element_text(size = fontsize_facet_labels))+
-                    scale_alpha(guide = 'none')+
-                    guides(fill=guide_legend(override.aes = list(alpha=unique_alphas)))
-            }else{
-                fig.plot <- ggplot(df,
-                    aes(x=factor(var1,levels=unique_levels),y=val))+
-                    geom_boxplot(outlier.shape=NA,aes(fill=factor(var1,levels=unique_levels),alpha=alpha),width=5)+
-                    theme_cowplot()+
-                    scale_colour_brewer(palette = "Set1")+
-                    labs(y="Correlation", x="Type", fill="Cell Type",title=paste0("Using all DEGs (from sex chromosomes)"))+
-                    facet_wrap(factor(df$var2,levels=c("Random Permutations","Between Study","Within-study subsamples")), scales="fixed")+
-                    theme(axis.title.x=element_blank(),
-                        axis.text.x=element_blank(),
-                        axis.ticks.x=element_blank(),
-                        axis.title.y = element_text(size = fontsize_yaxislabels),
-                        axis.text.y = element_text(size = fontsize_yaxisticks),
-                        plot.title = element_text(size = fontsize_title),
-                        legend.text = element_text(size = fontsize_legendlabels),
-                        legend.title = element_text(size = fontsize_legendtitle),
-                        strip.text = element_text(size = fontsize_facet_labels))+
-                    scale_alpha(guide = 'none')+
-                    guides(fill=guide_legend(override.aes = list(alpha=unique_alphas)))
-            }
-        }else{
-            if(sex_DEGs == FALSE){
-                fig.plot <- ggplot(df,
-                    aes(x=factor(var1,levels=unique_levels),y=val))+
-                    geom_boxplot(outlier.shape=NA,aes(fill=factor(var1,levels=unique_levels),alpha=alpha),width=5)+
-                    theme_cowplot()+
-                    scale_colour_brewer(palette = "Set1")+
-                    labs(y="Correlation", x="Type", fill="Cell Type",title=paste0("DEGs selected at a ",pval*100,"% cut-off (from all chromosomes)"))+
-                    facet_wrap(factor(df$var2,levels=c("Random Permutations","Between Study","Within-study subsamples")), scales="fixed")+
-                    theme(axis.title.x=element_blank(),
-                        axis.text.x=element_blank(),
-                        axis.ticks.x=element_blank(),
-                        axis.title.y = element_text(size = fontsize_yaxislabels),
-                        axis.text.y = element_text(size = fontsize_yaxisticks),
-                        plot.title = element_text(size = fontsize_title),
-                        legend.text = element_text(size = fontsize_legendlabels),
-                        legend.title = element_text(size = fontsize_legendtitle),
-                        strip.text = element_text(size = fontsize_facet_labels))+
-                    scale_alpha(guide = 'none')+
-                    guides(fill=guide_legend(override.aes = list(alpha=unique_alphas)))
-            }else{
-                fig.plot <- ggplot(df,
-                    aes(x=factor(var1,levels=unique_levels),y=val))+
-                    geom_boxplot(outlier.shape=NA,aes(fill=factor(var1,levels=unique_levels),alpha=alpha),width=5)+
-                    theme_cowplot()+
-                    scale_colour_brewer(palette = "Set1")+
-                    labs(y="Correlation", x="Type", fill="Cell Type",title=paste0("DEGs selected at a ",pval*100,"% cut-off (from sex chromosomes)"))+
-                    facet_wrap(factor(df$var2,levels=c("Random Permutations","Between Study","Within-study subsamples")), scales="fixed")+
-                    theme(axis.title.x=element_blank(),
-                        axis.text.x=element_blank(),
-                        axis.ticks.x=element_blank(),
-                        axis.title.y = element_text(size = fontsize_yaxislabels),
-                        axis.text.y = element_text(size = fontsize_yaxisticks),
-                        plot.title = element_text(size = fontsize_title),
-                        legend.text = element_text(size = fontsize_legendlabels),
-                        legend.title = element_text(size = fontsize_legendtitle),
-                        strip.text = element_text(size = fontsize_facet_labels))+
-                    scale_alpha(guide = 'none')+
-                    guides(fill=guide_legend(override.aes = list(alpha=unique_alphas)))
-            }
-        }
+        fig.plot <- ggplot(df,
+            aes(x=factor(var1,levels=unique_levels),y=val))+
+            geom_boxplot(outlier.shape=NA,aes(fill=factor(var1,levels=unique_levels),alpha=alpha),width=5)+
+            theme_cowplot()+
+            scale_colour_brewer(palette = "Set1")+
+            labs(y="Correlation", x="Type", fill="Cell Type",title=plt_title)+
+            facet_wrap(factor(df$var2,levels=c("Random Permutations","Between Study","Within-study subsamples")), scales="fixed")+
+            theme(axis.title.x=element_blank(),
+                axis.text.x=element_blank(),
+                axis.ticks.x=element_blank(),
+                axis.title.y = element_text(size = fontsize_yaxislabels),
+                axis.text.y = element_text(size = fontsize_yaxisticks),
+                plot.title = element_text(size = fontsize_title),
+                legend.text = element_text(size = fontsize_legendlabels),
+                legend.title = element_text(size = fontsize_legendtitle),
+                strip.text = element_text(size = fontsize_facet_labels))+
+            scale_alpha(guide = 'none')+
+            guides(fill=guide_legend(override.aes = list(alpha=unique_alphas)))
 
         # store output in list with p-value as key
         output_plots[[as.character(pval)]] <- fig.plot

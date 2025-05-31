@@ -4,13 +4,15 @@
 #' @importFrom ggplot2 theme element_text
 #' @importFrom utils write.csv
 
-#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)
+#' @param main_dataset name of the dataset used to select significant DEGs from, and for which random permutations and subset pairs will be created (to be specified as a string, name as in dataset_names)
 #' @param SCEs list of the input data (elements should be SCE objects)
 #' @param sampleIDs list or vector of sample IDs (in order of SCEs)
 #' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
-#' @param pvals the cut-off p-value which will be used to select DEGs
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
+#' @param N_randperms number of random permutations of the dataset to be created
+#' @param N_subsets number of pairs of random subsets of the dataset to be created
+#' @param pvals the cut-off p-value which will be used to select DEGs
 #' @param sex_DEGs If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.
 #' @param output_path base path in which outputs will be stored
 
@@ -20,21 +22,23 @@ plot_mean_correlation <- function(main_dataset,
                                   SCEs,
                                   sampleIDs,
                                   celltypeIDs,
-                                  pvals,
                                   celltype_correspondence,
                                   dataset_names,
+                                  N_randperms=5,
+                                  N_subsets=5,
+                                  pvals=c(0.05,0.025,0.01,0.001,0.0001),
                                   sex_DEGs=FALSE,
                                   output_path=getwd()){
 
     # validate function input params
-    validate_input_parameters_correlation(main_dataset=main_dataset, SCEs=SCEs, sampleIDs=sampleIDs, celltypeIDs=celltypeIDs, pvalues=pvals,
-                                          celltype_correspondence=celltype_correspondence, dataset_names=dataset_names, sex_DEGs=sex_DEGs,
-                                          output_path=output_path)
+    validate_input_parameters_correlation(main_dataset=main_dataset, SCEs=SCEs, sampleIDs=sampleIDs, celltypeIDs=celltypeIDs,
+                                          celltype_correspondence=celltype_correspondence, dataset_names=dataset_names, N_randperms=N_randperms,
+                                          N_subsets=N_subsets, pvalues=pvals, sex_DEGs=sex_DEGs, output_path=output_path)
     # outputs
     output_list <- list()
 
     # get DEouts
-    DEouts <- list()
+    DEouts <- list()    
     for(idx in seq_along(SCEs)){
         dataset <- SCEs[[idx]]
         coeff_use <- as.character(sort(unique(colData(dataset)$sex))[[2]])
@@ -43,22 +47,53 @@ plot_mean_correlation <- function(main_dataset,
         DEouts[[idx]] <- DGE_analysis(SCE=dataset, design=~sex, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath)
     }
 
+    # get DE outputs for random permutations and subsets
+    idx_main <- which(dataset_names==main_dataset)
+    if(length(idx_main) == 0){
+        stop("Error: main_dataset not found in dataset_names.")
+    }
+    # get random permutations
+    if(N_randperms > 0){
+        print(paste0("Creating ", N_randperms, " random permutations of the main dataset..."))
+        rand_perms <- random_permutations(SCEs[[idx_main]], sampleID=sampleIDs[[idx_main]], Nrandom_perms=N_randperms)
+        for(i in seq_along(rand_perms)){
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_perms[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randperm_", i)))
+        }
+        dataset_names <- c(dataset_names, paste0(main_dataset, "_RandPerm_", seq_len(N_randperms)))
+    }
+    # get random subsets
+    if(N_subsets > 0){
+        print(paste0("Creating ", N_subsets, " independent subsets of the main dataset..."))
+        rand_subsets <- subset_pairs(SCEs[[idx_main]], sampleID=sampleIDs[[idx_main]], Noutputs=N_subsets)
+        for(i in seq_along(rand_subsets)){
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_subsets[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i)))
+        }
+        dataset_names <- c(dataset_names, paste0(main_dataset, "_RandSubset_", seq_len(N_subsets)))
+    }
+
     # loop over each p-value
     for(pvalue in pvals){
         # list for genes of each celltype at specified p-value
         genes <- list()
         allCorrs <- list()
-        i <- 0
+        i <- 1
         for(celltype in names(celltype_correspondence)){
             # get corresponding cell type names for each dataset
             celltype_names <- celltype_correspondence[[celltype]]
+            # add random permutations and subsets to celltype names
+            if(N_randperms > 0){
+                celltype_names <- c(celltype_names, rep(celltype_names[[idx_main]], N_randperms))
+            }
+            if(N_subsets > 0){
+                celltype_names <- c(celltype_names, rep(celltype_names[[idx_main]], N_subsets))
+            }
             # correlation for each celltype at specified p-value
             corrOut <- plot_celltype_correlation(main_dataset, DEouts, celltype_names, dataset_names, sex_DEGs, pvalue)
-            i <- i+1
             # get correlation matrix for each celltype
-            allCorrs[[i]] <- corrOut[[1]]
+            allCorrs[[celltype]] <- corrOut[[1]]
             # get all present genes for current celltype
             genes[[i]] <- list(corrOut[[4]])
+            i <- i+1
         }
         # total number of unique genes across celltypes
         genes <- unlist(genes)
@@ -70,6 +105,8 @@ plot_mean_correlation <- function(main_dataset,
         if(is.vector(dataset_names)){
             rownames(meanCorr) <- colnames(meanCorr) <- dataset_names
         }
+        # add meanCorr to the list of all correlations
+        allCorrs[["Mean"]] <- meanCorr
 
         # plot correlation matrix
         corr_plot.plot <- ggcorrplot(round(meanCorr,3),
@@ -81,7 +118,7 @@ plot_mean_correlation <- function(main_dataset,
         sig.level=0.05) + theme(plot.title = element_text(hjust = 0.7)) # add/remove type="upper" in ggcorrplot (after hc.order) to get upper triangular/full matrix
 
         # store output in list with p-value as key
-        output_list[[as.character(pvalue)]] <- list(corr_plot = corr_plot.plot, meanCorr = meanCorr)
+        output_list[[as.character(pvalue)]] <- allCorrs
 
         # save the mean correlation matrix
         write.csv(meanCorr, file.path(output_path, paste0("mean_correlation_matrix_p", pvalue, ".csv")))
