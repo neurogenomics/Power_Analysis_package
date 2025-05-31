@@ -49,10 +49,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/power_analysis.html">Get Started</a>
+      <a href="../articles/bulk_analysis.html">Bulk Analysis</a>
     </li>
     <li>
-      <a href="../articles/validation_analysis.html">Validation and Evaluation</a>
+      <a href="../articles/power_analysis.html">Get Started</a>
     </li>
   </ul>
 </li>
@@ -88,7 +88,7 @@ Authors: <i>Yunning Yuan, Salman Fawad, Nathan Skene</i><br>
 Vignette updated: <i>May-31-2025</i><br>
 </h4></h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/vignettes/power_analysis.Rmd" class="external-link"><code>vignettes/power_analysis.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/vignettes/power_analysis.Rmd" class="external-link"><code>vignettes/power_analysis.Rmd</code></a></small>
       <div class="hidden name"><code>power_analysis.Rmd</code></div>
 
     </div>
@@ -113,7 +113,8 @@ SingleCellExperiment (SCE) object.</p>
 <code class="sourceCode R"><span><span class="co"># Load your SCE object (replace with actual file path)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs" class="external-link">qs</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">SCE</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"sce.qs"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">SCE_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Tsai_Micro.qs"</span>, package<span class="op">=</span><span class="st">"poweranalysis"</span><span class="op">)</span></span>
+<span><span class="va">SCE</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="va">SCE_path</span><span class="op">)</span></span></code></pre></div>
 <p>To use the <code>DGE_analysis</code> function, specify the formula
 for comparison along with the pseudobulk ID and celltype ID. The
 function requires the following key arguments:</p>
@@ -178,7 +179,7 @@ function:</p>
 <span>  celltypeID <span class="op">=</span> <span class="st">"cluster_celltype"</span>,</span>
 <span>  Nperms <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>power_analysis</code> function generates several key
-outputs:</p>
+<strong>outputs</strong>:</p>
 <ul>
 <li><p><strong>QC plots</strong> display distributions of effect sizes
 (log2 fold-change) across detected DEGs and the number of cells per
