@@ -69,8 +69,8 @@ plot_mean_correlation <- function(main_dataset,
             subset_1 <- rand_subsets[[i]][[1]]
             subset_2 <- rand_subsets[[i]][[2]]
             # run DGE analysis for each subset pair
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_subsets[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "a")))
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_subsets[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "b")))
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_1, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "a")))
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_2, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "b")))
             dataset_names <- c(dataset_names, paste0(main_dataset, "_RandSubset_", i, "a"), paste0(main_dataset, "_RandSubset_", i, "b"))
         }
     }
