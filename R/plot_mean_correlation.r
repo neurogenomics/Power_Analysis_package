@@ -89,7 +89,7 @@ plot_mean_correlation <- function(main_dataset,
                 celltype_names <- c(celltype_names, rep(celltype_names[[idx_main]], N_randperms))
             }
             if(N_subsets > 0){
-                celltype_names <- c(celltype_names, rep(celltype_names[[idx_main]], N_subsets))
+                celltype_names <- c(celltype_names, rep(celltype_names[[idx_main]], N_subsets*2))
             }
             # correlation for each celltype at specified p-value
             corrOut <- plot_celltype_correlation(main_dataset, DEouts, celltype_names, dataset_names, sex_DEGs, pvalue)
