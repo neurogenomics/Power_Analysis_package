@@ -44,7 +44,7 @@ plot_mean_correlation <- function(main_dataset,
         coeff_use <- as.character(sort(unique(colData(dataset)$sex))[[2]])
         savepath <- file.path(output_path,dataset_names[[idx]])
         print(paste0("Running DGE analysis for ", dataset_names[[idx]], "..."))
-        DEouts[[idx]] <- DGE_analysis(SCE=dataset, design=~sex, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath)
+        DEouts[[idx]] <- DGE_analysis(SCE=dataset, design=~sex, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath, save=TRUE)
     }
 
     # get DE outputs for random permutations and subsets
@@ -57,7 +57,7 @@ plot_mean_correlation <- function(main_dataset,
         print(paste0("Creating ", N_randperms, " random permutations of the main dataset..."))
         rand_perms <- random_permutations(SCEs[[idx_main]], sampleID=sampleIDs[[idx_main]], Nrandom_perms=N_randperms)
         for(i in seq_along(rand_perms)){
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_perms[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randperm_", i)))
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_perms[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randperm_", i)), save=TRUE)
         }
         dataset_names <- c(dataset_names, paste0(main_dataset, "_RandPerm_", seq_len(N_randperms)))
     }
@@ -69,11 +69,22 @@ plot_mean_correlation <- function(main_dataset,
             subset_1 <- rand_subsets[[i]][[1]]
             subset_2 <- rand_subsets[[i]][[2]]
             # run DGE analysis for each subset pair
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_1, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "a")))
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_2, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "b")))
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_1, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "a")), save=TRUE)
+            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_2, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "b")), save=TRUE)
             dataset_names <- c(dataset_names, paste0(main_dataset, "_RandSubset_", i, "a"), paste0(main_dataset, "_RandSubset_", i, "b"))
         }
     }
+
+    # reorder DEouts - random permutations first, then main datasets, then random subset pairs
+    DEouts_random_perms <- DEouts[(length(SCEs) + 1):(length(SCEs) + N_randperms)]
+    DEouts_main <- DEouts[1:length(SCEs)]
+    DEouts_random_subsets <- DEouts[(length(SCEs) + N_randperms + 1):length(DEouts)]
+    DEouts <- c(DEouts_random_perms, DEouts_main, DEouts_random_subsets)
+    # reorder dataset_names
+    dataset_names_random_perms <- dataset_names[(length(SCEs) + 1):(length(SCEs) + N_randperms)]
+    dataset_names_main <- dataset_names[1:length(SCEs)]
+    dataset_names_random_subsets <- dataset_names[(length(SCEs) + N_randperms + 1):length(dataset_names)]
+    dataset_names <- c(dataset_names_random_perms, dataset_names_main, dataset_names_random_subsets)
 
     # loop over each p-value
     for(pvalue in pvals){
@@ -86,7 +97,7 @@ plot_mean_correlation <- function(main_dataset,
             celltype_names <- celltype_correspondence[[celltype]]
             # add random permutations and subsets to celltype names
             if(N_randperms > 0){
-                celltype_names <- c(celltype_names, rep(celltype_names[[idx_main]], N_randperms))
+                celltype_names <- c(rep(celltype_names[[idx_main]], N_randperms), celltype_names)
             }
             if(N_subsets > 0){
                 celltype_names <- c(celltype_names, rep(celltype_names[[idx_main]], N_subsets*2))
