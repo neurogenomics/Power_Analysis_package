@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain the average correlation (across celltypes) at a specified cutoff p-value</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/R/plot_mean_correlation.r" class="external-link"><code>R/plot_mean_correlation.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/plot_mean_correlation.r" class="external-link"><code>R/plot_mean_correlation.r</code></a></small>
     <div class="hidden name"><code>plot_mean_correlation.Rd</code></div>
     </div>
 
@@ -68,9 +68,11 @@
 <span>  <span class="va">SCEs</span>,</span>
 <span>  <span class="va">sampleIDs</span>,</span>
 <span>  <span class="va">celltypeIDs</span>,</span>
-<span>  <span class="va">pvals</span>,</span>
 <span>  <span class="va">celltype_correspondence</span>,</span>
 <span>  <span class="va">dataset_names</span>,</span>
+<span>  N_randperms <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  N_subsets <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  pvals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>, <span class="fl">1e-04</span><span class="op">)</span>,</span>
 <span>  sex_DEGs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -81,7 +83,7 @@
 
 
 <dl><dt id="arg-main-dataset">main_dataset<a class="anchor" aria-label="anchor" href="#arg-main-dataset"></a></dt>
-<dd><p>name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)</p></dd>
+<dd><p>name of the dataset used to select significant DEGs from, and for which random permutations and subset pairs will be created (to be specified as a string, name as in dataset_names)</p></dd>
 
 
 <dt id="arg-sces">SCEs<a class="anchor" aria-label="anchor" href="#arg-sces"></a></dt>
@@ -96,16 +98,24 @@
 <dd><p>list or vector of cell type IDs (in order of SCEs)</p></dd>
 
 
-<dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>
-<dd><p>the cut-off p-value which will be used to select DEGs</p></dd>
-
-
 <dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
 <dd><p>list of different names specifying each cell type</p></dd>
 
 
 <dt id="arg-dataset-names">dataset_names<a class="anchor" aria-label="anchor" href="#arg-dataset-names"></a></dt>
 <dd><p>names of the datasets as they appear in the correlation plot (in order of SCEs)</p></dd>
+
+
+<dt id="arg-n-randperms">N_randperms<a class="anchor" aria-label="anchor" href="#arg-n-randperms"></a></dt>
+<dd><p>number of random permutations of the dataset to be created</p></dd>
+
+
+<dt id="arg-n-subsets">N_subsets<a class="anchor" aria-label="anchor" href="#arg-n-subsets"></a></dt>
+<dd><p>number of pairs of random subsets of the dataset to be created</p></dd>
+
+
+<dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>
+<dd><p>the cut-off p-value which will be used to select DEGs</p></dd>
 
 
 <dt id="arg-sex-degs">sex_DEGs<a class="anchor" aria-label="anchor" href="#arg-sex-degs"></a></dt>
