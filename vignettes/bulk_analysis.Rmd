@@ -25,7 +25,7 @@ This section introduces a validation strategy for scRNA-seq power analysis using
 
 The `bulk_power_analysis` function estimates the power to detect these DEGs across one or more SCE objects, with user-supplied metadata indicating how to identify samples and cell types. Below is an example that demonstrates this analysis using two scRNA-seq datasets, based on downsampling individuals.
 
-```{r bulk-individual, results='hide', message=FALSE, warning=FALSE}
+```{r bulk-individual, results='hide', message=FALSE, warning=FALSE, eval=FALSE}
 library(poweranalysis)
 library(SingleCellExperiment)
 
@@ -50,7 +50,7 @@ celltypeIDs <- c("cluster_celltype","cluster_celltype")
 sampleIDs <- c("sample_id","sample_id")
 
 
-# Output path (must be a clean directory without any folder)
+# Output path (must be a clean directory with no files or subdirectories)
 output_sample <- file.path(getwd(), "bulk_sample")
 if (!dir.exists(output_sample)) {
   dir.create(output_sample, recursive = TRUE)
@@ -76,7 +76,7 @@ bulk_power_analysis(
 
 To assess recovery by down-sampling cells instead of individuals, simply set `sampled = "cells"`:
 
-```{r bulk-cell, results='hide', message=FALSE, warning=FALSE}
+```{r bulk-cell, results='hide', message=FALSE, warning=FALSE, eval=FALSE}
 # Output path (must be a clean directory)
 output_cell <- file.path(getwd(), "bulk_cell")
 if (!dir.exists(output_cell)) {
@@ -100,11 +100,11 @@ bulk_power_analysis(
 The **output** displays the percentage of PTP DEGs from the bulk data that are detected across all cell types at different down-sampling levels of the scRNA-seq datasets. <br>
 
 Down-sampling individuals: <br>
-```{r, echo=FALSE, out.width="100%"}
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
 knitr::include_graphics("bulk_sample/prop_bulk_DEGs_sc.png")
 ```
 
 Down-sampling cells: <br>
-```{r, echo=FALSE, out.width="100%"}
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
 knitr::include_graphics("bulk_cell/prop_bulk_DEGs_sc.png")
 ```
