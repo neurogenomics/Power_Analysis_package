@@ -89,19 +89,23 @@ correlation_analysis <- function(main_dataset,
                                                       sex_DEGs=sex_DEGs,
                                                       output_path=output_path)
 
-    # run correlation_boxplots for each p-value (saving outputs)
-    correlation_boxplots(mean_correlation_results,
-                         num_real_datasets=length(SCEs),
-                         pvals=pvals,
-                         N_randperms=N_randperms,
-                         N_subsets=N_subsets,
-                         sex_DEGs=sex_DEGs,
-                         fontsize_yaxislabels=fontsize_yaxislabels,
-                         fontsize_yaxisticks=fontsize_yaxisticks,
-                         fontsize_title=fontsize_title,
-                         fontsize_legendlabels=fontsize_legendlabels,
-                         fontsize_legendtitle=fontsize_legendtitle,
-                         fontsize_facet_labels=fontsize_facet_labels,
-                         output_path=output_path)
+    # run correlation_boxplots for each p-value (saving outputs), unless only one SCE
+    if(length(SCEs) == 1){
+        print("Only one SCE provided, skipping correlation boxplots")
+    }else{
+        correlation_boxplots(mean_correlation_results,
+                             num_real_datasets=length(SCEs),
+                             pvals=pvals,
+                             N_randperms=N_randperms,
+                             N_subsets=N_subsets,
+                             sex_DEGs=sex_DEGs,
+                             fontsize_yaxislabels=fontsize_yaxislabels,
+                             fontsize_yaxisticks=fontsize_yaxisticks,
+                             fontsize_title=fontsize_title,
+                             fontsize_legendlabels=fontsize_legendlabels,
+                             fontsize_legendtitle=fontsize_legendtitle,
+                             fontsize_facet_labels=fontsize_facet_labels,
+                             output_path=output_path)
+    }
 
 }

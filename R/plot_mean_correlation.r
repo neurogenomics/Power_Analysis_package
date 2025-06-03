@@ -1,3 +1,6 @@
+# Define global variables
+utils::globalVariables(c("DEout"))
+
 #' Obtain the average correlation (across celltypes) at a specified cutoff p-value
 
 #' @importFrom ggcorrplot ggcorrplot
