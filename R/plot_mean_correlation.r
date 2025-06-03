@@ -44,7 +44,13 @@ plot_mean_correlation <- function(main_dataset,
         coeff_use <- as.character(sort(unique(colData(dataset)$sex))[[2]])
         savepath <- file.path(output_path,dataset_names[[idx]])
         print(paste0("Running DGE analysis for ", dataset_names[[idx]], "..."))
-        DEouts[[idx]] <- DGE_analysis(SCE=dataset, design=~sex, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath, save=TRUE)
+        if(!"DEout.RData" %in% list.files(savepath)){
+            # run and save DE analysis
+            DEouts[[idx]] <- DGE_analysis(SCE=dataset, design=~sex, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath, save=TRUE)
+        }else{
+            load(file.path(savepath,"DEout.RData"))
+            DEouts[[idx]] <- DEout
+        }
     }
 
     # get DE outputs for random permutations and subsets
@@ -57,7 +63,14 @@ plot_mean_correlation <- function(main_dataset,
         print(paste0("Creating ", N_randperms, " random permutations of the main dataset..."))
         rand_perms <- random_permutations(SCEs[[idx_main]], sampleID=sampleIDs[[idx_main]], Nrandom_perms=N_randperms)
         for(i in seq_along(rand_perms)){
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_perms[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randperm_", i)), save=TRUE)
+            savepath <- file.path(output_path, paste0(main_dataset,"_randperm_", i))
+            if(!"DEout.RData" %in% list.files(savepath)){
+                coeff_use <- as.character(sort(unique(colData(rand_perms[[i]])$sex))[[2]])
+                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_perms[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=savepath, save=TRUE)
+            }else{
+                load(file.path(savepath,"DEout.RData"))
+                DEouts[[length(DEouts)+1]] <- DEout
+            }
         }
         dataset_names <- c(dataset_names, paste0(main_dataset, "_RandPerm_", seq_len(N_randperms)))
     }
@@ -66,11 +79,20 @@ plot_mean_correlation <- function(main_dataset,
         print(paste0("Creating ", N_subsets, " independent subsets of the main dataset..."))
         rand_subsets <- subset_pairs(SCEs[[idx_main]], sampleID=sampleIDs[[idx_main]], Noutputs=N_subsets)
         for(i in seq_along(rand_subsets)){
-            subset_1 <- rand_subsets[[i]][[1]]
-            subset_2 <- rand_subsets[[i]][[2]]
-            # run DGE analysis for each subset pair
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_1, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "a")), save=TRUE)
-            DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_2, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=file.path(output_path, paste0(main_dataset,"_randsubset_", i, "b")), save=TRUE)
+            savepath_a <- file.path(output_path, paste0(main_dataset,"_randsubset_", i, "a"))
+            savepath_b <- file.path(output_path, paste0(main_dataset,"_randsubset_", i, "b"))
+            if("DEout.RData" %in% list.files(savepath_a) && "DEout.RData" %in% list.files(savepath_b)){
+                load(file.path(savepath_a,"DEout.RData"))
+                DEouts[[length(DEouts)+1]] <- DEout
+                load(file.path(savepath_b,"DEout.RData"))
+                DEouts[[length(DEouts)+1]] <- DEout
+            }else{
+                subset_1 <- rand_subsets[[i]][[1]]
+                subset_2 <- rand_subsets[[i]][[2]]
+                coeff_use <- as.character(sort(unique(colData(subset_1)$sex))[[2]])
+                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_1, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=savepath_a, save=TRUE)
+                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_2, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=savepath_b, save=TRUE)
+            }
             dataset_names <- c(dataset_names, paste0(main_dataset, "_RandSubset_", i, "a"), paste0(main_dataset, "_RandSubset_", i, "b"))
         }
     }
