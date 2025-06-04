@@ -5,8 +5,8 @@
 #' @param sampleIDs list or vector of sample IDs (in order of SCEs)
 #' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
 #' @param celltype_correspondence list of different names specifying each cell type
-#' @param pvals list of p-value cut-offs which will be used to select DEGs
 #' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
+#' @param pvals list of p-value cut-offs which will be used to select DEGs
 #' @param alphaval (alpha) transparency of the non-mean boxplots
 #' @param N_randperms number of random permutations of the dataset used to select significant DEGs from
 #' @param N_subsets number of pairs of random subsets of the dataset used to select significant DEGs from
