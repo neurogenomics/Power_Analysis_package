@@ -31,7 +31,7 @@ bulk_power_analysis(
 
 \item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., \code{"Endo"}, \code{"Micro"}) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
-\item{output_path}{A directory path where down-sampled outputs and plots will be saved.}
+\item{output_path}{A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).}
 
 \item{celltypeIDs}{A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).}
 
@@ -41,23 +41,23 @@ bulk_power_analysis(
 
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset (e.g., \code{LFSR.tsv}): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
-\item{bulk_cutoff}{Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues).}
+\item{bulk_cutoff}{Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues).}
 
-\item{pvalue}{Numeric. P-value threshold for defining DEGs in the bulk dataset.}
+\item{pvalue}{P-value threshold for defining DEGs in the bulk dataset.}
 
-\item{Nperms}{Number of permutations to perform for each down-sampling level. Default is 20; for quick testing, use a smaller value (e.g., \code{Nperms = 3}).}
+\item{Nperms}{Number of permutations to perform for each down-sampling level. Default is 20.}
 
-\item{fontsize_axislabels}{font size for axis labels in plot}
+\item{fontsize_axislabels}{Font size for axis labels in plot}
 
-\item{fontsize_axisticks}{font size for axis tick labels in plot}
+\item{fontsize_axisticks}{Font size for axis tick labels in plot}
 
-\item{fontsize_title}{font size for plot title}
+\item{fontsize_title}{Font size for plot title}
 
-\item{fontsize_legendlabels}{font size for legend labels in plot}
+\item{fontsize_legendlabels}{Font size for legend labels in plot}
 
-\item{fontsize_legendtitle}{font size for legend title in plot}
+\item{fontsize_legendtitle}{Font size for legend title in plot}
 
-\item{plot_title}{plot title
+\item{plot_title}{Plot title
 Saves all plots in the appropriate directories}
 }
 \description{

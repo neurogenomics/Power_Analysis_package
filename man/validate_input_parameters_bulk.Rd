@@ -27,43 +27,43 @@ validate_input_parameters_bulk(
 )
 }
 \arguments{
-\item{SCEs}{list of the input data (elements should be SCE objects)}
+\item{SCEs}{A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.}
 
-\item{dataset_names}{list of the names of the datasets (as you would like them to appear in the "output_path" directory)}
+\item{dataset_names}{A vector of names corresponding to each dataset (as you would like them to appear in output plots).}
 
 \item{celltype}{the cell type we are focusing on (name as it appears in cell type sub-directory name)}
 
-\item{celltype_correspondence}{list of different names specifying each cell type}
+\item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., \code{"Endo"}, \code{"Micro"}) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
-\item{output_path}{path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis}
+\item{output_path}{A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).}
 
 \item{range_downsampled}{vector or list containing values which the data will be downsampled at, in ascending order}
 
-\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
+\item{celltypeIDs}{A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).}
 
-\item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
+\item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.}
 
-\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
+\item{sampleIDs}{A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).}
 
-\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
+\item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset (e.g., \code{LFSR.tsv}): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
-\item{bulk_cutoff}{percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset}
+\item{bulk_cutoff}{Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues).}
 
-\item{pvalue}{the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)}
+\item{pvalue}{P-value threshold for defining DEGs in the bulk dataset.}
 
-\item{Nperms}{number of permutations of DGE analysis outputs for each sample}
+\item{Nperms}{Number of permutations to perform for each down-sampling level. Default is 20.}
 
-\item{fontsize_axislabels}{font size for axis labels in plot}
+\item{fontsize_axislabels}{Font size for axis labels in plot}
 
-\item{fontsize_axisticks}{font size for axis tick labels in plot}
+\item{fontsize_axisticks}{Font size for axis tick labels in plot}
 
-\item{fontsize_title}{font size for plot title}
+\item{fontsize_title}{Font size for plot title}
 
-\item{fontsize_legendlabels}{font size for legend labels in plot}
+\item{fontsize_legendlabels}{Font size for legend labels in plot}
 
-\item{fontsize_legendtitle}{font size for legend title in plot}
+\item{fontsize_legendtitle}{Font size for legend title in plot}
 
-\item{plot_title}{plot title
+\item{plot_title}{Plot title
 Checks all bulk analysis parameters are specified correctly}
 }
 \description{

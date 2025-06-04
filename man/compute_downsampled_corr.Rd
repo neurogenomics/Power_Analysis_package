@@ -9,7 +9,7 @@ compute_downsampled_corr(allstudies, sampled = "individuals")
 \arguments{
 \item{allstudies}{a list containing DGE analysis outputs (subset to "celltype_all_genes" and the specified cell type) at each down-sampled point}
 
-\item{sampled}{downsampling carried out based on what (either "individuals" or "cells")}
+\item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.}
 }
 \value{
 correlation matrix, plot and the number of DEGs at the specified p-value
