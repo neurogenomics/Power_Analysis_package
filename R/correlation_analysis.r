@@ -30,8 +30,8 @@
 #'                                 ...)
 #'# E.g.
 #'celltype_correspondence <- list("Microglia" = c("micro", "microglial cells", "Micro"),
-#'                                "Astrocytes" = c("Astrocytes", "astro"),
-#'                                "Oligodendrocytes" = c("oligo", "Oligodendrocytes"))
+#'                                "Astrocytes" = c("Astrocytes", "astro", NA),
+#'                                "Oligodendrocytes" = c("oligo", "Oligodendrocytes", NA))
 #'
 #' # Runnable example with bundled data
 #' # 1. Prepare DGE
