@@ -5,8 +5,8 @@
 #' @param sampleIDs list or vector of sample IDs (in order of SCEs)
 #' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
 #' @param celltype_correspondence list of different names specifying each cell type
-#' @param pvals list of p-value cut-offs which will be used to select DEGs
 #' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
+#' @param pvals list of p-value cut-offs which will be used to select DEGs
 #' @param alphaval (alpha) transparency of the non-mean boxplots
 #' @param N_randperms number of random permutations of the dataset used to select significant DEGs from
 #' @param N_subsets number of pairs of random subsets of the dataset used to select significant DEGs from
@@ -30,8 +30,8 @@
 #'                                 ...)
 #'# E.g.
 #'celltype_correspondence <- list("Microglia" = c("micro", "microglial cells", "Micro"),
-#'                                "Astrocytes" = c("Astrocytes", "astro"),
-#'                                "Oligodendrocytes" = c("oligo", "Oligodendrocytes"))
+#'                                "Astrocytes" = c("Astrocytes", "astro", NA),
+#'                                "Oligodendrocytes" = c("oligo", "Oligodendrocytes", NA))
 #'
 #' # Runnable example with bundled data
 #' # 1. Prepare DGE
@@ -62,8 +62,8 @@ correlation_analysis <- function(main_dataset,
                                  sampleIDs,
                                  celltypeIDs,
                                  celltype_correspondence,
+                                 dataset_names,
                                  pvals=c(0.05,0.025,0.01,0.001,0.0001),
-                                 dataset_names="placeholder",
                                  alphaval=0.25,
                                  N_randperms=5,
                                  N_subsets=5,
@@ -87,19 +87,23 @@ correlation_analysis <- function(main_dataset,
                                                       sex_DEGs=sex_DEGs,
                                                       output_path=output_path)
 
-    # run correlation_boxplots for each p-value (saving outputs)
-    correlation_boxplots(mean_correlation_results,
-                         num_real_datasets=length(SCEs),
-                         pvals=pvals,
-                         N_randperms=N_randperms,
-                         N_subsets=N_subsets,
-                         sex_DEGs=sex_DEGs,
-                         fontsize_yaxislabels=fontsize_yaxislabels,
-                         fontsize_yaxisticks=fontsize_yaxisticks,
-                         fontsize_title=fontsize_title,
-                         fontsize_legendlabels=fontsize_legendlabels,
-                         fontsize_legendtitle=fontsize_legendtitle,
-                         fontsize_facet_labels=fontsize_facet_labels,
-                         output_path=output_path)
+    # run correlation_boxplots for each p-value (saving outputs), unless only one SCE
+    if(length(SCEs) == 1){
+        print("Only one SCE provided, skipping correlation boxplots")
+    }else{
+        correlation_boxplots(mean_correlation_results,
+                             num_real_datasets=length(SCEs),
+                             pvals=pvals,
+                             N_randperms=N_randperms,
+                             N_subsets=N_subsets,
+                             sex_DEGs=sex_DEGs,
+                             fontsize_yaxislabels=fontsize_yaxislabels,
+                             fontsize_yaxisticks=fontsize_yaxisticks,
+                             fontsize_title=fontsize_title,
+                             fontsize_legendlabels=fontsize_legendlabels,
+                             fontsize_legendtitle=fontsize_legendtitle,
+                             fontsize_facet_labels=fontsize_facet_labels,
+                             output_path=output_path)
+    }
 
 }

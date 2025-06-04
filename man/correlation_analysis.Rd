@@ -10,8 +10,8 @@ correlation_analysis(
   sampleIDs,
   celltypeIDs,
   celltype_correspondence,
+  dataset_names,
   pvals = c(0.05, 0.025, 0.01, 0.001, 1e-04),
-  dataset_names = "placeholder",
   alphaval = 0.25,
   N_randperms = 5,
   N_subsets = 5,
@@ -36,9 +36,9 @@ correlation_analysis(
 
 \item{celltype_correspondence}{list of different names specifying each cell type}
 
-\item{pvals}{list of p-value cut-offs which will be used to select DEGs}
-
 \item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
+
+\item{pvals}{list of p-value cut-offs which will be used to select DEGs}
 
 \item{alphaval}{(alpha) transparency of the non-mean boxplots}
 
