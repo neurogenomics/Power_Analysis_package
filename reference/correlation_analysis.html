@@ -69,8 +69,8 @@
 <span>  <span class="va">sampleIDs</span>,</span>
 <span>  <span class="va">celltypeIDs</span>,</span>
 <span>  <span class="va">celltype_correspondence</span>,</span>
+<span>  <span class="va">dataset_names</span>,</span>
 <span>  pvals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>, <span class="fl">1e-04</span><span class="op">)</span>,</span>
-<span>  dataset_names <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  alphaval <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  N_randperms <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  N_subsets <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -109,12 +109,12 @@
 <dd><p>list of different names specifying each cell type</p></dd>
 
 
-<dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>
-<dd><p>list of p-value cut-offs which will be used to select DEGs</p></dd>
-
-
 <dt id="arg-dataset-names">dataset_names<a class="anchor" aria-label="anchor" href="#arg-dataset-names"></a></dt>
 <dd><p>names of the datasets as they appear in the correlation plot (in order of SCEs)</p></dd>
+
+
+<dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>
+<dd><p>list of p-value cut-offs which will be used to select DEGs</p></dd>
 
 
 <dt id="arg-alphaval">alphaval<a class="anchor" aria-label="anchor" href="#arg-alphaval"></a></dt>
