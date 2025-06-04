@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain overall percentage overlap between DEGs from bulk data (DE across all tissues) and various scRNA-seq datasets, across all common cell types</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/prop_bulk_DEGs_sc.r" class="external-link"><code>R/prop_bulk_DEGs_sc.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/R/prop_bulk_DEGs_sc.r" class="external-link"><code>R/prop_bulk_DEGs_sc.r</code></a></small>
     <div class="hidden name"><code>prop_bulk_DEGs_sc.Rd</code></div>
     </div>
 
@@ -87,11 +87,11 @@
 
 
 <dt id="arg-bulk-cutoff">bulk_cutoff<a class="anchor" aria-label="anchor" href="#arg-bulk-cutoff"></a></dt>
-<dd><p>Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).</p></dd>
+<dd><p>Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).</p></dd>
 
 
 <dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
-<dd><p>Numeric. P-value threshold for defining DEGs in the bulk dataset.</p></dd>
+<dd><p>P-value threshold for defining DEGs in the bulk dataset.</p></dd>
 
 
 <dt id="arg-sampled">sampled<a class="anchor" aria-label="anchor" href="#arg-sampled"></a></dt>
@@ -99,32 +99,32 @@
 
 
 <dt id="arg-fontsize-axislabels">fontsize_axislabels<a class="anchor" aria-label="anchor" href="#arg-fontsize-axislabels"></a></dt>
-<dd><p>font size for axis labels in plot</p></dd>
+<dd><p>Font size for axis labels in plot</p></dd>
 
 
 <dt id="arg-fontsize-axisticks">fontsize_axisticks<a class="anchor" aria-label="anchor" href="#arg-fontsize-axisticks"></a></dt>
-<dd><p>font size for axis tick labels in plot</p></dd>
+<dd><p>Font size for axis tick labels in plot</p></dd>
 
 
 <dt id="arg-fontsize-title">fontsize_title<a class="anchor" aria-label="anchor" href="#arg-fontsize-title"></a></dt>
-<dd><p>font size for plot title</p></dd>
+<dd><p>Font size for plot title</p></dd>
 
 
 <dt id="arg-fontsize-legendlabels">fontsize_legendlabels<a class="anchor" aria-label="anchor" href="#arg-fontsize-legendlabels"></a></dt>
-<dd><p>font size for legend labels in plot</p></dd>
+<dd><p>Font size for legend labels in plot</p></dd>
 
 
 <dt id="arg-fontsize-legendtitle">fontsize_legendtitle<a class="anchor" aria-label="anchor" href="#arg-fontsize-legendtitle"></a></dt>
-<dd><p>font size for legend title in plot</p></dd>
+<dd><p>Font size for legend title in plot</p></dd>
 
 
 <dt id="arg-plot-title">plot_title<a class="anchor" aria-label="anchor" href="#arg-plot-title"></a></dt>
-<dd><p>plot title</p></dd>
+<dd><p>Plot title
+Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory</p></dd>
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><p>A directory path where down-sampled outputs and diagnostic plots will be saved.
-Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory</p></dd>
+<dd><p>A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).</p></dd>
 
 </dl></div>
 

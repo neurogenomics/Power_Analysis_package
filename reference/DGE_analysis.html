@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/DGE_analysis.R" class="external-link"><code>R/DGE_analysis.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/R/DGE_analysis.R" class="external-link"><code>R/DGE_analysis.R</code></a></small>
     <div class="hidden name"><code>DGE_analysis.Rd</code></div>
     </div>
 
@@ -86,59 +86,59 @@
 
 
 <dl><dt id="arg-sce">SCE<a class="anchor" aria-label="anchor" href="#arg-sce"></a></dt>
-<dd><p>SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments. A location of an R, rds or qs file to be loaded can also be passed. If using R objects make sure SCE object saved with the name SCE</p></dd>
+<dd><p>A <code>SingleCellExperiment</code> object representing the input scRNA-seq data. You may also provide a path to an <code>.R</code>, <code>.rds</code>, or <code>.qs</code> file. If using a file, ensure the <code>SCE</code> object inside is named <code>SCE</code>.</p></dd>
 
 
 <dt id="arg-design">design<a class="anchor" aria-label="anchor" href="#arg-design"></a></dt>
-<dd><p>Design formula of class type <code>formula</code>. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease.</p></dd>
+<dd><p>A model formula specifying covariates for differential expression analysis. It should be of class <code>formula</code> (e.g., <code>~ sex + pmi + disease</code>). This formula is used to fit a generalized linear model.</p></dd>
 
 
 <dt id="arg-sampleid">sampleID<a class="anchor" aria-label="anchor" href="#arg-sampleid"></a></dt>
-<dd><p>Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach</p></dd>
+<dd><p>Name of the column in the <code>SCE</code> metadata that identifies biological replicates (e.g., patient ID). This column is used for grouping in the pseudobulk approach.</p></dd>
 
 
 <dt id="arg-celltypeid">celltypeID<a class="anchor" aria-label="anchor" href="#arg-celltypeid"></a></dt>
-<dd><p>Column name in the SCE object for the cell type variable. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will be automatically updated accordingly.</p></dd>
+<dd><p>Name of the column in the <code>SCE</code> metadata indicating cell type labels. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will automatically adjust.</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>Column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logisitc regression) or continuous (linear regression)</p></dd>
+<dd><p>Name of the column in the <code>SCE</code> metadata representing the response variable (e.g., "diagnosis" - case or disease). If not specified, defaults to the last variable in the <code>design</code> formula. Accepts both categorical (logistic regression) and continuous (linear regression) variables.</p></dd>
 
 
 <dt id="arg-region">region<a class="anchor" aria-label="anchor" href="#arg-region"></a></dt>
-<dd><p>Column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.</p></dd>
+<dd><p>Optional column in <code>SCE</code> metadata indicating the tissue or brain region. If present, differential expression is performed within each region separately. Defaults to "single_region" (i.e., no regional split).</p></dd>
 
 
 <dt id="arg-coef">coef<a class="anchor" aria-label="anchor" href="#arg-coef"></a></dt>
-<dd><p>Character specifying which level to investigate for the differential expression analysis e.g. in a case/control study use "case" if case is the identifier in the y column to get positive fold changes to relate to case samples. leave as default value for continuous y. Default is NULL.</p></dd>
+<dd><p>Character string indicating the level of the response variable (<code>y</code>) to test for in differential expression. For case-control studies, this would typically be "case". Typically used in binary comparisons. Not required for continuous outcomes.</p></dd>
 
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
-<dd><p>Character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.</p></dd>
+<dd><p>Optional. Character string specifying the control level in the response variable (<code>y</code>) to compare against. Only required if <code>y</code> contains more than two levels. Ignored for binary or continuous outcomes.</p></dd>
 
 
 <dt id="arg-pval-adjust-method">pval_adjust_method<a class="anchor" aria-label="anchor" href="#arg-pval-adjust-method"></a></dt>
-<dd><p>Adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options</p></dd>
+<dd><p>Method used to adjust p-values for multiple testing. Default is "BH" (Benjamini–Hochberg). See <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">stats::p.adjust</a></code> for available options.</p></dd>
 
 
 <dt id="arg-adj-pval">adj_pval<a class="anchor" aria-label="anchor" href="#arg-adj-pval"></a></dt>
-<dd><p>Adjusted p-value cut-off for the differential expression analysis, 0-1 range</p></dd>
+<dd><p>Adjusted p-value threshold (0–1) used to define significance in the differential expression results.</p></dd>
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><p>Folder where the graphs from the differential expression analysis are saved. Default will create a folder in the current working directory "sc.cell.type.de.graphs". False will skip plotting.</p></dd>
+<dd><p>Directory where output plots from the DE analysis will be saved. If set to <code>FALSE</code>, no plots will be generated. Defaults to a folder named "sc.cell.type.de.graphs" in the working directory.</p></dd>
 
 
 <dt id="arg-rmv-zero-count-genes">rmv_zero_count_genes<a class="anchor" aria-label="anchor" href="#arg-rmv-zero-count-genes"></a></dt>
-<dd><p>Whether genes with no count values in any cell should be removed. Default is TRUE</p></dd>
+<dd><p>Logical. Whether to remove genes with zero counts across all cells. Default is <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical indicating if extra information about the differential expression analysis should be printed</p></dd>
+<dd><p>Logical. Whether to print progress and additional messages during the differential analysis analysis. Default is <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-save">save<a class="anchor" aria-label="anchor" href="#arg-save"></a></dt>
-<dd><p>Whether or not to save the DE analysis results as an RData file. Default is FALSE (down-sampling/power analysis saves these outputs itself)</p></dd>
+<dd><p>Whether to save DE analysis results as an <code>.RData</code> file. Default is <code>FALSE</code>. Note: power analysis and downsampling functions handle saving separately.</p></dd>
 
 </dl></div>
     <div id="value">

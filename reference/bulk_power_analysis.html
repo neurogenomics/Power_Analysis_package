@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Runs entire bulk RNA-seq power analysis pipeline</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/bulk_power_analysis.r" class="external-link"><code>R/bulk_power_analysis.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/R/bulk_power_analysis.r" class="external-link"><code>R/bulk_power_analysis.r</code></a></small>
     <div class="hidden name"><code>bulk_power_analysis.Rd</code></div>
     </div>
 
@@ -101,7 +101,7 @@
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><p>A directory path where down-sampled outputs and plots will be saved.</p></dd>
+<dd><p>A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).</p></dd>
 
 
 <dt id="arg-celltypeids">celltypeIDs<a class="anchor" aria-label="anchor" href="#arg-celltypeids"></a></dt>
@@ -121,39 +121,39 @@
 
 
 <dt id="arg-bulk-cutoff">bulk_cutoff<a class="anchor" aria-label="anchor" href="#arg-bulk-cutoff"></a></dt>
-<dd><p>Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).</p></dd>
+<dd><p>Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).</p></dd>
 
 
 <dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
-<dd><p>Numeric. P-value threshold for defining DEGs in the bulk dataset.</p></dd>
+<dd><p>P-value threshold for defining DEGs in the bulk dataset.</p></dd>
 
 
 <dt id="arg-nperms">Nperms<a class="anchor" aria-label="anchor" href="#arg-nperms"></a></dt>
-<dd><p>Number of permutations to perform for each down-sampling level. Default is 20; for quick testing, use a smaller value (e.g., <code>Nperms = 3</code>).</p></dd>
+<dd><p>Number of permutations to perform for each down-sampling level. Default is 20.</p></dd>
 
 
 <dt id="arg-fontsize-axislabels">fontsize_axislabels<a class="anchor" aria-label="anchor" href="#arg-fontsize-axislabels"></a></dt>
-<dd><p>font size for axis labels in plot</p></dd>
+<dd><p>Font size for axis labels in plot</p></dd>
 
 
 <dt id="arg-fontsize-axisticks">fontsize_axisticks<a class="anchor" aria-label="anchor" href="#arg-fontsize-axisticks"></a></dt>
-<dd><p>font size for axis tick labels in plot</p></dd>
+<dd><p>Font size for axis tick labels in plot</p></dd>
 
 
 <dt id="arg-fontsize-title">fontsize_title<a class="anchor" aria-label="anchor" href="#arg-fontsize-title"></a></dt>
-<dd><p>font size for plot title</p></dd>
+<dd><p>Font size for plot title</p></dd>
 
 
 <dt id="arg-fontsize-legendlabels">fontsize_legendlabels<a class="anchor" aria-label="anchor" href="#arg-fontsize-legendlabels"></a></dt>
-<dd><p>font size for legend labels in plot</p></dd>
+<dd><p>Font size for legend labels in plot</p></dd>
 
 
 <dt id="arg-fontsize-legendtitle">fontsize_legendtitle<a class="anchor" aria-label="anchor" href="#arg-fontsize-legendtitle"></a></dt>
-<dd><p>font size for legend title in plot</p></dd>
+<dd><p>Font size for legend title in plot</p></dd>
 
 
 <dt id="arg-plot-title">plot_title<a class="anchor" aria-label="anchor" href="#arg-plot-title"></a></dt>
-<dd><p>plot title
+<dd><p>Plot title
 Saves all plots in the appropriate directories</p></dd>
 
 </dl></div>

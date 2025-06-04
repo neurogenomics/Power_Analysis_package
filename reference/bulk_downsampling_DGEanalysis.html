@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Downsample the dataset, based either on the individuals or cells, and run DE analysis on each downsampled output. Save results in a dataframe</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/bulk_downsampling_DGEanalysis.r" class="external-link"><code>R/bulk_downsampling_DGEanalysis.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/R/bulk_downsampling_DGEanalysis.r" class="external-link"><code>R/bulk_downsampling_DGEanalysis.r</code></a></small>
     <div class="hidden name"><code>bulk_downsampling_DGEanalysis.Rd</code></div>
     </div>
 
@@ -105,15 +105,15 @@
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><p>A directory path where down-sampled outputs and plots will be saved.</p></dd>
+<dd><p>A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).</p></dd>
 
 
 <dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
-<dd><p>the cut-off p-value used to select DEGs</p></dd>
+<dd><p>P-value threshold for defining DEGs in the bulk dataset.</p></dd>
 
 
 <dt id="arg-nperms">Nperms<a class="anchor" aria-label="anchor" href="#arg-nperms"></a></dt>
-<dd><p>number of permutations of DGE analysis outputs for each sample
+<dd><p>Number of permutations to perform for each down-sampling level. Default is 20.
 Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions</p></dd>
 
 </dl></div>

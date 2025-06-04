@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Collate DEGs detected in DGE analysis outputs, across all celltypes in a dataset (datasets/DGE analysis outputs should have common celltypes as specified below)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/gather_celltype_DEGs.r" class="external-link"><code>R/gather_celltype_DEGs.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/R/gather_celltype_DEGs.r" class="external-link"><code>R/gather_celltype_DEGs.r</code></a></small>
     <div class="hidden name"><code>gather_celltype_DEGs.Rd</code></div>
     </div>
 
@@ -77,15 +77,15 @@
 
 
 <dl><dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
-<dd><p>list of different names specifying each cell type</p></dd>
+<dd><p>A named vector that maps a standard cell type label (e.g., <code>"Endo"</code>, <code>"Micro"</code>) to how that cell type appears in each dataset. Use <code>NA</code> if the cell type is not present in a given dataset.</p></dd>
 
 
 <dt id="arg-pvalue">pvalue<a class="anchor" aria-label="anchor" href="#arg-pvalue"></a></dt>
-<dd><p>the cut-off p-value used to select DEGs</p></dd>
+<dd><p>P-value threshold for defining DEGs in the bulk dataset.</p></dd>
 
 
 <dt id="arg-nperms">Nperms<a class="anchor" aria-label="anchor" href="#arg-nperms"></a></dt>
-<dd><p>number of permutations of DGE analysis outputs for each sample</p></dd>
+<dd><p>Number of permutations to perform for each down-sampling level. Default is 20.</p></dd>
 
 
 <dt id="arg-sampled">sampled<a class="anchor" aria-label="anchor" href="#arg-sampled"></a></dt>
@@ -94,7 +94,7 @@ Saves combined list of DEGs (across all cell types) in a subdirectory inside the
 
 
 <dt id="arg-output-path">output_path<a class="anchor" aria-label="anchor" href="#arg-output-path"></a></dt>
-<dd><p>path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis</p></dd>
+<dd><p>A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).</p></dd>
 
 </dl></div>
 
