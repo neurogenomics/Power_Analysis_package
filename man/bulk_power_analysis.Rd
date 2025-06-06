@@ -2,7 +2,7 @@
 % Please edit documentation in R/bulk_power_analysis.r
 \name{bulk_power_analysis}
 \alias{bulk_power_analysis}
-\title{Runs entire bulk RNA-seq power analysis pipeline}
+\title{Perform cross-dataset power analysis using scRNA-seq and bulk RNA-seq DEG overlap}
 \usage{
 bulk_power_analysis(
   SCEs,
@@ -31,7 +31,7 @@ bulk_power_analysis(
 
 \item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., \code{"Endo"}, \code{"Micro"}) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
-\item{output_path}{A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).}
+\item{output_path}{A clean directory path where DGE analysis outputs of down-sampled datasets and summary plots will be saved (should contain no subdirectories).}
 
 \item{celltypeIDs}{A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).}
 
@@ -41,11 +41,11 @@ bulk_power_analysis(
 
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset (e.g., \code{LFSR.tsv}): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 
-\item{bulk_cutoff}{Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues).}
+\item{bulk_cutoff}{Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90\% of tissues). Default is 0.9.}
 
-\item{pvalue}{P-value threshold for defining DEGs in the bulk dataset.}
+\item{pvalue}{P-value threshold for selecting DEGs in each individual dataset. Default is 0.05.}
 
-\item{Nperms}{Number of permutations to perform for each down-sampling level. Default is 20.}
+\item{Nperms}{Number of subsets (permutations) to generate at each downsampling level during power analysis. Each subset is analyzed independently to estimate variability. Default is 20.}
 
 \item{fontsize_axislabels}{Font size for axis labels in plot}
 
@@ -61,7 +61,7 @@ bulk_power_analysis(
 Saves all plots in the appropriate directories}
 }
 \description{
-Runs entire bulk RNA-seq power analysis pipeline
+Runs the complete bulk RNA-seq-informed power analysis pipeline by performing downsampling-based DEG detection across multiple scRNA-seq datasets, comparing overlaps with bulk RNA-seq DEGs, and generating summary plots for evaluation.
 }
 \examples{
 \dontrun{

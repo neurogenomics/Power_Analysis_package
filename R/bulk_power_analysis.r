@@ -1,16 +1,18 @@
-#' Runs entire bulk RNA-seq power analysis pipeline
+#' Perform cross-dataset power analysis using scRNA-seq and bulk RNA-seq DEG overlap
+#'
+#' Runs the complete bulk RNA-seq-informed power analysis pipeline by performing downsampling-based DEG detection across multiple scRNA-seq datasets, comparing overlaps with bulk RNA-seq DEGs, and generating summary plots for evaluation.
 
 #' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
 #' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
 #' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
-#' @param output_path A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).
+#' @param output_path A clean directory path where DGE analysis outputs of down-sampled datasets and summary plots will be saved (should contain no subdirectories).
 #' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
 #' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
 #' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param bulk_cutoff Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
-#' @param pvalue P-value threshold for defining DEGs in the bulk dataset.
-#' @param Nperms Number of permutations to perform for each down-sampling level. Default is 20.
+#' @param bulk_cutoff Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues). Default is 0.9.
+#' @param pvalue P-value threshold for selecting DEGs in each individual dataset. Default is 0.05.
+#' @param Nperms Number of subsets (permutations) to generate at each downsampling level during power analysis. Each subset is analyzed independently to estimate variability. Default is 20.
 #' @param fontsize_axislabels Font size for axis labels in plot
 #' @param fontsize_axisticks Font size for axis tick labels in plot
 #' @param fontsize_title Font size for plot title

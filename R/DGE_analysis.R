@@ -1,19 +1,21 @@
-#' Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis
+#'  Perform differential expression analysis using a pseudobulk approach on single-cell data
+#'
+#'  Conducts differential gene expression (DGE) analysis across cell types by aggregating single-cell RNA-seq data at the sample level (pseudobulk). This approach accounts for biological replicates and covariates, enabling robust identification of cell type–specific DEGs using generalized linear models. Returns a list of differential expression results for each cell type.
 
 #' @importFrom data.table rbindlist
 #' @importFrom qs qread
 #' @importFrom stats as.formula
 
-#' @param SCE A `SingleCellExperiment` object representing the input scRNA-seq data. You may also provide a path to an `.R`, `.rds`, or `.qs` file. If using a file, ensure the `SCE` object inside is named `SCE`.
+#' @param SCE A `SingleCellExperiment` object containing the input scRNA-seq data. You may also provide a path to an `.R`, `.rds`, or `.qs` file. If using a file, ensure the `SCE` object inside is named `SCE`.
 #' @param design  A model formula specifying covariates for differential expression analysis. It should be of class `formula` (e.g., `~ sex + pmi + disease`). This formula is used to fit a generalized linear model.
 #' @param sampleID Name of the column in the `SCE` metadata that identifies biological replicates (e.g., patient ID). This column is used for grouping in the pseudobulk approach.
 #' @param celltypeID Name of the column in the `SCE` metadata indicating cell type labels. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will automatically adjust.
 #' @param y Name of the column in the `SCE` metadata representing the response variable (e.g., "diagnosis" - case or disease). If not specified, defaults to the last variable in the `design` formula. Accepts both categorical (logistic regression) and continuous (linear regression) variables.
-#' @param coef Character string indicating the level of the response variable (`y`) to test for in differential expression. For case-control studies, this would typically be "case". Typically used in binary comparisons. Not required for continuous outcomes.
+#' @param coef Character string indicating the level of the response variable (`y`) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.
 #' @param region Optional column in `SCE` metadata indicating the tissue or brain region. If present, differential expression is performed within each region separately. Defaults to "single_region" (i.e., no regional split).
 #' @param control  Optional. Character string specifying the control level in the response variable (`y`) to compare against. Only required if `y` contains more than two levels. Ignored for binary or continuous outcomes.
 #' @param pval_adjust_method Method used to adjust p-values for multiple testing. Default is "BH" (Benjamini–Hochberg). See `stats::p.adjust` for available options.
-#' @param adj_pval Adjusted p-value threshold (0–1) used to define significance in the differential expression results.
+#' @param adj_pval Adjusted p-value threshold (0–1) used to define significance in the differential expression results. Default is 0.05.
 #' @param output_path  Directory where output plots from the DE analysis will be saved. If set to `FALSE`, no plots will be generated. Defaults to a folder named "sc.cell.type.de.graphs" in the working directory.
 #' @param verbose Logical. Whether to print progress and additional messages during the differential analysis analysis. Default is `FALSE`.
 #' @param rmv_zero_count_genes Logical. Whether to remove genes with zero counts across all cells. Default is `TRUE`.

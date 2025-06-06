@@ -2,7 +2,7 @@
 % Please edit documentation in R/DGE_analysis.R
 \name{DGE_analysis}
 \alias{DGE_analysis}
-\title{Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis}
+\title{Perform differential expression analysis using a pseudobulk approach on single-cell data}
 \usage{
 DGE_analysis(
   SCE,
@@ -22,7 +22,7 @@ DGE_analysis(
 )
 }
 \arguments{
-\item{SCE}{A \code{SingleCellExperiment} object representing the input scRNA-seq data. You may also provide a path to an \code{.R}, \code{.rds}, or \code{.qs} file. If using a file, ensure the \code{SCE} object inside is named \code{SCE}.}
+\item{SCE}{A \code{SingleCellExperiment} object containing the input scRNA-seq data. You may also provide a path to an \code{.R}, \code{.rds}, or \code{.qs} file. If using a file, ensure the \code{SCE} object inside is named \code{SCE}.}
 
 \item{design}{A model formula specifying covariates for differential expression analysis. It should be of class \code{formula} (e.g., \code{~ sex + pmi + disease}). This formula is used to fit a generalized linear model.}
 
@@ -34,13 +34,13 @@ DGE_analysis(
 
 \item{region}{Optional column in \code{SCE} metadata indicating the tissue or brain region. If present, differential expression is performed within each region separately. Defaults to "single_region" (i.e., no regional split).}
 
-\item{coef}{Character string indicating the level of the response variable (\code{y}) to test for in differential expression. For case-control studies, this would typically be "case". Typically used in binary comparisons. Not required for continuous outcomes.}
+\item{coef}{Character string indicating the level of the response variable (\code{y}) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.}
 
 \item{control}{Optional. Character string specifying the control level in the response variable (\code{y}) to compare against. Only required if \code{y} contains more than two levels. Ignored for binary or continuous outcomes.}
 
 \item{pval_adjust_method}{Method used to adjust p-values for multiple testing. Default is "BH" (Benjamini–Hochberg). See \code{stats::p.adjust} for available options.}
 
-\item{adj_pval}{Adjusted p-value threshold (0–1) used to define significance in the differential expression results.}
+\item{adj_pval}{Adjusted p-value threshold (0–1) used to define significance in the differential expression results. Default is 0.05.}
 
 \item{output_path}{Directory where output plots from the DE analysis will be saved. If set to \code{FALSE}, no plots will be generated. Defaults to a folder named "sc.cell.type.de.graphs" in the working directory.}
 
@@ -57,7 +57,7 @@ celltype_all_genes: list with all genes along with their differential expression
 celltype_counts: vector with the counts of cells after QC in each cell type
 }
 \description{
-Perform differential expression analysis across cell types based on single cell data with Pseudobulk approach. Returns the results of this differential expression analysis
+Conducts differential gene expression (DGE) analysis across cell types by aggregating single-cell RNA-seq data at the sample level (pseudobulk). This approach accounts for biological replicates and covariates, enabling robust identification of cell type–specific DEGs using generalized linear models. Returns a list of differential expression results for each cell type.
 }
 \examples{
 \dontrun{
