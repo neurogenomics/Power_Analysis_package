@@ -82,7 +82,7 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
         if(!dir.exists(output_path)){
             stop("Error: the specified output_path directory does not exist.")
         }
-        if(length(list.dirs(output_path, full.names = FALSE, recursive = FALSE)) > 1){
+        if(length(list.dirs(output_path, full.names = FALSE, recursive = FALSE)) >= 1){
             stop(paste0("Error: The specified output_path directory is not clean (contains subdirectories): '", output_path, "'. Please provide an empty directory."))
         }
     }
