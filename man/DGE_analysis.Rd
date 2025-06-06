@@ -34,7 +34,7 @@ DGE_analysis(
 
 \item{region}{Optional column in \code{SCE} metadata indicating the tissue or brain region. If present, differential expression is performed within each region separately. Defaults to "single_region" (i.e., no regional split).}
 
-\item{coef}{Character string indicating the level of the response variable (\code{y}) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.}
+\item{coef}{Character string indicating the level of the response variable (\code{y}) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons, leave as default value for two groups or continuous y. Default is NULL.}
 
 \item{control}{Optional. Character string specifying the control level in the response variable (\code{y}) to compare against. Only required if \code{y} contains more than two levels. Ignored for binary or continuous outcomes.}
 
