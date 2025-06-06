@@ -50,7 +50,7 @@ celltypeIDs <- c("cluster_celltype","cluster_celltype")
 sampleIDs <- c("sample_id","sample_id")
 
 
-# Output path (must be a clean directory without any folder)
+# Output path (must be a clean directory with no files or subdirectories)
 output_sample <- file.path(getwd(), "bulk_sample")
 if (!dir.exists(output_sample)) {
   dir.create(output_sample, recursive = TRUE)

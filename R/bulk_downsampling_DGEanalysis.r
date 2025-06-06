@@ -5,12 +5,12 @@
 #' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
 #' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
 #' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
-#' @param output_path A directory path where down-sampled outputs and plots will be saved.
+#' @param output_path A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).
 #' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
 #' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
 #' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
-#' @param pvalue the cut-off p-value used to select DEGs
-#' @param Nperms number of permutations of DGE analysis outputs for each sample
+#' @param pvalue P-value threshold for defining DEGs in the bulk dataset.
+#' @param Nperms Number of permutations to perform for each down-sampling level. Default is 20.
 
 #' Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions
 

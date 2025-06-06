@@ -82,10 +82,8 @@ correlation_analysis <- function(main_dataset,
                                                       sampleIDs=sampleIDs,
                                                       celltypeIDs=celltypeIDs,
                                                       celltype_correspondence=celltype_correspondence,
-                                                      dataset_names=dataset_names,
                                                       pvals=pvals,
-                                                      N_randperms=N_randperms,
-                                                      N_subsets=N_subsets,
+                                                      dataset_names=dataset_names,
                                                       sex_DEGs=sex_DEGs,
                                                       output_path=output_path)
 

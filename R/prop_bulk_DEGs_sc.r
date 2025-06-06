@@ -11,16 +11,16 @@ utils::globalVariables(c("DEGs","numSamples","pctDEGs"))
 #' @importFrom cowplot theme_cowplot
 
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param bulk_cutoff Numeric. Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
-#' @param pvalue Numeric. P-value threshold for defining DEGs in the bulk dataset.
+#' @param bulk_cutoff Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
+#' @param pvalue P-value threshold for defining DEGs in the bulk dataset.
 #' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
-#' @param fontsize_axislabels font size for axis labels in plot
-#' @param fontsize_axisticks font size for axis tick labels in plot
-#' @param fontsize_title font size for plot title
-#' @param fontsize_legendlabels font size for legend labels in plot
-#' @param fontsize_legendtitle font size for legend title in plot
-#' @param plot_title plot title
-#' @param output_path A directory path where down-sampled outputs and diagnostic plots will be saved.
+#' @param output_path A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).
+#' @param fontsize_axislabels Font size for axis labels in plot
+#' @param fontsize_axisticks Font size for axis tick labels in plot
+#' @param fontsize_title Font size for plot title
+#' @param fontsize_legendlabels Font size for legend labels in plot
+#' @param fontsize_legendtitle Font size for legend title in plot
+#' @param plot_title Plot title
 
 #' Saves plot showing percentage DEGs from bulk data found in each scRNA-seq dataset, in the appropriate directory
 
