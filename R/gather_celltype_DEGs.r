@@ -1,9 +1,9 @@
 #' Collate DEGs detected in DGE analysis outputs, across all celltypes in a dataset (datasets/DGE analysis outputs should have common celltypes as specified below)
 
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param pvalue the cut-off p-value used to select DEGs
-#' @param Nperms number of permutations of DGE analysis outputs for each sample
-#' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param pvalue P-value threshold for defining DEGs in the bulk dataset.
+#' @param Nperms Number of permutations to perform for each down-sampling level. Default is 20.
+#' @param output_path A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).
 #' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
 
 #' Saves combined list of DEGs (across all cell types) in a subdirectory inside the dataset directory

@@ -29,11 +29,11 @@ bulk_downsampling_DGEanalysis(
 
 \item{celltypeIDs}{A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).}
 
-\item{output_path}{A directory path where down-sampled outputs and plots will be saved.}
+\item{output_path}{A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).}
 
-\item{pvalue}{the cut-off p-value used to select DEGs}
+\item{pvalue}{P-value threshold for defining DEGs in the bulk dataset.}
 
-\item{Nperms}{number of permutations of DGE analysis outputs for each sample
+\item{Nperms}{Number of permutations to perform for each down-sampling level. Default is 20.
 Saves DGE analysis output in the correct directory, to be used by other bulk analysis functions}
 }
 \description{

@@ -1,24 +1,24 @@
 #' Tests input parameters for functions
 
-#' @param SCEs list of the input data (elements should be SCE objects)
-#' @param dataset_names list of the names of the datasets (as you would like them to appear in the "output_path" directory)
+#' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
+#' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
 #' @param celltype the cell type we are focusing on (name as it appears in cell type sub-directory name)
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param output_path path storing the down-sampled DGE analysis for each single-cell dataset, generated for bulk analysis
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param output_path A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
-#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
-#' @param sampled downsampling carried out based on what (either "individuals" or "cells")
-#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
-#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset: rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
-#' @param bulk_cutoff percentage (proportion between 0 and 1), specified so that we select DEGs common across >= bulk_cutoff of the tissues in the Bulk dataset
-#' @param pvalue the cut-off p-value used to select DEGs (for both, bulk and scRNA-seq datasets)
-#' @param Nperms number of permutations of DGE analysis outputs for each sample
-#' @param fontsize_axislabels font size for axis labels in plot
-#' @param fontsize_axisticks font size for axis tick labels in plot
-#' @param fontsize_title font size for plot title
-#' @param fontsize_legendlabels font size for legend labels in plot
-#' @param fontsize_legendtitle font size for legend title in plot
-#' @param plot_title plot title
+#' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
+#' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
+#' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
+#' @param bulk_cutoff Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
+#' @param pvalue P-value threshold for defining DEGs in the bulk dataset.
+#' @param Nperms Number of permutations to perform for each down-sampling level. Default is 20.
+#' @param fontsize_axislabels Font size for axis labels in plot
+#' @param fontsize_axisticks Font size for axis tick labels in plot
+#' @param fontsize_title Font size for plot title
+#' @param fontsize_legendlabels Font size for legend labels in plot
+#' @param fontsize_legendtitle Font size for legend title in plot
+#' @param plot_title Plot title
 
 #' Checks all bulk analysis parameters are specified correctly
 
@@ -81,7 +81,10 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
         }
         if(!dir.exists(output_path)){
             stop("Error: the specified output_path directory does not exist.")
-        }    
+        }
+        if(length(list.dirs(output_path, full.names = FALSE, recursive = FALSE)) >= 1){
+            stop(paste0("Error: The specified output_path directory is not clean (contains subdirectories): '", output_path, "'. Please provide an empty directory."))
+        }
     }
     if(!identical(range_downsampled,"placeholder")){
         if(class(range_downsampled)=="character"){

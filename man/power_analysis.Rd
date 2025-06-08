@@ -2,7 +2,7 @@
 % Please edit documentation in R/power_analysis.r
 \name{power_analysis}
 \alias{power_analysis}
-\title{Runs entire power analysis pipeline}
+\title{Perform robust power analysis for differential gene expression in scRNA-seq dataset}
 \usage{
 power_analysis(
   SCE,
@@ -25,43 +25,43 @@ power_analysis(
 )
 }
 \arguments{
-\item{SCE}{the input data (should be an SCE object)}
+\item{SCE}{A \code{SingleCellExperiment} object containing the input scRNA-seq data. You may also provide a path to an \code{.R}, \code{.rds}, or \code{.qs} file. If using a file, ensure the \code{SCE} object inside is named \code{SCE}.}
 
-\item{range_downsampled_individuals}{vector or list containing values which the SCE will be downsampled at (for individuals), in ascending order}
+\item{range_downsampled_individuals}{A numeric vector specifying the number of individuals to include at each downsampling level, in ascending order (e.g., c(10, 20, 30)). By default, 12 evenly spaced values are generated from 0 to the total number of samples, each rounded up to the nearest multiple of 5.}
 
-\item{range_downsampled_cells}{vector or list containing values which the SCE will be downsampled at (for cells), in ascending order}
+\item{range_downsampled_cells}{A numeric vector specifying the number of cells per individual to include at each downsampling level, in ascending order (e.g., c(20, 40, 60)). By default, 11 evenly spaced values are generated from 0 to the 90th percentile of per-individual cell counts, each rounded to the nearest multiple of 5.}
 
-\item{output_path}{base path in which outputs will be stored}
+\item{output_path}{A directory path where DGE analysis outputs of down-sampled datasets and power plots will be saved.}
 
-\item{sampleID}{sample ID}
+\item{sampleID}{Name of the column in the \code{SCE} metadata that identifies biological replicates (e.g., patient ID). This column is used for grouping in the pseudobulk approach.}
 
-\item{design}{the design formula of class type \code{formula}. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease}
+\item{design}{A model formula specifying covariates for differential expression analysis. It should be of class \code{formula} (e.g., \code{~ sex + pmi + disease}). This formula is used to fit a generalized linear model.}
 
-\item{sexID}{sex ID}
+\item{sexID}{Name of the column in the \code{SCE} metadata that encodes the sex of individuals. Default is \code{"sex"}.}
 
-\item{celltypeID}{cell type ID}
+\item{celltypeID}{Name of the column in the \code{SCE} metadata indicating cell type labels. This is used to identify celltype specific DEGs.}
 
-\item{coeff}{which coefficient to carry out DE analysis with respect to}
+\item{coeff}{Character string indicating the level of the response variable (\code{y}) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.}
 
-\item{fdr}{the cut-off False Discovery Rate below which to select DEGs}
+\item{fdr}{Adjusted p-value (False Discovery Rate) threshold for selecting significantly differentially expressed genes (DEGs). Only genes with adjusted p-values below this value will be retained. Default is 0.05.}
 
-\item{nom_pval}{the cut-off nominal P-value below which to select DEGs (as an alternative to FDR)}
+\item{nom_pval}{Nominal (unadjusted) p-value threshold for selecting DEGs. Used as an alternative to FDR when preferred. Only genes with p-values below this cutoff will be retained. Default is 0.05.}
 
-\item{Nperms}{number of subsets created when downsampling at each level}
+\item{Nperms}{Number of subsets (permutations) to generate at each downsampling level during power analysis. Each subset is analyzed independently to estimate variability. Default is 20.}
 
-\item{y}{the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)}
+\item{y}{Name of the column in the \code{SCE} metadata representing the response variable (e.g., "diagnosis" - case or disease). If not specified, defaults to the last variable in the \code{design} formula. Accepts both categorical (logistic regression) and continuous (linear regression) variables.}
 
-\item{region}{the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.}
+\item{region}{Optional column in \code{SCE} metadata indicating the tissue or brain region. If present, differential expression is performed within each region separately. Defaults to "single_region" (i.e., no regional split).}
 
-\item{control}{character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.}
+\item{control}{Optional. Character string specifying the control level in the response variable (\code{y}) to compare against. Only required if \code{y} contains more than two levels. Ignored for binary or continuous outcomes.}
 
-\item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
+\item{pval_adjust_method}{Method used to adjust p-values for multiple testing. Default is "BH" (Benjamini–Hochberg). See \code{stats::p.adjust} for available options.}
 
-\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
+\item{rmv_zero_count_genes}{Logical. Whether to remove genes with zero counts across all cells. Default is \code{TRUE}.
 Saves all plots and DGE analysis outputs in the appropriate directories}
 }
 \description{
-Runs entire power analysis pipeline
+Run the complete power analysis pipeline by downsampling individuals and cells, performing differential expression analysis, and generating power plots.
 }
 \examples{
 \dontrun{
