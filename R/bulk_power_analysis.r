@@ -4,7 +4,7 @@
 
 #' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
 #' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
-#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., list(Micro=c("Micro",NA), Astro=c(NA,"Astro")) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
 #' @param output_path A clean directory path where DGE analysis outputs of down-sampled datasets and summary plots will be saved (should contain no subdirectories).
 #' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
 #' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).

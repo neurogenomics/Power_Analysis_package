@@ -1,15 +1,15 @@
 #' Runs correlation analysis pipeline
 
-#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)
-#' @param SCEs list of the input data (elements should be SCE objects)
-#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
-#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
-#' @param pvals list of p-value cut-offs which will be used to select DEGs
-#' @param alphaval (alpha) transparency of the non-mean boxplots
-#' @param N_randperms number of random permutations of the dataset used to select significant DEGs from
-#' @param N_subsets number of pairs of random subsets of the dataset used to select significant DEGs from
+#' @param main_dataset Name of the dataset used to select significant DEGs from (specified as a string, use the dataset name as in dataset_names)
+#' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
+#' @param sampleIDs A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., list(Micro=c("Micro",NA), Astro=c(NA,"Astro")) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
+#' @param pvals list of P-value thresholds for selecting DEGs in each individual dataset. Default is c(0.05,0.025,0.01,0.001,0.0001).
+#' @param alphaval Transparency of the non-mean boxplots. The value of alpha ranges between 0 (completely transparent) and 1 (completely opaque).
+#' @param N_randperms Number of random permutations of the dataset used to select significant DEGs from. Default is 5.
+#' @param N_subsets Number of pairs of random subsets of the dataset used to select significant DEGs from. Default is 5.
 #' @param sex_DEGs If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.
 #' @param fontsize_yaxislabels font size for axis labels in plot
 #' @param fontsize_yaxisticks font size for axis tick labels in plot
@@ -17,7 +17,7 @@
 #' @param fontsize_legendlabels font size for legend labels in plot
 #' @param fontsize_legendtitle font size for legend title in plot
 #' @param fontsize_facet_labels font size for facet labels
-#' @param output_path base path in which outputs will be stored
+#' @param output_path A clean directory path where outputs will be saved (should contain no subdirectories).
 
 #' Saves all plots and DGE analysis outputs in the appropriate directories
 #' @export
