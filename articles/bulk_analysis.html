@@ -52,6 +52,9 @@
       <a href="../articles/bulk_analysis.html">Bulk Analysis</a>
     </li>
     <li>
+      <a href="../articles/correlation_analysis.html">Correlation Analysis</a>
+    </li>
+    <li>
       <a href="../articles/power_analysis.html">Get Started</a>
     </li>
   </ul>
@@ -85,7 +88,7 @@ Authors: <i>Yunning Yuan, Salman Fawad, Nathan Skene</i><br>
             
             <h4 data-toc-skip class="date"><h4>
 <br>
-Vignette updated: <i>Jun-18-2025</i><br>
+Vignette updated: <i>Jun-19-2025</i><br>
 </h4></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/docu-Yunning/vignettes/bulk_analysis.Rmd" class="external-link"><code>vignettes/bulk_analysis.Rmd</code></a></small>
@@ -96,7 +99,78 @@ Vignette updated: <i>Jun-18-2025</i><br>
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/Power_Analysis_package" class="external-link">poweranalysis</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/Power_Analysis_package" class="external-link">poweranalysis</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: SummarizedExperiment</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: MatrixGenerics</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: matrixStats</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'MatrixGenerics'</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
+<span><span class="co">##     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
+<span><span class="co">##     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
+<span><span class="co">##     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
+<span><span class="co">##     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
+<span><span class="co">##     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
+<span><span class="co">##     colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
+<span><span class="co">##     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
+<span><span class="co">##     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
+<span><span class="co">##     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
+<span><span class="co">##     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
+<span><span class="co">##     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
+<span><span class="co">##     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,</span></span>
+<span><span class="co">##     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
+<span><span class="co">##     rowWeightedSds, rowWeightedVars</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: GenomicRanges</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: stats4</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: BiocGenerics</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: generics</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'generics'</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,</span></span>
+<span><span class="co">##     setequal, union</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'BiocGenerics'</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     IQR, mad, sd, var, xtabs</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,</span></span>
+<span><span class="co">##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,</span></span>
+<span><span class="co">##     get, grep, grepl, is.unsorted, lapply, Map, mapply, match, mget,</span></span>
+<span><span class="co">##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span></span>
+<span><span class="co">##     rbind, Reduce, rownames, sapply, saveRDS, table, tapply, unique,</span></span>
+<span><span class="co">##     unsplit, which.max, which.min</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: S4Vectors</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'S4Vectors'</span></span></code></pre>
+<pre><code><span><span class="co">## The following object is masked from 'package:utils':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     findMatches</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     expand.grid, I, unname</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: IRanges</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: GenomeInfoDb</span></span></code></pre>
+<pre><code><span><span class="co">## Loading required package: Biobase</span></span></code></pre>
+<pre><code><span><span class="co">## Welcome to Bioconductor</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     Vignettes contain introductory material; view with</span></span>
+<span><span class="co">##     'browseVignettes()'. To cite Bioconductor, see</span></span>
+<span><span class="co">##     'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'Biobase'</span></span></code></pre>
+<pre><code><span><span class="co">## The following object is masked from 'package:MatrixGenerics':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     rowMedians</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     anyMissing, rowMedians</span></span></code></pre>
 <div class="section level2">
 <h2 id="validating-power-analysis-using-bulk-data">Validating Power Analysis using Bulk Data<a class="anchor" aria-label="anchor" href="#validating-power-analysis-using-bulk-data"></a>
 </h2>
@@ -110,13 +184,10 @@ a robust benchmark for evaluating sex-bias detection. <br></p>
 <p>The <code>bulk_power_analysis</code> function estimates the power to
 detect these DEGs across one or more SCE objects, with user-supplied
 metadata indicating how to identify samples and cell types. Below is an
-example that demonstrates this analysis using two scRNA-seq datasets,
-based on downsampling individuals.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/Power_Analysis_package" class="external-link">poweranalysis</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SingleCellExperiment</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Load SCE objects (replace with actual file paths or data)</span></span>
+<strong>example</strong> that demonstrates this analysis using two
+scRNA-seq datasets, based on downsampling individuals.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load SCE objects (replace with actual file paths or data)</span></span>
 <span><span class="va">tsai_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Tsai_Micro.qs"</span>, package<span class="op">=</span><span class="st">"poweranalysis"</span><span class="op">)</span></span>
 <span><span class="va">tsai_micro</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="va">tsai_path</span><span class="op">)</span></span>
 <span><span class="va">zhou_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Zhou_Astro_subset.qs"</span>, package<span class="op">=</span><span class="st">"poweranalysis"</span><span class="op">)</span></span>
@@ -147,7 +218,7 @@ based on downsampling individuals.</p>
 <span><span class="va">bulk_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"LFSR.tsv"</span>, package<span class="op">=</span><span class="st">"poweranalysis"</span><span class="op">)</span></span>
 <span><span class="va">bulkDE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="va">bulk_path</span>, sep <span class="op">=</span> <span class="st">"\t"</span>, header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Run power analysis for down-sampling individuals</span></span>
+<span><span class="co"># Run bulk power analysis for down-sampling individuals</span></span>
 <span><span class="fu"><a href="../reference/bulk_power_analysis.html">bulk_power_analysis</a></span><span class="op">(</span></span>
 <span>  SCEs <span class="op">=</span> <span class="va">SCEs</span>,</span>
 <span>  dataset_names <span class="op">=</span> <span class="va">dataset_names</span>,</span>
@@ -161,13 +232,14 @@ based on downsampling individuals.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>To assess recovery by down-sampling cells instead of individuals,
 simply set <code>sampled = "cells"</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Output path (must be a clean directory)</span></span>
 <span><span class="va">output_cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"bulk_cell"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">output_cell</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">output_cell</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
+<span><span class="co"># Run bulk power analysis for down-sampling cells</span></span>
 <span><span class="fu"><a href="../reference/bulk_power_analysis.html">bulk_power_analysis</a></span><span class="op">(</span></span>
 <span>  SCEs <span class="op">=</span> <span class="va">SCEs</span>,</span>
 <span>  dataset_names <span class="op">=</span> <span class="va">dataset_names</span>,</span>
