@@ -1,4 +1,6 @@
-#' Runs correlation analysis pipeline
+#' Perform correlation analysis of DEG effect sizes between single-cell datasets
+#'
+#' Runs the correlation analysis pipeline by computing Spearman’s rank correlations of log₂ fold-changes for differentially expressed genes (DEGs) across and within multiple scRNA-seq datasets. Uses a user-specified reference dataset to define DEGs and compares effect sizes across studies, independently sampled subsets, and permuted controls.
 
 #' @param main_dataset Name of the dataset used to select significant DEGs from (specified as a string, use the dataset name as in dataset_names)
 #' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
@@ -10,6 +12,7 @@
 #' @param alphaval Transparency of the non-mean boxplots. The value of alpha ranges between 0 (completely transparent) and 1 (completely opaque).
 #' @param N_randperms Number of random permutations of the dataset used to select significant DEGs from. Default is 5.
 #' @param N_subsets Number of pairs of random subsets of the dataset used to select significant DEGs from. Default is 5.
+#' @param output_path A directory path where outputs will be saved.
 #' @param sex_DEGs If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.
 #' @param fontsize_yaxislabels font size for axis labels in plot
 #' @param fontsize_yaxisticks font size for axis tick labels in plot
@@ -17,7 +20,6 @@
 #' @param fontsize_legendlabels font size for legend labels in plot
 #' @param fontsize_legendtitle font size for legend title in plot
 #' @param fontsize_facet_labels font size for facet labels
-#' @param output_path A clean directory path where outputs will be saved (should contain no subdirectories).
 
 #' Saves all plots and DGE analysis outputs in the appropriate directories
 #' @export

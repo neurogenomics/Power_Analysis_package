@@ -2,7 +2,7 @@
 % Please edit documentation in R/correlation_analysis.r
 \name{correlation_analysis}
 \alias{correlation_analysis}
-\title{Runs correlation analysis pipeline}
+\title{Perform correlation analysis of DEG effect sizes between single-cell datasets}
 \usage{
 correlation_analysis(
   main_dataset,
@@ -26,25 +26,25 @@ correlation_analysis(
 )
 }
 \arguments{
-\item{main_dataset}{name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)}
+\item{main_dataset}{Name of the dataset used to select significant DEGs from (specified as a string, use the dataset name as in dataset_names)}
 
-\item{SCEs}{list of the input data (elements should be SCE objects)}
+\item{SCEs}{A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.}
 
-\item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
+\item{sampleIDs}{A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).}
 
-\item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
+\item{celltypeIDs}{A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).}
 
-\item{celltype_correspondence}{list of different names specifying each cell type}
+\item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., list(Micro=c("Micro",NA), Astro=c(NA,"Astro")) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
-\item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
+\item{dataset_names}{A vector of names corresponding to each dataset (as you would like them to appear in output plots).}
 
-\item{pvals}{list of p-value cut-offs which will be used to select DEGs}
+\item{pvals}{list of P-value thresholds for selecting DEGs in each individual dataset. Default is c(0.05,0.025,0.01,0.001,0.0001).}
 
-\item{alphaval}{(alpha) transparency of the non-mean boxplots}
+\item{alphaval}{Transparency of the non-mean boxplots. The value of alpha ranges between 0 (completely transparent) and 1 (completely opaque).}
 
-\item{N_randperms}{number of random permutations of the dataset used to select significant DEGs from}
+\item{N_randperms}{Number of random permutations of the dataset used to select significant DEGs from. Default is 5.}
 
-\item{N_subsets}{number of pairs of random subsets of the dataset used to select significant DEGs from}
+\item{N_subsets}{Number of pairs of random subsets of the dataset used to select significant DEGs from. Default is 5.}
 
 \item{sex_DEGs}{If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.}
 
@@ -60,11 +60,11 @@ correlation_analysis(
 
 \item{fontsize_facet_labels}{font size for facet labels}
 
-\item{output_path}{base path in which outputs will be stored
+\item{output_path}{A clean directory path where outputs will be saved (should contain no subdirectories).
 Saves all plots and DGE analysis outputs in the appropriate directories}
 }
 \description{
-Runs correlation analysis pipeline
+Runs the correlation analysis pipeline by computing Spearman’s rank correlations of log₂ fold-changes for differentially expressed genes (DEGs) across and within multiple scRNA-seq datasets. Uses a user-specified reference dataset to define DEGs and compares effect sizes across studies, independently sampled subsets, and permuted controls.
 }
 \examples{
 \dontrun{
