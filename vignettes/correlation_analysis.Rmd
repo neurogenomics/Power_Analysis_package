@@ -1,0 +1,100 @@
+---
+title: "Correlation Analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{correlation_analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(poweranalysis)
+library(SingleCellExperiment)
+```
+
+## Assessing Effect Size Concordance via Correlation Analysis
+The `correlation_analysis` function quantifies agreement in effect sizes (log₂ fold-changes) of differentially expressed genes (DEGs) across and within scRNA-seq datasets by computing Spearman’s rank correlations. A user-specified reference dataset is used to define significant DEGs, which are then compared across other studies, independently sampled subsets, and random permutations. Comparing these patterns to correlations from random permutations helps distinguish true biological signals from noise. <br>
+
+Below is an **example** demonstrating how to apply this analysis using a list of `SingleCellExperiment` objects:
+```{r correlation, results='hide', message=FALSE, warning=FALSE, eval=FALSE}
+# Load SCE objects (replace with actual file paths or data)
+tsai_path <- system.file("extdata", "Tsai_Micro.qs", package="poweranalysis")
+tsai_micro <- qs::qread(tsai_path)
+zhou_path <- system.file("extdata", "Zhou_Micro.qs", package="poweranalysis")
+zhou_micro <- qs::qread(zhou_path)
+
+# List of SCE datasets
+SCEs <- list(tsai_micro, zhou_micro)
+
+# Dataset names (used in plots and output files)
+dataset_names <- c("Tsai", "Zhou")
+
+# Cell type mapping
+celltype_corr <- list(Micro=c("Micro", "Micro"))
+
+# Metadata column names per SCE
+celltypeIDs <- c("cluster_celltype","cluster_celltype")
+sampleIDs <- c("sample_id","sample_id")
+
+# list of P-value thresholds
+pvals <- c(0.05,0.01,0.001)
+
+# Output path (must be a clean directory with no files or subdirectories)
+output_corr <- file.path(getwd(), "output_corr")
+if (!dir.exists(output_corr)) {
+  dir.create(output_corr, recursive = TRUE)
+}
+
+
+# Run correlation analysis between single-cell datasets
+correlation_analysis(
+  main_dataset = "Tsai",    # Name of the dataset used to select significant DEGs from 
+  SCEs = SCEs,
+  dataset_names = dataset_names,
+  celltype_corr = celltype_corr,
+  celltypeIDs = celltypeIDs,
+  sampleIDs = sampleIDs,
+  pvals = pvals,
+  N_randperms = 3,
+  N_subsets = 3,
+  output_path = output_corr
+)
+```
+
+
+The `correlation_analysis` function generates two key **outputs**:
+
+- **Symmetric heatmaps** show pairwise Spearman’s rank correlations of log₂ fold-changes for DEGs identified under different P-value thresholds in the single-cell datasets. <br>
+P-value = 0.05: <br>
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
+knitr::include_graphics("output_corr/mean_correlation_p0.05.png")
+```
+P-value = 0.01: <br>
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
+knitr::include_graphics("output_corr/mean_correlation_p0.01.png")
+```
+P-value = 0.001: <br>
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
+knitr::include_graphics("output_corr/mean_correlation_p0.001.png")
+```
+
+- **Box plots** summarises correlations for effect sizes of DEGs across datasets, by cell type, as well as the overall mean. High between-study correlation indicates reproducibility of DEGs, while high within-study correlation may suggest technical variation such as batch effects. <br>
+P-value = 0.05: <br>
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
+knitr::include_graphics("output_corr/correlation_boxplot_p0.05.png")
+```
+P-value = 0.01: <br>
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
+knitr::include_graphics("output_corr/correlation_boxplot_p0.01.png")
+```
+P-value = 0.001: <br>
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
+knitr::include_graphics("output_corr/correlation_boxplot_p0.001.png")
+```
