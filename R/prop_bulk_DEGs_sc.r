@@ -38,11 +38,6 @@ prop_bulk_DEGs_sc <- function(bulkDE,
 
     sampled <- match.arg(sampled, choices = c("individuals", "cells"))
 
-    # validate function input params
-    validate_input_parameters_bulk(bulkDE=bulkDE, output_path=output_path,
-                                   bulk_cutoff=bulk_cutoff,pvalue=pvalue, fontsize_axislabels=fontsize_axislabels,
-                                   fontsize_axisticks=fontsize_axisticks, fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels,
-                                   fontsize_legendtitle=fontsize_legendtitle, plot_title=plot_title)
 
     # default placeholder
     if(plot_title=="placeholder"){
