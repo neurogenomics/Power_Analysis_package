@@ -166,7 +166,7 @@
 <div class="section level2">
 <h2 id="assessing-effect-size-concordance-via-correlation-analysis">Assessing Effect Size Concordance via Correlation Analysis<a class="anchor" aria-label="anchor" href="#assessing-effect-size-concordance-via-correlation-analysis"></a>
 </h2>
-<p>The <code>correlation_analysis function</code> quantifies agreement
+<p>The <code>correlation_analysis</code> function quantifies agreement
 in effect sizes (log₂ fold-changes) of differentially expressed genes
 (DEGs) across and within scRNA-seq datasets by computing Spearman’s rank
 correlations. A user-specified reference dataset is used to define
@@ -222,20 +222,26 @@ analysis using a list of <code>SingleCellExperiment</code> objects:</p>
 <p>The <code>correlation_analysis</code> function generates two key
 <strong>outputs</strong>:</p>
 <ul>
-<li><p><strong>Symmetric heatmaps</strong> show pairwise Spearman’s rank
+<li>
+<strong>Symmetric heatmaps</strong> show pairwise Spearman’s rank
 correlations of log₂ fold-changes for DEGs identified under different
 P-value thresholds in the single-cell datasets. <br> P-value = 0.05:
-<br><img src="output_corr/mean_correlation_p0.05.png" width="100%">
-P-value = 0.01: <br><img src="output_corr/mean_correlation_p0.01.png" width="100%">
-P-value = 0.001: <br><img src="output_corr/mean_correlation_p0.001.png" width="100%"></p></li>
-<li><p><strong>Box plots</strong> summarises correlations for effect
-sizes of DEGs across datasets, by cell type, as well as the overall
-mean. High between-study correlation indicates reproducibility of DEGs,
-while high within-study correlation may suggest technical variation such
-as batch effects. <br> P-value = 0.05: <br><img src="output_corr/correlation_boxplot_p0.05.png" width="100%">
-P-value = 0.01: <br><img src="output_corr/correlation_boxplot_p0.01.png" width="100%">
-P-value = 0.001: <br><img src="output_corr/correlation_boxplot_p0.001.png" width="100%"></p></li>
+<br>
+</li>
 </ul>
+<p>P-value = 0.01: <br></p>
+<p>P-value = 0.001: <br></p>
+<ul>
+<li>
+<strong>Box plots</strong> summarises correlations for effect sizes
+of DEGs across datasets, by cell type, as well as the overall mean. High
+between-study correlation indicates reproducibility of DEGs, while high
+within-study correlation may suggest technical variation such as batch
+effects. <br> P-value = 0.05: <br>
+</li>
+</ul>
+<p>P-value = 0.01: <br></p>
+<p>P-value = 0.001: <br></p>
 </div>
   </div>
 
