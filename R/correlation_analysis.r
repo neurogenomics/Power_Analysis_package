@@ -78,6 +78,26 @@ correlation_analysis <- function(main_dataset,
                                  fontsize_facet_labels=9,
                                  output_path=getwd()){
 
+    # Comprehensive validation for all parameters used in the pipeline
+    validate_input_parameters_correlation(main_dataset=main_dataset,
+                                          SCEs=SCEs,
+                                          sampleIDs=sampleIDs,
+                                          celltypeIDs=celltypeIDs,
+                                          celltype_correspondence=celltype_correspondence,
+                                          dataset_names=dataset_names,
+                                          pvalues=pvals,
+                                          alphaval=alphaval,
+                                          N_randperms=N_randperms,
+                                          N_subsets=N_subsets,
+                                          sex_DEGs=sex_DEGs,
+                                          fontsize_yaxislabels=fontsize_yaxislabels,
+                                          fontsize_yaxisticks=fontsize_yaxisticks,
+                                          fontsize_title=fontsize_title,
+                                          fontsize_legendlabels=fontsize_legendlabels,
+                                          fontsize_legendtitle=fontsize_legendtitle,
+                                          fontsize_facet_labels=fontsize_facet_labels,
+                                          output_path=output_path)
+
     # run plot_mean_correlation for each p-value (saving outputs)
     mean_correlation_results <- plot_mean_correlation(main_dataset=main_dataset,
                                                       SCEs=SCEs,

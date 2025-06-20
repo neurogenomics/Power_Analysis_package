@@ -60,13 +60,6 @@ power_plots <- function(SCE,
     # create output path if doesn't already exist
     setwd(output_path)
     dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
-    # validate function input params
-    validate_input_parameters_power(SCE=SCE, range_downsampled=range_downsampled, output_path=output_path,
-                                    inpath=inpath, sampled=sampled, sampleID=sampleID,
-                                    celltypeID=celltypeID, coeff=coeff, fdr=fdr,
-                                    nom_pval=nom_pval, Nperms=Nperms, y=y,
-                                    region=region, control=control, pval_adjust_method=pval_adjust_method,
-                                    rmv_zero_count_genes=rmv_zero_count_genes)
 
     # get celltype name from dataset
     celltype_name <- toString(unique(SCE[[celltypeID]]))

@@ -46,12 +46,6 @@ preliminary_plots <- function(SCE,
     if(design=="placeholder"){
         design=as.formula(paste0("~",sexID))
     }
-    # validate function input params
-    validate_input_parameters_power(SCE=SCE, output_path=output_path, sampleID=sampleID,
-                                    design=design, sexID=sexID, celltypeID=celltypeID,
-                                    coeff=coeff, fdr=fdr, y=y,
-                                    region=region, control=control, pval_adjust_method=pval_adjust_method,
-                                    rmv_zero_count_genes=rmv_zero_count_genes)
 
     # get celltype name from dataset
     celltype_name <- toString(unique(SCE[[celltypeID]]))

@@ -55,6 +55,25 @@ bulk_power_analysis <- function(SCEs,
                                 fontsize_legendtitle=9,
                                 plot_title="placeholder"){
 
+    # Comprehensive validation for all parameters used in the pipeline
+    validate_input_parameters_bulk(SCEs=SCEs, 
+                                   dataset_names=dataset_names, 
+                                   celltype_correspondence=celltype_correspondence,
+                                   output_path=output_path,
+                                   celltypeIDs=celltypeIDs,
+                                   sampled=sampled,
+                                   sampleIDs=sampleIDs,
+                                   bulkDE=bulkDE,
+                                   bulk_cutoff=bulk_cutoff,
+                                   pvalue=pvalue,
+                                   Nperms=Nperms,
+                                   fontsize_axislabels=fontsize_axislabels,
+                                   fontsize_axisticks=fontsize_axisticks,
+                                   fontsize_title=fontsize_title,
+                                   fontsize_legendlabels=fontsize_legendlabels,
+                                   fontsize_legendtitle=fontsize_legendtitle,
+                                   plot_title=plot_title)
+
     # Run bulk_downsampling_DGEanalysis for all cell types
     bulk_downsampling_DGEanalysis(SCEs = SCEs,
                                   dataset_names = dataset_names,
