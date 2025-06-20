@@ -36,14 +36,7 @@ correlation_boxplots <- function(corr_mats,
                                  fontsize_legendlabels=9,
                                  fontsize_legendtitle=9,
                                  fontsize_facet_labels=9,
-                                 output_path=getwd()){
-
-    # validate function input params
-    validate_input_parameters_correlation(corr_mats=corr_mats, num_real_datasets=num_real_datasets, pvalues=pvals,
-                                          alphaval=alphaval, N_randperms=N_randperms, N_subsets=N_subsets,
-                                          sex_DEGs=sex_DEGs, fontsize_yaxislabels=fontsize_yaxislabels, fontsize_yaxisticks=fontsize_yaxisticks,
-                                          fontsize_title=fontsize_title, fontsize_legendlabels=fontsize_legendlabels, fontsize_legendtitle=fontsize_legendtitle,
-                                          fontsize_facet_labels=fontsize_facet_labels, output_path=output_path)                                    
+                                 output_path=getwd()){                                    
     # outputs
     output_plots <- list()
 

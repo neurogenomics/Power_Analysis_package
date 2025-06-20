@@ -65,7 +65,7 @@ validate_input_parameters_correlation <- function(main_dataset="placeholder",
             stop("Error: celltypeIDs should be a string or list/vector specifying the cell type IDs in order of SCEs.")
         }
     }
-    if(!identical(celltype_correspondence,"placeholder")){    
+    if(!identical(celltype_correspondence,"placeholder")){
         if(class(celltype_correspondence)!="list"){
             stop("Error: celltype_correspondence should be a list of lists of all cell type names, as they appear in each of the SCEs")
         }
@@ -167,11 +167,11 @@ validate_input_parameters_correlation <- function(main_dataset="placeholder",
     if(output_path!="placeholder"){
         if(output_path!=getwd()){
             if(!is.character(output_path)){
-                stop("Error: output_path should be a string specifying the base path where output will be stored.")        
+                stop("Error: output_path should be a string specifying the base path where output will be stored.")
             }
             if(!dir.exists(output_path)){
                 stop("Error: the specified output_path directory does not exist.")
-            }      
+            }
         }
-    }    
+    }
 }

@@ -4,7 +4,7 @@
 
 #' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
 #' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
-#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., `"Endo"`, `"Micro"`) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., list(Micro=c("Micro",NA), Astro=c(NA,"Astro")) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
 #' @param output_path A clean directory path where DGE analysis outputs of down-sampled datasets and summary plots will be saved (should contain no subdirectories).
 #' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
 #' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
@@ -54,6 +54,25 @@ bulk_power_analysis <- function(SCEs,
                                 fontsize_legendlabels=9,
                                 fontsize_legendtitle=9,
                                 plot_title="placeholder"){
+
+    # Comprehensive validation for all parameters used in the pipeline
+    validate_input_parameters_bulk(SCEs=SCEs, 
+                                   dataset_names=dataset_names, 
+                                   celltype_correspondence=celltype_correspondence,
+                                   output_path=output_path,
+                                   celltypeIDs=celltypeIDs,
+                                   sampled=sampled,
+                                   sampleIDs=sampleIDs,
+                                   bulkDE=bulkDE,
+                                   bulk_cutoff=bulk_cutoff,
+                                   pvalue=pvalue,
+                                   Nperms=Nperms,
+                                   fontsize_axislabels=fontsize_axislabels,
+                                   fontsize_axisticks=fontsize_axisticks,
+                                   fontsize_title=fontsize_title,
+                                   fontsize_legendlabels=fontsize_legendlabels,
+                                   fontsize_legendtitle=fontsize_legendtitle,
+                                   plot_title=plot_title)
 
     # Run bulk_downsampling_DGEanalysis for all cell types
     bulk_downsampling_DGEanalysis(SCEs = SCEs,

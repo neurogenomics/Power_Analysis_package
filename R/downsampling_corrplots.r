@@ -51,12 +51,6 @@ downsampling_corrplots <- function(SCE,
     dir.create(output_path,showWarnings=FALSE,recursive=TRUE)
     # create directory for correlation analysis
     dir.create(file.path(output_path, "corr_analysis"), showWarnings=FALSE,recursive=TRUE)
-    # validate function input params
-    validate_input_parameters_power(SCE=SCE, range_downsampled=range_downsampled, output_path=output_path,
-                                    inpath=inpath, sampled=sampled, sampleID=sampleID,
-                                    celltypeID=celltypeID, coeff=coeff, y=y,
-                                    region=region, control=control, pval_adjust_method=pval_adjust_method,
-                                    rmv_zero_count_genes=rmv_zero_count_genes)
     
     # get celltype name from dataset
     celltype_name <- toString(unique(SCE[[celltypeID]]))

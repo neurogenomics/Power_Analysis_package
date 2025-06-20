@@ -18,17 +18,15 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(poweranalysis)
+library(SingleCellExperiment)
 ```
 
 ## Validating Power Analysis using Bulk Data
 This section introduces a validation strategy for scRNA-seq power analysis using high-confidence, sex-biased DEGs derived from bulk GTEx data. Specifically, it assesses how many “PTP DEGs” (genes sex-biased in ≥90% of GTEx tissues) are recovered in single-cell differential expression analysis results under various down-sampling levels. Because these DEGs are identified across a broad range of tissues, they provide a robust benchmark for evaluating sex-bias detection. <br>
 
-The `bulk_power_analysis` function estimates the power to detect these DEGs across one or more SCE objects, with user-supplied metadata indicating how to identify samples and cell types. Below is an example that demonstrates this analysis using two scRNA-seq datasets, based on downsampling individuals.
+The `bulk_power_analysis` function estimates the power to detect these DEGs across one or more SCE objects, with user-supplied metadata indicating how to identify samples and cell types. Below is an **example** that demonstrates this analysis using two scRNA-seq datasets, based on downsampling individuals.
 
 ```{r bulk-individual, results='hide', message=FALSE, warning=FALSE, eval=FALSE}
-library(poweranalysis)
-library(SingleCellExperiment)
-
 # Load SCE objects (replace with actual file paths or data)
 tsai_path <- system.file("extdata", "Tsai_Micro.qs", package="poweranalysis")
 tsai_micro <- qs::qread(tsai_path)
@@ -60,7 +58,7 @@ if (!dir.exists(output_sample)) {
 bulk_path <- system.file("extdata", "LFSR.tsv", package="poweranalysis")
 bulkDE <- read.table(bulk_path, sep = "\t", header = TRUE)
 
-# Run power analysis for down-sampling individuals
+# Run bulk power analysis for down-sampling individuals
 bulk_power_analysis(
   SCEs = SCEs,
   dataset_names = dataset_names,
@@ -83,6 +81,7 @@ if (!dir.exists(output_cell)) {
   dir.create(output_cell, recursive = TRUE)
 }
 
+# Run bulk power analysis for down-sampling cells
 bulk_power_analysis(
   SCEs = SCEs,
   dataset_names = dataset_names,
