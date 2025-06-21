@@ -149,6 +149,15 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
             }
         }
     }
+    if(fontsize_axislabels!="placeholder"){
+        if(class(fontsize_axislabels)!="numeric"){
+            stop("Error: fontsize_axislabels should be numerical.")
+        }else{
+            if(fontsize_axislabels-floor(fontsize_axislabels)!=0|fontsize_axislabels<0){
+                stop("Error: fontsize_axislabels should be a positive integer.")
+            }
+        }
+    }
     if(fontsize_axisticks!="placeholder"){
         if(class(fontsize_axisticks)!="numeric"){
             stop("Error: fontsize_axisticks should be numerical.")

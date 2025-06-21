@@ -26,10 +26,6 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
 
     sampled <- match.arg(sampled, choices = c("individuals", "cells"))
 
-    # validate function input params
-    validate_input_parameters_bulk(SCEs=SCEs, dataset_names=dataset_names, celltype_correspondence=celltype_correspondence, sampled=sampled,
-                                   sampleIDs=sampleIDs, celltypeIDs=celltypeIDs, output_path=output_path, pvalue=pvalue, Nperms=Nperms)
-
     # get biggest downsampling range
     max_downsampling_range <- bulk_downsampling_range(SCEs=SCEs, sampled=sampled, sampleIDs=sampleIDs, celltypeIDs=celltypeIDs, celltype_correspondence=celltype_correspondence)
     # check sampleIDs, celltypeIDs

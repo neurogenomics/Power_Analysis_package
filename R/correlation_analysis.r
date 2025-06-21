@@ -1,15 +1,18 @@
-#' Runs correlation analysis pipeline
+#' Perform correlation analysis of DEG effect sizes between single-cell datasets
+#'
+#' Runs the correlation analysis pipeline by computing Spearman’s rank correlations of log₂ fold-changes for differentially expressed genes (DEGs) across and within multiple scRNA-seq datasets. Uses a user-specified reference dataset to define DEGs and compares effect sizes across studies, independently sampled subsets, and permuted controls.
 
-#' @param main_dataset name of the dataset used to select significant DEGs from (specified as a string, name as in dataset_names)
-#' @param SCEs list of the input data (elements should be SCE objects)
-#' @param sampleIDs list or vector of sample IDs (in order of SCEs)
-#' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
-#' @param pvals list of p-value cut-offs which will be used to select DEGs
-#' @param alphaval (alpha) transparency of the non-mean boxplots
-#' @param N_randperms number of random permutations of the dataset used to select significant DEGs from
-#' @param N_subsets number of pairs of random subsets of the dataset used to select significant DEGs from
+#' @param main_dataset Name of the dataset used to select significant DEGs from (specified as a string, use the dataset name as in dataset_names)
+#' @param SCEs A list of SingleCellExperiment (SCE) objects, each representing a scRNA-seq dataset.
+#' @param sampleIDs A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
+#' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., list(Micro=c("Micro",NA), Astro=c(NA,"Astro")) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
+#' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
+#' @param pvals list of P-value thresholds for selecting DEGs in each individual dataset. Default is c(0.05,0.025,0.01,0.001,0.0001).
+#' @param alphaval Transparency of the non-mean boxplots. The value of alpha ranges between 0 (completely transparent) and 1 (completely opaque).
+#' @param N_randperms Number of random permutations of the dataset used to select significant DEGs from. Default is 5.
+#' @param N_subsets Number of pairs of random subsets of the dataset used to select significant DEGs from. Default is 5.
+#' @param output_path A directory path where outputs will be saved.
 #' @param sex_DEGs If TRUE, only keep genes present on sex chromosmomes. Queries hspanies gene Ensembl dataset.
 #' @param fontsize_yaxislabels font size for axis labels in plot
 #' @param fontsize_yaxisticks font size for axis tick labels in plot
@@ -17,7 +20,6 @@
 #' @param fontsize_legendlabels font size for legend labels in plot
 #' @param fontsize_legendtitle font size for legend title in plot
 #' @param fontsize_facet_labels font size for facet labels
-#' @param output_path base path in which outputs will be stored
 
 #' Saves all plots and DGE analysis outputs in the appropriate directories
 #' @export
@@ -75,6 +77,26 @@ correlation_analysis <- function(main_dataset,
                                  fontsize_legendtitle=9,
                                  fontsize_facet_labels=9,
                                  output_path=getwd()){
+
+    # Comprehensive validation for all parameters used in the pipeline
+    validate_input_parameters_correlation(main_dataset=main_dataset,
+                                          SCEs=SCEs,
+                                          sampleIDs=sampleIDs,
+                                          celltypeIDs=celltypeIDs,
+                                          celltype_correspondence=celltype_correspondence,
+                                          dataset_names=dataset_names,
+                                          pvalues=pvals,
+                                          alphaval=alphaval,
+                                          N_randperms=N_randperms,
+                                          N_subsets=N_subsets,
+                                          sex_DEGs=sex_DEGs,
+                                          fontsize_yaxislabels=fontsize_yaxislabels,
+                                          fontsize_yaxisticks=fontsize_yaxisticks,
+                                          fontsize_title=fontsize_title,
+                                          fontsize_legendlabels=fontsize_legendlabels,
+                                          fontsize_legendtitle=fontsize_legendtitle,
+                                          fontsize_facet_labels=fontsize_facet_labels,
+                                          output_path=output_path)
 
     # run plot_mean_correlation for each p-value (saving outputs)
     mean_correlation_results <- plot_mean_correlation(main_dataset=main_dataset,

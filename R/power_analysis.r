@@ -68,6 +68,24 @@ power_analysis <- function(SCE,
                            pval_adjust_method="BH",
                            rmv_zero_count_genes=TRUE){
 
+    # Comprehensive validation for all parameters used in the pipeline
+    validate_input_parameters_power(SCE=SCE,
+                                    range_downsampled=range_downsampled_individuals,
+                                    output_path=output_path,
+                                    sampleID=sampleID,
+                                    design=design,
+                                    sexID=sexID,
+                                    celltypeID=celltypeID,
+                                    coeff=coeff,
+                                    fdr=fdr,
+                                    nom_pval=nom_pval,
+                                    Nperms=Nperms,
+                                    y=y,
+                                    region=region,
+                                    control=control,
+                                    pval_adjust_method=pval_adjust_method,
+                                    rmv_zero_count_genes=rmv_zero_count_genes)
+
     setwd(output_path)
 
     # alter range_downsampled_individuals

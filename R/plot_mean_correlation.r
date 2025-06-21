@@ -32,11 +32,6 @@ plot_mean_correlation <- function(main_dataset,
                                   pvals=c(0.05,0.025,0.01,0.001,0.0001),
                                   sex_DEGs=FALSE,
                                   output_path=getwd()){
-
-    # validate function input params
-    validate_input_parameters_correlation(main_dataset=main_dataset, SCEs=SCEs, sampleIDs=sampleIDs, celltypeIDs=celltypeIDs,
-                                          celltype_correspondence=celltype_correspondence, dataset_names=dataset_names, N_randperms=N_randperms,
-                                          N_subsets=N_subsets, pvalues=pvals, sex_DEGs=sex_DEGs, output_path=output_path)
     # outputs
     output_list <- list()
 

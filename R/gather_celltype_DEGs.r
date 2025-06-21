@@ -16,10 +16,6 @@ gather_celltype_DEGs <- function(celltype_correspondence,
 
     sampled <- match.arg(sampled, choices = c("individuals", "cells"))
 
-    # validate function input params
-    validate_input_parameters_bulk(output_path=output_path, celltype_correspondence=celltype_correspondence,
-                                   pvalue=pvalue, Nperms=Nperms)
-
     # reference the appropriate subdirectory regarding the down-sampling type
     folder_tag <- if (sampled == "individuals") "DE_downsampling" else "DE_downsampling_cells"
 
