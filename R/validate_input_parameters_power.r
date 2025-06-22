@@ -9,7 +9,7 @@
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
 #' @param sexID sex ID
 #' @param celltypeID cell type ID
-#' @param coeff which coefficient to carry out DE analysis with respect to
+#' @param coef which coefficient to carry out DE analysis with respect to
 #' @param fdr the cut-off False Discovery Rate below which to select DEGs
 #' @param nom_pval the cut-off nominal P-value below which to select DEGs (as an alternative to FDR)
 #' @param Nperms number of subsets created when downsampling at each level
@@ -32,7 +32,7 @@ validate_input_parameters_power <- function(SCE="placeholder",
                                             design="placeholder",
                                             sexID="placeholder",
                                             celltypeID="placeholder",
-                                            coeff="placeholder",
+                                            coef="placeholder",
                                             fdr="placeholder",
                                             nom_pval="placeholder",
                                             Nperms="placeholder",
@@ -125,10 +125,10 @@ validate_input_parameters_power <- function(SCE="placeholder",
             }
         }
     }
-    if(coeff!="placeholder"){
-        if(coeff!="male"){	
-            if(!is.character(coeff)){
-                stop("Error: coeff should be a string specifying coefficient DE analysis should be carried out with respect to.")
+    if(coef!="placeholder"){
+        if(coef!="male"){	
+            if(!is.character(coef)){
+                stop("Error: coef should be a string specifying coefficient DE analysis should be carried out with respect to.")
             }
         }
     }
