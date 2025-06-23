@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Perform robust power analysis for differential gene expression in scRNA-seq dataset</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/master/R/power_analysis.r" class="external-link"><code>R/power_analysis.r</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/Power_Analysis_package/blob/dev-Yunning/R/power_analysis.r" class="external-link"><code>R/power_analysis.r</code></a></small>
     <div class="hidden name"><code>power_analysis.Rd</code></div>
     </div>
 
@@ -75,7 +75,7 @@
 <span>  design <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  sexID <span class="op">=</span> <span class="st">"sex"</span>,</span>
 <span>  celltypeID <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
-<span>  coeff <span class="op">=</span> <span class="st">"male"</span>,</span>
+<span>  coef <span class="op">=</span> <span class="st">"male"</span>,</span>
 <span>  fdr <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  nom_pval <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  Nperms <span class="op">=</span> <span class="fl">20</span>,</span>
@@ -123,7 +123,7 @@
 <dd><p>Name of the column in the <code>SCE</code> metadata indicating cell type labels. This is used to identify celltype specific DEGs.</p></dd>
 
 
-<dt id="arg-coeff">coeff<a class="anchor" aria-label="anchor" href="#arg-coeff"></a></dt>
+<dt id="arg-coef">coef<a class="anchor" aria-label="anchor" href="#arg-coef"></a></dt>
 <dd><p>Character string indicating the level of the response variable (<code>y</code>) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.</p></dd>
 
 
