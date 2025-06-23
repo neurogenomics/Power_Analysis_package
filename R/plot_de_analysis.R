@@ -234,7 +234,7 @@ plot_de_analysis <- function(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
             data = celltype_all_genes_dt[
                 celltype_all_genes_dt[,.I[adj_pval %in%
                                               sort(adj_pval)[1:3]][1:3],
-                                      by=celltype]$V1],
+                                      by=celltype]$V1][!is.na(gene_name) & gene_name != ""],
             aes(label = gene_name),
             size = 3,
             box.padding = unit(0.35, "lines"),
