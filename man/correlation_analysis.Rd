@@ -58,10 +58,10 @@ correlation_analysis(
 
 \item{fontsize_legendtitle}{font size for legend title in plot}
 
-\item{fontsize_facet_labels}{font size for facet labels}
-
-\item{output_path}{A clean directory path where outputs will be saved (should contain no subdirectories).
+\item{fontsize_facet_labels}{font size for facet labels
 Saves all plots and DGE analysis outputs in the appropriate directories}
+
+\item{output_path}{A directory path where outputs will be saved.}
 }
 \description{
 Runs the correlation analysis pipeline by computing Spearman’s rank correlations of log₂ fold-changes for differentially expressed genes (DEGs) across and within multiple scRNA-seq datasets. Uses a user-specified reference dataset to define DEGs and compares effect sizes across studies, independently sampled subsets, and permuted controls.

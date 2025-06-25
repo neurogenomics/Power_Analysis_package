@@ -17,7 +17,7 @@ utils::globalVariables(c("dataset"))
 #' @param sexID Name of the column in the `SCE` metadata that encodes the sex of individuals. Default is `"sex"`.
 #' @param design  A model formula specifying covariates for differential expression analysis. It should be of class `formula` (e.g., `~ sex + pmi + disease`). This formula is used to fit a generalized linear model.
 #' @param y Name of the column in the `SCE` metadata representing the response variable (e.g., "diagnosis" - case or disease). If not specified, defaults to the last variable in the `design` formula. Accepts both categorical (logistic regression) and continuous (linear regression) variables.
-#' @param coeff Character string indicating the level of the response variable (`y`) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.
+#' @param coef Character string indicating the level of the response variable (`y`) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.
 #' @param fdr Adjusted p-value (False Discovery Rate) threshold for selecting significantly differentially expressed genes (DEGs). Only genes with adjusted p-values below this value will be retained. Default is 0.05.
 #' @param nom_pval Nominal (unadjusted) p-value threshold for selecting DEGs. Used as an alternative to FDR when preferred. Only genes with p-values below this cutoff will be retained. Default is 0.05.
 #' @param Nperms Number of subsets (permutations) to generate at each downsampling level during power analysis. Each subset is analyzed independently to estimate variability. Default is 20.
@@ -58,7 +58,7 @@ power_analysis <- function(SCE,
                            design="placeholder",
                            sexID="sex",
                            celltypeID="cell_type",
-                           coeff="male",
+                           coef="male",
                            fdr=0.05,
                            nom_pval=0.05,
                            Nperms=20,
@@ -76,7 +76,7 @@ power_analysis <- function(SCE,
                                     design=design,
                                     sexID=sexID,
                                     celltypeID=celltypeID,
-                                    coeff=coeff,
+                                    coef=coef,
                                     fdr=fdr,
                                     nom_pval=nom_pval,
                                     Nperms=Nperms,
@@ -108,7 +108,7 @@ power_analysis <- function(SCE,
                       design=design,
                       sexID=sexID,
                       celltypeID=celltypeID,
-                      coeff=coeff,
+                      coef=coef,
                       fdr=fdr)
 
     ## create power plots for down-sampling individuals, cells
@@ -126,7 +126,7 @@ power_analysis <- function(SCE,
                             control=control,
                             pval_adjust_method=pval_adjust_method,
                             rmv_zero_count_genes=rmv_zero_count_genes,
-                            coeff=coeff,
+                            coef=coef,
                             fdr=fdr,
                             nom_pval=nom_pval,
                             Nperms=Nperms)
@@ -154,7 +154,7 @@ power_analysis <- function(SCE,
                             control=control,
                             pval_adjust_method=pval_adjust_method,
                             rmv_zero_count_genes=rmv_zero_count_genes,
-                            coeff=coeff,
+                            coef=coef,
                             fdr=fdr,
                             nom_pval=nom_pval,
                             Nperms=Nperms)

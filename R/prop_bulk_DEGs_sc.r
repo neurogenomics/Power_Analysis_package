@@ -102,7 +102,12 @@ prop_bulk_DEGs_sc <- function(bulkDE,
     # function to select colours appropriately for boxplots
     generate_color_palette <- function(N, palette = "Set1") {
         max_colors <- 9  # the maximum number of colors available for the chosen palette
-        if (N <= max_colors) {
+        # brewer.pal requires at least 3 colors for most palettes
+        if (N == 1) {
+            return("#E41A1C")  # return single color for one dataset
+        } else if (N == 2) {
+            return(c("#E41A1C", "#377EB8"))  # return two colors for two datasets
+        } else if (N <= max_colors) {
             return(brewer.pal(N, palette))
         }else{
             # set seed

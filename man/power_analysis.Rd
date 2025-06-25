@@ -13,7 +13,7 @@ power_analysis(
   design = "placeholder",
   sexID = "sex",
   celltypeID = "cell_type",
-  coeff = "male",
+  coef = "male",
   fdr = 0.05,
   nom_pval = 0.05,
   Nperms = 20,
@@ -41,7 +41,7 @@ power_analysis(
 
 \item{celltypeID}{Name of the column in the \code{SCE} metadata indicating cell type labels. This is used to identify celltype specific DEGs.}
 
-\item{coeff}{Character string indicating the level of the response variable (\code{y}) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.}
+\item{coef}{Character string indicating the level of the response variable (\code{y}) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.}
 
 \item{fdr}{Adjusted p-value (False Discovery Rate) threshold for selecting significantly differentially expressed genes (DEGs). Only genes with adjusted p-values below this value will be retained. Default is 0.05.}
 

@@ -14,7 +14,7 @@ validate_input_parameters_power(
   design = "placeholder",
   sexID = "placeholder",
   celltypeID = "placeholder",
-  coeff = "placeholder",
+  coef = "placeholder",
   fdr = "placeholder",
   nom_pval = "placeholder",
   Nperms = "placeholder",
@@ -46,7 +46,7 @@ validate_input_parameters_power(
 
 \item{celltypeID}{cell type ID}
 
-\item{coeff}{which coefficient to carry out DE analysis with respect to}
+\item{coef}{which coefficient to carry out DE analysis with respect to}
 
 \item{fdr}{the cut-off False Discovery Rate below which to select DEGs}
 
