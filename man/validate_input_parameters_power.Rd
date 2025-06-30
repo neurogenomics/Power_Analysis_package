@@ -14,6 +14,7 @@ validate_input_parameters_power(
   design = "placeholder",
   sexID = "placeholder",
   celltypeID = "placeholder",
+  assay_name = "placeholder",
   coef = "placeholder",
   fdr = "placeholder",
   nom_pval = "placeholder",
@@ -45,6 +46,8 @@ validate_input_parameters_power(
 \item{sexID}{sex ID}
 
 \item{celltypeID}{cell type ID}
+
+\item{assay_name}{the name of the assay in the SCE object to be used for the analysis (default is "counts")}
 
 \item{coef}{which coefficient to carry out DE analysis with respect to}
 

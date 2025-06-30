@@ -13,7 +13,8 @@ utils::globalVariables(c("PValue","name"))
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
 #' @param sexID sex ID
 #' @param celltypeID cell type ID
-#' @param coeff which coefficient to carry out DE analysis with respect to
+#' @param assay_name the assay name in the SCE object to use for the analysis. Default is "counts" which uses the counts assay in each SCE
+#' @param coef which coefficient to carry out DE analysis with respect to
 #' @param fdr the cut-off False Discovery Rate below which to select DEGs
 #' @param nom_pval the cut-off nominal P-value below which to select DEGs (as an alternative to FDR)
 #' @param Nperms number of subsets created when downsampling at each level
@@ -33,7 +34,8 @@ downsampling_DEanalysis <- function(SCE,
                                     design="placeholder",
                                     sexID="sex",
                                     celltypeID="cell_type",
-                                    coeff="male",
+                                    assay_name="counts",
+                                    coef="male",
                                     fdr=0.05,
                                     nom_pval=0.05,
                                     Nperms=20,
@@ -61,7 +63,7 @@ downsampling_DEanalysis <- function(SCE,
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
         # run and save DE analysis
-        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, assay_name=assay_name, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coef))
         save(DEout,file=file.path(output_path,"DEout.RData"))
     }else{
         load(file.path(output_path,"DEout.RData"))
@@ -108,7 +110,7 @@ downsampling_DEanalysis <- function(SCE,
                 dir.create(path,showWarnings=FALSE,recursive=TRUE)
                 setwd(path)
                 # ensure sexID isnt "Sex", has to be lower case (change this in SCE if needed)
-                assign(paste0("DEout_",toString(value)), DGE_analysis(samples[[j]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+                assign(paste0("DEout_",toString(value)), DGE_analysis(samples[[j]], design=design, sampleID=sampleID, celltypeID=celltypeID, assay_name=assay_name, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coef))
                 # save output
                 save(list=eval(paste0("DEout_",toString(value))),file=paste0("DEout",toString(value),"_",j,".RData"))
                 # get number of TP DEGs
@@ -163,7 +165,7 @@ downsampling_DEanalysis <- function(SCE,
                 dir.create(path,showWarnings=FALSE,recursive=TRUE)
                 setwd(path)
                 # ensure sexID isnt "Sex", has to be lower case (change this in SCE if needed)
-                assign(paste0("DEout_",toString(value)), DGE_analysis(cells[[j]], design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+                assign(paste0("DEout_",toString(value)), DGE_analysis(cells[[j]], design=design, sampleID=sampleID, celltypeID=celltypeID, assay_name=assay_name, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coef))
                 # save output
                 save(list=eval(paste0("DEout_",toString(value))),file=paste0("DEout",toString(value),"_",j,".RData"))
                 # get number of TP DEGs

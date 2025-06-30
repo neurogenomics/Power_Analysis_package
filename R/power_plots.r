@@ -19,7 +19,8 @@ utils::globalVariables(c("design","PValue","logFC","name","variable"))
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 #' @param celltypeID cell type ID
-#' @param coeff which coefficient to carry out DE analysis with respect to
+#' @param assay_name the name of the assay in the SCE object that will be used for the analysis. Default is "counts"
+#' @param coef which coefficient to carry out DE analysis with respect to
 #' @param fdr the cut-off False Discovery Rate below which to select DEGs
 #' @param nom_pval the cut-off nominal P-value below which to select DEGs (as an alternative to FDR)
 #' @param Nperms number of subsets created when downsampling at each level
@@ -38,7 +39,8 @@ power_plots <- function(SCE,
                         sampled="individuals",
                         sampleID="donor_id",
                         celltypeID="cell_type",
-                        coeff="male",
+                        assay_name="counts",
+                        coef="male",
                         fdr=0.05,
                         nom_pval=0.05,
                         Nperms=20,
@@ -66,7 +68,7 @@ power_plots <- function(SCE,
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
         # run and save DE analysis
-        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, assay_name=assay_name, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coef))
         save(DEout,file=file.path(output_path,"DEout.RData"))
     }else{
         load(file.path(output_path,"DEout.RData"))

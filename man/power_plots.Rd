@@ -12,6 +12,7 @@ power_plots(
   sampled = "individuals",
   sampleID = "donor_id",
   celltypeID = "cell_type",
+  assay_name = "counts",
   coeff = "male",
   fdr = 0.05,
   nom_pval = 0.05,
@@ -37,6 +38,8 @@ power_plots(
 \item{sampleID}{sample ID}
 
 \item{celltypeID}{cell type ID}
+
+\item{assay_name}{the name of the assay in the SCE object that will be used for the analysis. Default is "counts"}
 
 \item{coeff}{which coefficient to carry out DE analysis with respect to}
 

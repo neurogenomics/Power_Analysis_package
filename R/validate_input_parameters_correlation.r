@@ -7,6 +7,7 @@
 #' @param celltype_correspondence list of different names specifying each cell type
 #' @param pvalues the list of cut-off p-values which will be used to select DEGs (can just provide a list with one as well)
 #' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
+#' @param assay_names names of the assays in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries "counts", which uses the count assay in each SCE.
 #' @param corr_mats (named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value
 #' @param num_real_datasets total number of *real* datasets (most likely the number of studies, but sometimes a study may be split e.g. into 2 brain regions, so in this case it would be the number of studies plus 1)
 #' @param alphaval (alpha) transparency of the non-mean boxplots
@@ -30,6 +31,7 @@ validate_input_parameters_correlation <- function(main_dataset="placeholder",
                                                   celltype_correspondence="placeholder",
                                                   pvalues="placeholder",
                                                   dataset_names="placeholder",
+                                                  assay_names="placeholder",
                                                   corr_mats="placeholder",
                                                   num_real_datasets="placeholder",
                                                   alphaval="placeholder",

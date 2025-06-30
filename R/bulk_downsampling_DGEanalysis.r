@@ -8,6 +8,7 @@
 #' @param output_path A clean directory path where down-sampled outputs and plots will be saved (should contain no subdirectories).
 #' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
 #' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param assay_names A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries `"counts"`, which uses the count assay in each SCE.
 #' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
 #' @param pvalue P-value threshold for defining DEGs in the bulk dataset.
 #' @param Nperms Number of permutations to perform for each down-sampling level. Default is 20.
@@ -19,6 +20,7 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
                                           celltype_correspondence,
                                           sampled="individuals",
                                           sampleIDs="donor_id",
+                                          assay_names="counts",
                                           celltypeIDs="cell_type",
                                           output_path=getwd(),
                                           pvalue=0.05,
@@ -34,6 +36,9 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
     }
     if(length(celltypeIDs) == 1){
         celltypeIDs <- rep(celltypeIDs,length(SCEs))
+    }
+    if(length(assay_names) == 1){
+        assay_names <- rep(assay_names,length(SCEs))
     }
     # loop through all datasets and cell types
     for(standard_celltype in names(celltype_correspondence)){
@@ -55,7 +60,7 @@ bulk_downsampling_DGEanalysis <- function(SCEs,
 
                 # run downsampling, DGE analysis
                 downsampling_DEanalysis(dataset1,range_dataset,output_path=savepath,sampled=sampled,
-                                        sampleID=sampleIDs[[idx]],celltypeID=celltypeIDs[[idx]],coeff=coeff_use,
+                                        sampleID=sampleIDs[[idx]],celltypeID=celltypeIDs[[idx]], assay_name=assay_names[[idx]], coef=coeff_use,
                                         nom_pval=pvalue,Nperms=Nperms)
             }
         }

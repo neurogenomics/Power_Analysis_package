@@ -12,6 +12,7 @@ bulk_power_analysis(
   celltypeIDs = "cell_type",
   sampled = "individuals",
   sampleIDs = "donor_id",
+  assay_names = "counts",
   bulkDE = "placeholder",
   bulk_cutoff = 0.9,
   pvalue = 0.05,
@@ -38,6 +39,8 @@ bulk_power_analysis(
 \item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.}
 
 \item{sampleIDs}{A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).}
+
+\item{assay_names}{A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries \code{"counts"}, which uses the count assay in each SCE.}
 
 \item{bulkDE}{DGE analysis output for a bulk RNA-seq dataset (e.g., \code{LFSR.tsv}): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels}
 

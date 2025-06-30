@@ -10,6 +10,7 @@ bulk_downsampling_DGEanalysis(
   celltype_correspondence,
   sampled = "individuals",
   sampleIDs = "donor_id",
+  assay_names = "counts",
   celltypeIDs = "cell_type",
   output_path = getwd(),
   pvalue = 0.05,
@@ -26,6 +27,8 @@ bulk_downsampling_DGEanalysis(
 \item{sampled}{Specifies the unit of down-sampling. Can be either \code{"individuals"} or \code{"cells"}, depending on whether the analysis downsamples across samples or cells.}
 
 \item{sampleIDs}{A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).}
+
+\item{assay_names}{A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries \code{"counts"}, which uses the count assay in each SCE.}
 
 \item{celltypeIDs}{A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).}
 

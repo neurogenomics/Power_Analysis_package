@@ -13,6 +13,7 @@ downsampling_DEanalysis(
   design = "placeholder",
   sexID = "sex",
   celltypeID = "cell_type",
+  assay_name = "counts",
   coeff = "male",
   fdr = 0.05,
   nom_pval = 0.05,
@@ -40,6 +41,8 @@ downsampling_DEanalysis(
 \item{sexID}{sex ID}
 
 \item{celltypeID}{cell type ID}
+
+\item{assay_name}{the assay name in the SCE object to use for the analysis. Default is "counts" which uses the counts assay in each SCE}
 
 \item{coeff}{which coefficient to carry out DE analysis with respect to}
 

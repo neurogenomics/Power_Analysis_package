@@ -9,6 +9,7 @@ validate_input_parameters_de(
   design,
   sampleID,
   celltypeID,
+  assay_name,
   y,
   region,
   coef,
@@ -28,6 +29,8 @@ validate_input_parameters_de(
 \item{sampleID}{Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach}
 
 \item{celltypeID}{Column name in the SCE object for the cell type variable}
+
+\item{assay_name}{Name of the assay to use for the differential expression analysis. Default is "counts". If using a different assay, ensure it contains the count values.}
 
 \item{y}{Column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease}
 

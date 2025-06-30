@@ -11,6 +11,7 @@ correlation_analysis(
   celltypeIDs,
   celltype_correspondence,
   dataset_names,
+  assay_names = "counts",
   pvals = c(0.05, 0.025, 0.01, 0.001, 1e-04),
   alphaval = 0.25,
   N_randperms = 5,
@@ -37,6 +38,8 @@ correlation_analysis(
 \item{celltype_correspondence}{A named vector that maps a standard cell type label (e.g., list(Micro=c("Micro",NA), Astro=c(NA,"Astro")) to how that cell type appears in each dataset. Use \code{NA} if the cell type is not present in a given dataset.}
 
 \item{dataset_names}{A vector of names corresponding to each dataset (as you would like them to appear in output plots).}
+
+\item{assay_names}{A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries \code{"counts"}, which uses the count assay in each SCE.}
 
 \item{pvals}{list of P-value thresholds for selecting DEGs in each individual dataset. Default is c(0.05,0.025,0.01,0.001,0.0001).}
 

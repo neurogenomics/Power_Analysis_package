@@ -11,14 +11,15 @@
 #' @param sampleID Name of the column in the `SCE` metadata that identifies biological replicates (e.g., patient ID). This column is used for grouping in the pseudobulk approach.
 #' @param celltypeID Name of the column in the `SCE` metadata indicating cell type labels. This is used to identify celltype specific DEGs. If there is only one cell type in the analysis, the analysis will automatically adjust.
 #' @param y Name of the column in the `SCE` metadata representing the response variable (e.g., "diagnosis" - case or disease). If not specified, defaults to the last variable in the `design` formula. Accepts both categorical (logistic regression) and continuous (linear regression) variables.
-#' @param coef Character string indicating the level of the response variable (`y`) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons, leave as default value for two groups or continuous y. Default is NULL.
 #' @param region Optional column in `SCE` metadata indicating the tissue or brain region. If present, differential expression is performed within each region separately. Defaults to "single_region" (i.e., no regional split).
+#' @param coef Character string indicating the level of the response variable (`y`) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons, leave as default value for two groups or continuous y. Default is NULL.
 #' @param control  Optional. Character string specifying the control level in the response variable (`y`) to compare against. Only required if `y` contains more than two levels. Ignored for binary or continuous outcomes.
 #' @param pval_adjust_method Method used to adjust p-values for multiple testing. Default is "BH" (Benjamini–Hochberg). See `stats::p.adjust` for available options.
 #' @param adj_pval Adjusted p-value threshold (0–1) used to define significance in the differential expression results. Default is 0.05.
 #' @param output_path  Directory where output plots from the DE analysis will be saved. If set to `FALSE`, no plots will be generated. Defaults to a folder named "sc.cell.type.de.graphs" in the working directory.
-#' @param verbose Logical. Whether to print progress and additional messages during the differential analysis analysis. Default is `FALSE`.
 #' @param rmv_zero_count_genes Logical. Whether to remove genes with zero counts across all cells. Default is `TRUE`.
+#' @param assay_name Name of the assay to use for the pseudobulk calculation. Default is "counts". If using a different assay, ensure it contains the count values.
+#' @param verbose Logical. Whether to print progress and additional messages during the differential analysis analysis. Default is `FALSE`.
 #' @param save Whether to save DE analysis results as an `.RData` file. Default is `FALSE`. Note: power analysis and downsampling functions handle saving separately.
 
 #' @return A list containing:
@@ -90,7 +91,7 @@ DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
                          region="single_region", coef=NULL, control=NULL,
                          pval_adjust_method = "BH", adj_pval=0.05,
                          output_path="sc.cell.type.de.graphs/",
-                         rmv_zero_count_genes=T, verbose=F, save=F){
+                         rmv_zero_count_genes=T, assay_name="counts", verbose=F, save=F){
 
     # need to load SCE if a directory is passed
     if(class(SCE)[1]=="character"){
@@ -110,7 +111,7 @@ DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
     }
 
     # sense check inputs
-    validate_input_parameters_de(SCE, design, sampleID, celltypeID, y,
+    validate_input_parameters_de(SCE, design, sampleID, celltypeID, assay_name, y,
                                  region, coef, control, pval_adjust_method,
                                  adj_pval, output_path, rmv_zero_count_genes,
                                  verbose)
@@ -148,7 +149,8 @@ DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
                             sampleID=sampleID,
                             pb_columns=pb_columns,
                             region=region,
-                            rmv_zero_count_genes=rmv_zero_count_genes))
+                            rmv_zero_count_genes=rmv_zero_count_genes,
+                            assay_name=assay_name))
     names(pb_dat) <- celltypes
 
     # run edgeR LRT DE analysis
@@ -175,8 +177,8 @@ DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
     celltype_DEGs_dt <- data.table::rbindlist(celltype_DEGs,idcol = T)
     setnames(celltype_DEGs_dt,".id","celltype")
 
-    if(!isFALSE(output_path)){
-        if(isTRUE(verbose))
+    if(!identical(output_path,FALSE)){
+        if(identical(verbose,TRUE))
         message("Plotting the results of differential expression analysis")
         #make plots for DE analysis
         plot_de_analysis(pb_dat,y,celltype_DEGs_dt,celltype_all_genes_dt,
@@ -185,7 +187,7 @@ DGE_analysis <- function(SCE, design, sampleID, celltypeID, y=NULL,
         DEout <- list("celltype_DEGs"=celltype_DEGs,
                       "celltype_all_genes"=celltype_de,
                       "celltype_counts"=counts_celltypes)
-        if(isTRUE(save))
+        if(identical(save,TRUE))
             save(DEout, file = file.path(output_path,"DEout.RData"))
     }
 

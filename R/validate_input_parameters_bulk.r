@@ -8,6 +8,7 @@
 #' @param range_downsampled vector or list containing values which the data will be downsampled at, in ascending order
 #' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
 #' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param assay_names A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries `"counts"`, which uses the count assay in each SCE.
 #' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
 #' @param bulk_cutoff Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues).
@@ -31,6 +32,7 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
                                            celltypeIDs="placeholder",
                                            sampled="placeholder",
                                            sampleIDs="placeholder",
+                                           assay_names="placeholder",
                                            bulkDE="placeholder",
                                            bulk_cutoff="placeholder",
                                            pvalue="placeholder",
@@ -115,6 +117,11 @@ validate_input_parameters_bulk <- function(SCEs="placeholder",
     if(!identical(sampleIDs,"placeholder")){
         if(!is.character(sampleIDs)&!is.list(sampleIDs)){
             stop("Error: sampleIDs should be a string or list/vector specifying the cell type IDs in order of SCEs.")
+        }
+    }
+    if(!identical(assay_names,"placeholder")){
+        if(!is.character(assay_names)&!is.list(assay_names)){
+            stop("Error: assay_names should be a string or list/vector specifying the assay names in order of SCEs.")
         }
     }
     if(!identical(bulkDE,"placeholder")){

@@ -12,6 +12,7 @@ validate_input_parameters_correlation(
   celltype_correspondence = "placeholder",
   pvalues = "placeholder",
   dataset_names = "placeholder",
+  assay_names = "placeholder",
   corr_mats = "placeholder",
   num_real_datasets = "placeholder",
   alphaval = "placeholder",
@@ -41,6 +42,8 @@ validate_input_parameters_correlation(
 \item{pvalues}{the list of cut-off p-values which will be used to select DEGs (can just provide a list with one as well)}
 
 \item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
+
+\item{assay_names}{names of the assays in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries "counts", which uses the count assay in each SCE.}
 
 \item{corr_mats}{(named) list of correlation matrices for each celltype with the final element being the mean correlation matrix, all at specified p-value}
 

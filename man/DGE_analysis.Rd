@@ -17,6 +17,7 @@ DGE_analysis(
   adj_pval = 0.05,
   output_path = "sc.cell.type.de.graphs/",
   rmv_zero_count_genes = T,
+  assay_name = "counts",
   verbose = F,
   save = F
 )
@@ -45,6 +46,8 @@ DGE_analysis(
 \item{output_path}{Directory where output plots from the DE analysis will be saved. If set to \code{FALSE}, no plots will be generated. Defaults to a folder named "sc.cell.type.de.graphs" in the working directory.}
 
 \item{rmv_zero_count_genes}{Logical. Whether to remove genes with zero counts across all cells. Default is \code{TRUE}.}
+
+\item{assay_name}{Name of the assay to use for the pseudobulk calculation. Default is "counts". If using a different assay, ensure it contains the count values.}
 
 \item{verbose}{Logical. Whether to print progress and additional messages during the differential analysis analysis. Default is \code{FALSE}.}
 

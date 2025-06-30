@@ -8,6 +8,7 @@
 #' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
 #' @param celltype_correspondence A named vector that maps a standard cell type label (e.g., list(Micro=c("Micro",NA), Astro=c(NA,"Astro")) to how that cell type appears in each dataset. Use `NA` if the cell type is not present in a given dataset.
 #' @param dataset_names A vector of names corresponding to each dataset (as you would like them to appear in output plots).
+#' @param assay_names A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries `"counts"`, which uses the count assay in each SCE.
 #' @param pvals list of P-value thresholds for selecting DEGs in each individual dataset. Default is c(0.05,0.025,0.01,0.001,0.0001).
 #' @param alphaval Transparency of the non-mean boxplots. The value of alpha ranges between 0 (completely transparent) and 1 (completely opaque).
 #' @param N_randperms Number of random permutations of the dataset used to select significant DEGs from. Default is 5.
@@ -65,6 +66,7 @@ correlation_analysis <- function(main_dataset,
                                  celltypeIDs,
                                  celltype_correspondence,
                                  dataset_names,
+                                 assay_names="counts",
                                  pvals=c(0.05,0.025,0.01,0.001,0.0001),
                                  alphaval=0.25,
                                  N_randperms=5,
@@ -85,6 +87,7 @@ correlation_analysis <- function(main_dataset,
                                           celltypeIDs=celltypeIDs,
                                           celltype_correspondence=celltype_correspondence,
                                           dataset_names=dataset_names,
+                                          assay_names=assay_names,
                                           pvalues=pvals,
                                           alphaval=alphaval,
                                           N_randperms=N_randperms,
@@ -105,6 +108,7 @@ correlation_analysis <- function(main_dataset,
                                                       celltypeIDs=celltypeIDs,
                                                       celltype_correspondence=celltype_correspondence,
                                                       dataset_names=dataset_names,
+                                                      assay_names=assay_names,
                                                       pvals=pvals,
                                                       N_randperms=N_randperms,
                                                       N_subsets=N_subsets,

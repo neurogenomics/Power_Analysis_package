@@ -14,6 +14,7 @@ utils::globalVariables(c("dataset"))
 #' @param output_path A directory path where DGE analysis outputs of down-sampled datasets and power plots will be saved.
 #' @param sampleID Name of the column in the `SCE` metadata that identifies biological replicates (e.g., patient ID). This column is used for grouping in the pseudobulk approach.
 #' @param celltypeID Name of the column in the `SCE` metadata indicating cell type labels. This is used to identify celltype specific DEGs.
+#' @param assay_name Name of the assay in the `SCE` object to use for analysis. Default is `"counts"`, which uses the count assay in each SCE.
 #' @param sexID Name of the column in the `SCE` metadata that encodes the sex of individuals. Default is `"sex"`.
 #' @param design  A model formula specifying covariates for differential expression analysis. It should be of class `formula` (e.g., `~ sex + pmi + disease`). This formula is used to fit a generalized linear model.
 #' @param y Name of the column in the `SCE` metadata representing the response variable (e.g., "diagnosis" - case or disease). If not specified, defaults to the last variable in the `design` formula. Accepts both categorical (logistic regression) and continuous (linear regression) variables.
@@ -58,6 +59,7 @@ power_analysis <- function(SCE,
                            design="placeholder",
                            sexID="sex",
                            celltypeID="cell_type",
+                           assay_name="counts",
                            coef="male",
                            fdr=0.05,
                            nom_pval=0.05,
@@ -76,6 +78,7 @@ power_analysis <- function(SCE,
                                     design=design,
                                     sexID=sexID,
                                     celltypeID=celltypeID,
+                                    assay_name=assay_name,
                                     coef=coef,
                                     fdr=fdr,
                                     nom_pval=nom_pval,
@@ -108,6 +111,7 @@ power_analysis <- function(SCE,
                       design=design,
                       sexID=sexID,
                       celltypeID=celltypeID,
+                      assay_name=assay_name,
                       coef=coef,
                       fdr=fdr)
 
@@ -121,6 +125,7 @@ power_analysis <- function(SCE,
                             design=design,
                             sexID=sexID,
                             celltypeID=celltypeID,
+                            assay_name=assay_name,
                             y=y,
                             region=region,
                             control=control,
@@ -137,6 +142,7 @@ power_analysis <- function(SCE,
                 sampled="individuals",
                 sampleID=sampleID,
                 celltypeID=celltypeID,
+                assay_name=assay_name,
                 fdr=fdr,
                 nom_pval=nom_pval,
                 Nperms=Nperms)
@@ -149,6 +155,7 @@ power_analysis <- function(SCE,
                             design=design,
                             sexID=sexID,
                             celltypeID=celltypeID,
+                            assay_name=assay_name,
                             y=y,
                             region=region,
                             control=control,
@@ -165,6 +172,7 @@ power_analysis <- function(SCE,
                 sampled="cells",
                 sampleID=sampleID,
                 celltypeID=celltypeID,
+                assay_name=assay_name,
                 fdr=fdr,
                 nom_pval=nom_pval,
                 Nperms=Nperms)
@@ -174,6 +182,7 @@ power_analysis <- function(SCE,
                            output_path=output_path,
                            sampled="individuals",
                            celltypeID=celltypeID,
+                           assay_name=assay_name,
                            Nperms=Nperms)
     # create down-sampling correlation plots (cells)
     downsampling_corrplots(SCE=SCE,
@@ -181,5 +190,6 @@ power_analysis <- function(SCE,
                            output_path=output_path,
                            sampled="cells",
                            celltypeID=celltypeID,
+                           assay_name=assay_name,
                            Nperms=Nperms)
 }

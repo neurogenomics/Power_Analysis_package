@@ -9,10 +9,11 @@ utils::globalVariables(c("DEout"))
 
 #' @param main_dataset name of the dataset used to select significant DEGs from, and for which random permutations and subset pairs will be created (to be specified as a string, name as in dataset_names)
 #' @param SCEs list of the input data (elements should be SCE objects)
+#' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
+#' @param celltype_correspondence list of different names specifying each cell type
 #' @param sampleIDs list or vector of sample IDs (in order of SCEs)
 #' @param celltypeIDs list or vector of cell type IDs (in order of SCEs)
-#' @param celltype_correspondence list of different names specifying each cell type
-#' @param dataset_names names of the datasets as they appear in the correlation plot (in order of SCEs)
+#' @param assay_names names of the assays in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries "counts", which uses the count assay in each SCE.
 #' @param N_randperms number of random permutations of the dataset to be created
 #' @param N_subsets number of pairs of random subsets of the dataset to be created
 #' @param pvals the cut-off p-value which will be used to select DEGs
@@ -23,18 +24,30 @@ utils::globalVariables(c("DEout"))
 
 plot_mean_correlation <- function(main_dataset,
                                   SCEs,
-                                  sampleIDs,
-                                  celltypeIDs,
-                                  celltype_correspondence,
                                   dataset_names,
+                                  celltype_correspondence,
+                                  sampleIDs="donor_id",
+                                  celltypeIDs="cell_type",
+                                  assay_names="counts",
                                   N_randperms=5,
                                   N_subsets=5,
                                   pvals=c(0.05,0.025,0.01,0.001,0.0001),
                                   sex_DEGs=FALSE,
                                   output_path=getwd()){
+    
+    # check sampleIDs, celltypeIDs
+    if(length(sampleIDs) == 1){
+        sampleIDs <- rep(sampleIDs,length(SCEs))
+    }
+    if(length(celltypeIDs) == 1){
+        celltypeIDs <- rep(celltypeIDs,length(SCEs))
+    }
+    if(length(assay_names) == 1){
+        assay_names <- rep(assay_names,length(SCEs))
+    }
+
     # outputs
     output_list <- list()
-
     # get DEouts
     DEouts <- list()    
     for(idx in seq_along(SCEs)){
@@ -44,7 +57,7 @@ plot_mean_correlation <- function(main_dataset,
         print(paste0("Running DGE analysis for ", dataset_names[[idx]], "..."))
         if(!"DEout.RData" %in% list.files(savepath)){
             # run and save DE analysis
-            DEouts[[idx]] <- DGE_analysis(SCE=dataset, design=~sex, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], coef=coeff_use, output_path=savepath, save=TRUE)
+            DEouts[[idx]] <- DGE_analysis(SCE=dataset, design=~sex, sampleID=sampleIDs[[idx]], celltypeID=celltypeIDs[[idx]], assay_name=assay_names[[idx]], coef=coeff_use, output_path=savepath, save=TRUE)
         }else{
             load(file.path(savepath,"DEout.RData"))
             DEouts[[idx]] <- DEout
@@ -64,7 +77,7 @@ plot_mean_correlation <- function(main_dataset,
             savepath <- file.path(output_path, paste0(main_dataset,"_randperm_", i))
             if(!"DEout.RData" %in% list.files(savepath)){
                 coeff_use <- as.character(sort(unique(colData(rand_perms[[i]])$sex))[[2]])
-                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_perms[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=savepath, save=TRUE)
+                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=rand_perms[[i]], design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], assay_name=assay_names[[idx_main]], coef=coeff_use, output_path=savepath, save=TRUE)
             }else{
                 load(file.path(savepath,"DEout.RData"))
                 DEouts[[length(DEouts)+1]] <- DEout
@@ -88,8 +101,8 @@ plot_mean_correlation <- function(main_dataset,
                 subset_1 <- rand_subsets[[i]][[1]]
                 subset_2 <- rand_subsets[[i]][[2]]
                 coeff_use <- as.character(sort(unique(colData(subset_1)$sex))[[2]])
-                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_1, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=savepath_a, save=TRUE)
-                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_2, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], coef=coeff_use, output_path=savepath_b, save=TRUE)
+                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_1, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], assay_name=assay_names[[idx_main]], coef=coeff_use, output_path=savepath_a, save=TRUE)
+                DEouts[[length(DEouts)+1]] <- DGE_analysis(SCE=subset_2, design=~sex, sampleID=sampleIDs[[idx_main]], celltypeID=celltypeIDs[[idx_main]], assay_name=assay_names[[idx_main]], coef=coeff_use, output_path=savepath_b, save=TRUE)
             }
             dataset_names <- c(dataset_names, paste0(main_dataset, "_RandSubset_", i, "a"), paste0(main_dataset, "_RandSubset_", i, "b"))
         }

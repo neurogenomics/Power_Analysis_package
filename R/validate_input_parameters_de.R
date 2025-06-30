@@ -4,6 +4,7 @@
 #' @param design Design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model.
 #' @param sampleID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
 #' @param celltypeID Column name in the SCE object for the cell type variable 
+#' @param assay_name Name of the assay to use for the differential expression analysis. Default is "counts". If using a different assay, ensure it contains the count values.
 #' @param y Column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease
 #' @param region Column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
 #' @param coef Character specifying which level to investigate for the differential expression analysis e.g. in a case/control study use "case" if case is the identifier in the y column to get positive fold changes to relate to case samples. leave as default value for continuous y. Default is NULL.
@@ -16,7 +17,7 @@
 
 #' Checks all DE analysis parameters are specified correctly
 
-validate_input_parameters_de<-function(SCE, design, sampleID, celltypeID, 
+validate_input_parameters_de<-function(SCE, design, sampleID, celltypeID, assay_name,
                                        y, region, coef, control, 
                                        pval_adjust_method, adj_pval, output_path, 
                                        rmv_zero_count_genes, verbose){
@@ -27,6 +28,10 @@ validate_input_parameters_de<-function(SCE, design, sampleID, celltypeID,
     if(is.null(SCE[[celltypeID]]))
         stop(paste0("Error: the inputted celltypeID: ",celltypeID,
                     " is not present in the SCE object, perhaps check if spelling is correct"))
+    if(!is.character(assay_name))
+        stop("Error: please input a character for assay_name indicating the assay to be used for the differential expression analysis")
+    if(!assay_name %in% names(SCE@assays))
+        stop("Error: the specified assay name is not present in the SCE, please check if this is spelled correctly.")
     # check design is a formula, formatting is correct and variables exist
     if(!inherits(design,"formula"))
         stop("Error: please input a formula for the design variable specifying the comparison. See examples.")
@@ -92,7 +97,7 @@ validate_input_parameters_de<-function(SCE, design, sampleID, celltypeID,
     if(adj_pval<0|adj_pval>1)
         stop("Error: please input a 0-1 range number for the adj_pval indicating the cut off of significance for the differential expression analysis")
     # if the user doesn't want to save plots from DE analysis they can pass in a false for the folder input parameter
-    if(!isFALSE(output_path))
+    if(!identical(output_path,FALSE))
         if(!is.character(output_path))
             stop("Error: for the output_path input variable, please pass a directory for the plots to be saved in, go with the default or pass in FALSE stop plotting")
     if(!is.logical(verbose))

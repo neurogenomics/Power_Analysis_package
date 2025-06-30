@@ -12,7 +12,8 @@
 #' @param sampled downsampling carried out based on what (either "individuals" or "cells")
 #' @param sampleID sample ID
 #' @param celltypeID cell type ID
-#' @param coeff which coefficient to carry out DE analysis with respect to
+#' @param assay_name the name of the assay in the SCE object to use for the analysis. Default is "counts"
+#' @param coef which coefficient to carry out DE analysis with respect to
 #' @param Nperms number of subsets created when downsampling at each level
 #' @param y the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)
 #' @param region the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
@@ -29,7 +30,8 @@ downsampling_corrplots <- function(SCE,
                                    sampled="individuals",
                                    sampleID="donor_id",
                                    celltypeID="cell_type",
-                                   coeff="male",
+                                   assay_name="counts",
+                                   coef="male",
                                    Nperms=20,
                                    y=NULL,
                                    region="single_region",
@@ -57,7 +59,7 @@ downsampling_corrplots <- function(SCE,
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
         # run and save DE analysis
-        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, assay_name=assay_name, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coef))
         save(DEout,file=file.path(output_path,"DEout.RData"))
     }else{
         load(file.path(output_path,"DEout.RData"))

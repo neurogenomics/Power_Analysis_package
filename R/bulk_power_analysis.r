@@ -8,6 +8,7 @@
 #' @param output_path A clean directory path where DGE analysis outputs of down-sampled datasets and summary plots will be saved (should contain no subdirectories).
 #' @param celltypeIDs A character vector specifying the column name in each SCE that denotes cell type identity (in order of SCEs).
 #' @param sampleIDs  A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).
+#' @param assay_names A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries `"counts"`, which uses the count assay in each SCE.
 #' @param sampled Specifies the unit of down-sampling. Can be either `"individuals"` or `"cells"`, depending on whether the analysis downsamples across samples or cells.
 #' @param bulkDE DGE analysis output for a bulk RNA-seq dataset (e.g., `LFSR.tsv`): rows (rownames) should be the genes, columns should be tissues, and entries should be significance levels
 #' @param bulk_cutoff Proportion (0–1) of bulk tissues in which a gene must be differentially expressed to be considered (e.g., 0.9 selects DEGs found in ≥90% of tissues). Default is 0.9.
@@ -44,6 +45,7 @@ bulk_power_analysis <- function(SCEs,
                                 celltypeIDs="cell_type",
                                 sampled="individuals",
                                 sampleIDs="donor_id",
+                                assay_names="counts",
                                 bulkDE="placeholder",
                                 bulk_cutoff=0.9,
                                 pvalue=0.05,
@@ -63,6 +65,7 @@ bulk_power_analysis <- function(SCEs,
                                    celltypeIDs=celltypeIDs,
                                    sampled=sampled,
                                    sampleIDs=sampleIDs,
+                                   assay_names=assay_names,
                                    bulkDE=bulkDE,
                                    bulk_cutoff=bulk_cutoff,
                                    pvalue=pvalue,
@@ -80,6 +83,7 @@ bulk_power_analysis <- function(SCEs,
                                   celltype_correspondence = celltype_correspondence,
                                   sampled = sampled,
                                   sampleIDs = sampleIDs,
+                                  assay_names = assay_names,
                                   celltypeIDs = celltypeIDs,
                                   output_path = output_path,
                                   pvalue = pvalue,

@@ -1,20 +1,23 @@
 #' Calculate the summed pseudobulk values for an SCE object based on one single cell type only. Ensure to filter SCE to pass one cell type's data.
 
 #' @importFrom SingleCellExperiment colData counts
+#' @importFrom SummarizedExperiment assay
 #' @importFrom Matrix rowSums
 
 #' @param SCE SingleCellExperiment object, a specialised S4 class for storing data from single-cell experiments.
-#' @param sampleID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach
+#' @param sampleID Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach.
 #' @param pb_columns Vector, list of annotation column names in the SCE object to be returned in annot_pb rolled up to pseudobulk level. Default is NULL which won't return any information in annot_pb.
 #' @param region Column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
-#' @param rmv_zero_count_genes Whether genes with no count values in any cell should be removed. Default is TRUE
+#' @param rmv_zero_count_genes Whether genes with no count values in any cell should be removed. Default is TRUE.
+#' @param assay_name Name of the assay to use for the pseudobulk calculation. Default is "counts". If using a different assay, ensure it contains the count values.
 
 #' @return a list containing:
 #'              sumDat: matrix of the summed pseudobulk count values
 #'              annot_pb: dataframe of the annotation data from the SCE rolled up based on the pseudobulk aggregation.
 
 make_pseudobulk <- function(SCE,sampleID, pb_columns=NULL,
-                            region="single_region",rmv_zero_count_genes=TRUE){
+                            region="single_region",rmv_zero_count_genes=TRUE,
+                            assay_name="counts"){
     allAnnot <- colData(SCE)
     if(region=="single_region") # constant value for all samples
         allAnnot[[region]] <- "one_region"
@@ -35,7 +38,8 @@ make_pseudobulk <- function(SCE,sampleID, pb_columns=NULL,
                 allAnnot[[sampleID]]==indv & allAnnot[[region]]==region_i
             theData <- SCE[,whichCells]
             count <- count+1
-            sumDat[,count] <- rowSums(counts(theData))
+            #sumDat[,count] <- rowSums(counts(theData))
+            sumDat[,count] <- rowSums(assay(theData,assay_name))
             colnames(sumDat)[count] = sprintf("%s_%s",indv,region_i)
             # get annotation data
             print_warning <- FALSE

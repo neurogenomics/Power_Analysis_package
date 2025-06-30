@@ -13,6 +13,7 @@ power_analysis(
   design = "placeholder",
   sexID = "sex",
   celltypeID = "cell_type",
+  assay_name = "counts",
   coef = "male",
   fdr = 0.05,
   nom_pval = 0.05,
@@ -40,6 +41,8 @@ power_analysis(
 \item{sexID}{Name of the column in the \code{SCE} metadata that encodes the sex of individuals. Default is \code{"sex"}.}
 
 \item{celltypeID}{Name of the column in the \code{SCE} metadata indicating cell type labels. This is used to identify celltype specific DEGs.}
+
+\item{assay_name}{Name of the assay in the \code{SCE} object to use for analysis. Default is \code{"counts"}, which uses the count assay in each SCE.}
 
 \item{coef}{Character string indicating the level of the response variable (\code{y}) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.}
 

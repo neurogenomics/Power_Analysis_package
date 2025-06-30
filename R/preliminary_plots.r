@@ -15,7 +15,8 @@ utils::globalVariables(c("..density.."))
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
 #' @param sexID sex ID
 #' @param celltypeID cell type ID
-#' @param coeff which coefficient to carry out DE analysis with respect to
+#' @param assay_name the name of the assay in the SCE object that will be used for the analysis. Default is "counts"
+#' @param coef which coefficient to carry out DE analysis with respect to
 #' @param fdr the cut-off False Discovery Rate below which to select DEGs
 #' @param y the column name in the SCE object for the return variable e.g. "diagnosis" - Case or disease. Default is the last variable in the design formula. y can be discrete (logistic regression) or continuous (linear regression)
 #' @param region the column name in the SCE object for the study region. If there are multiple regions in the study (for example two brain regions). Pseudobulk values can be derived separately. Default is "single_region" which will not split by region.
@@ -31,7 +32,8 @@ preliminary_plots <- function(SCE,
                               design="placeholder",
                               sexID="sex",
                               celltypeID="cell_type",
-                              coeff="male",
+                              assay_name="counts",
+                              coef="male",
                               fdr=0.05,
                               y=NULL,
                               region="single_region",
@@ -52,7 +54,7 @@ preliminary_plots <- function(SCE,
     # check if DE analysis output present already in output_path
     if(!"DEout.RData" %in% list.files(output_path)){
     # run and save DE analysis
-        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coeff))
+        assign("DEout", DGE_analysis(SCE, design=design, sampleID=sampleID, celltypeID=celltypeID, assay_name=assay_name, y=y, region=region, control=control, pval_adjust_method=pval_adjust_method, rmv_zero_count_genes=rmv_zero_count_genes, verbose=T, coef=coef))
         save(DEout,file=file.path(output_path,"DEout.RData"))
     }else{
         load(file.path(output_path,"DEout.RData"))

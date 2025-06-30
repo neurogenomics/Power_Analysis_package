@@ -9,6 +9,7 @@
 #' @param design the design formula of class type `formula`. Equation used to fit the model- data for the generalised linear model e.g. expression ~ sex + pmi + disease
 #' @param sexID sex ID
 #' @param celltypeID cell type ID
+#' @param assay_name the name of the assay in the SCE object to be used for the analysis (default is "counts")
 #' @param coef which coefficient to carry out DE analysis with respect to
 #' @param fdr the cut-off False Discovery Rate below which to select DEGs
 #' @param nom_pval the cut-off nominal P-value below which to select DEGs (as an alternative to FDR)
@@ -32,6 +33,7 @@ validate_input_parameters_power <- function(SCE="placeholder",
                                             design="placeholder",
                                             sexID="placeholder",
                                             celltypeID="placeholder",
+                                            assay_name="placeholder",
                                             coef="placeholder",
                                             fdr="placeholder",
                                             nom_pval="placeholder",
@@ -123,6 +125,14 @@ validate_input_parameters_power <- function(SCE="placeholder",
             if(is.null(SCE[[celltypeID]])){
                 stop("Error: The specified column name (celltypeID argument) is not present in the SCE. Please check if this is spelled correctly.")
             }
+        }
+    }
+    if(assay_name!="placeholder"){
+        if(!is.character(assay_name)){
+            stop("Error: assay_name should be a string specifying the assay to be used for the analysis.")
+        }
+        if(!assay_name %in% names(SCE@assays)){
+            stop("Error: The specified assay name is not present in the SCE. Please check if this is spelled correctly.")
         }
     }
     if(coef!="placeholder"){

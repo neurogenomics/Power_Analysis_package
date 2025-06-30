@@ -11,6 +11,7 @@ preliminary_plots(
   design = "placeholder",
   sexID = "sex",
   celltypeID = "cell_type",
+  assay_name = "counts",
   coeff = "male",
   fdr = 0.05,
   y = NULL,
@@ -32,6 +33,8 @@ preliminary_plots(
 \item{sexID}{sex ID}
 
 \item{celltypeID}{cell type ID}
+
+\item{assay_name}{the name of the assay in the SCE object that will be used for the analysis. Default is "counts"}
 
 \item{coeff}{which coefficient to carry out DE analysis with respect to}
 

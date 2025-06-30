@@ -11,7 +11,7 @@
 
 downsampling_range <- function(SCE,
                                sampled="individuals",
-                               sampleID="Donor.ID"){
+                               sampleID="donor_id"){
 
     # get list of sample IDs
     coldata <- colData(SCE)

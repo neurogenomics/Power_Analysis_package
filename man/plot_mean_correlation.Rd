@@ -7,10 +7,11 @@
 plot_mean_correlation(
   main_dataset,
   SCEs,
-  sampleIDs,
-  celltypeIDs,
-  celltype_correspondence,
   dataset_names,
+  celltype_correspondence,
+  sampleIDs = "donor_id",
+  celltypeIDs = "cell_type",
+  assay_names = "counts",
   N_randperms = 5,
   N_subsets = 5,
   pvals = c(0.05, 0.025, 0.01, 0.001, 1e-04),
@@ -23,13 +24,15 @@ plot_mean_correlation(
 
 \item{SCEs}{list of the input data (elements should be SCE objects)}
 
+\item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
+
+\item{celltype_correspondence}{list of different names specifying each cell type}
+
 \item{sampleIDs}{list or vector of sample IDs (in order of SCEs)}
 
 \item{celltypeIDs}{list or vector of cell type IDs (in order of SCEs)}
 
-\item{celltype_correspondence}{list of different names specifying each cell type}
-
-\item{dataset_names}{names of the datasets as they appear in the correlation plot (in order of SCEs)}
+\item{assay_names}{names of the assays in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries "counts", which uses the count assay in each SCE.}
 
 \item{N_randperms}{number of random permutations of the dataset to be created}
 
