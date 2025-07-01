@@ -14,7 +14,7 @@ downsampling_DEanalysis(
   sexID = "sex",
   celltypeID = "cell_type",
   assay_name = "counts",
-  coeff = "male",
+  coef = "male",
   fdr = 0.05,
   nom_pval = 0.05,
   Nperms = 20,
@@ -44,7 +44,7 @@ downsampling_DEanalysis(
 
 \item{assay_name}{the assay name in the SCE object to use for the analysis. Default is "counts" which uses the counts assay in each SCE}
 
-\item{coeff}{which coefficient to carry out DE analysis with respect to}
+\item{coef}{which coefficient to carry out DE analysis with respect to}
 
 \item{fdr}{the cut-off False Discovery Rate below which to select DEGs}
 

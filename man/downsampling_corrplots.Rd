@@ -13,7 +13,7 @@ downsampling_corrplots(
   sampleID = "donor_id",
   celltypeID = "cell_type",
   assay_name = "counts",
-  coeff = "male",
+  coef = "male",
   Nperms = 20,
   y = NULL,
   region = "single_region",
@@ -39,7 +39,7 @@ downsampling_corrplots(
 
 \item{assay_name}{the name of the assay in the SCE object to use for the analysis. Default is "counts"}
 
-\item{coeff}{which coefficient to carry out DE analysis with respect to}
+\item{coef}{which coefficient to carry out DE analysis with respect to}
 
 \item{Nperms}{number of subsets created when downsampling at each level}
 

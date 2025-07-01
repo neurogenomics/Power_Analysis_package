@@ -12,7 +12,7 @@ preliminary_plots(
   sexID = "sex",
   celltypeID = "cell_type",
   assay_name = "counts",
-  coeff = "male",
+  coef = "male",
   fdr = 0.05,
   y = NULL,
   region = "single_region",
@@ -36,7 +36,7 @@ preliminary_plots(
 
 \item{assay_name}{the name of the assay in the SCE object that will be used for the analysis. Default is "counts"}
 
-\item{coeff}{which coefficient to carry out DE analysis with respect to}
+\item{coef}{which coefficient to carry out DE analysis with respect to}
 
 \item{fdr}{the cut-off False Discovery Rate below which to select DEGs}
 
