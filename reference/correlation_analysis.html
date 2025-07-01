@@ -73,6 +73,7 @@
 <span>  <span class="va">celltypeIDs</span>,</span>
 <span>  <span class="va">celltype_correspondence</span>,</span>
 <span>  <span class="va">dataset_names</span>,</span>
+<span>  assay_names <span class="op">=</span> <span class="st">"counts"</span>,</span>
 <span>  pvals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>, <span class="fl">1e-04</span><span class="op">)</span>,</span>
 <span>  alphaval <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  N_randperms <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -114,6 +115,10 @@
 
 <dt id="arg-dataset-names">dataset_names<a class="anchor" aria-label="anchor" href="#arg-dataset-names"></a></dt>
 <dd><p>A vector of names corresponding to each dataset (as you would like them to appear in output plots).</p></dd>
+
+
+<dt id="arg-assay-names">assay_names<a class="anchor" aria-label="anchor" href="#arg-assay-names"></a></dt>
+<dd><p>A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries <code>"counts"</code>, which uses the count assay in each SCE.</p></dd>
 
 
 <dt id="arg-pvals">pvals<a class="anchor" aria-label="anchor" href="#arg-pvals"></a></dt>

@@ -71,7 +71,8 @@
 <span>  <span class="va">sampleID</span>,</span>
 <span>  pb_columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  region <span class="op">=</span> <span class="st">"single_region"</span>,</span>
-<span>  rmv_zero_count_genes <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  rmv_zero_count_genes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  assay_name <span class="op">=</span> <span class="st">"counts"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,7 +85,7 @@
 
 
 <dt id="arg-sampleid">sampleID<a class="anchor" aria-label="anchor" href="#arg-sampleid"></a></dt>
-<dd><p>Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach</p></dd>
+<dd><p>Column name in the SCE object to perform pseudobulk on, usually the patient identifier. This column is used for grouping in the pseudobulk approach.</p></dd>
 
 
 <dt id="arg-pb-columns">pb_columns<a class="anchor" aria-label="anchor" href="#arg-pb-columns"></a></dt>
@@ -96,7 +97,11 @@
 
 
 <dt id="arg-rmv-zero-count-genes">rmv_zero_count_genes<a class="anchor" aria-label="anchor" href="#arg-rmv-zero-count-genes"></a></dt>
-<dd><p>Whether genes with no count values in any cell should be removed. Default is TRUE</p></dd>
+<dd><p>Whether genes with no count values in any cell should be removed. Default is TRUE.</p></dd>
+
+
+<dt id="arg-assay-name">assay_name<a class="anchor" aria-label="anchor" href="#arg-assay-name"></a></dt>
+<dd><p>Name of the assay to use for the pseudobulk calculation. Default is "counts". If using a different assay, ensure it contains the count values.</p></dd>
 
 </dl></div>
     <div id="value">

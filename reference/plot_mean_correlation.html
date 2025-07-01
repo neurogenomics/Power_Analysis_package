@@ -69,10 +69,11 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_mean_correlation</span><span class="op">(</span></span>
 <span>  <span class="va">main_dataset</span>,</span>
 <span>  <span class="va">SCEs</span>,</span>
-<span>  <span class="va">sampleIDs</span>,</span>
-<span>  <span class="va">celltypeIDs</span>,</span>
-<span>  <span class="va">celltype_correspondence</span>,</span>
 <span>  <span class="va">dataset_names</span>,</span>
+<span>  <span class="va">celltype_correspondence</span>,</span>
+<span>  sampleIDs <span class="op">=</span> <span class="st">"donor_id"</span>,</span>
+<span>  celltypeIDs <span class="op">=</span> <span class="st">"cell_type"</span>,</span>
+<span>  assay_names <span class="op">=</span> <span class="st">"counts"</span>,</span>
 <span>  N_randperms <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  N_subsets <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  pvals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>, <span class="fl">1e-04</span><span class="op">)</span>,</span>
@@ -93,6 +94,14 @@
 <dd><p>list of the input data (elements should be SCE objects)</p></dd>
 
 
+<dt id="arg-dataset-names">dataset_names<a class="anchor" aria-label="anchor" href="#arg-dataset-names"></a></dt>
+<dd><p>names of the datasets as they appear in the correlation plot (in order of SCEs)</p></dd>
+
+
+<dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
+<dd><p>list of different names specifying each cell type</p></dd>
+
+
 <dt id="arg-sampleids">sampleIDs<a class="anchor" aria-label="anchor" href="#arg-sampleids"></a></dt>
 <dd><p>list or vector of sample IDs (in order of SCEs)</p></dd>
 
@@ -101,12 +110,8 @@
 <dd><p>list or vector of cell type IDs (in order of SCEs)</p></dd>
 
 
-<dt id="arg-celltype-correspondence">celltype_correspondence<a class="anchor" aria-label="anchor" href="#arg-celltype-correspondence"></a></dt>
-<dd><p>list of different names specifying each cell type</p></dd>
-
-
-<dt id="arg-dataset-names">dataset_names<a class="anchor" aria-label="anchor" href="#arg-dataset-names"></a></dt>
-<dd><p>names of the datasets as they appear in the correlation plot (in order of SCEs)</p></dd>
+<dt id="arg-assay-names">assay_names<a class="anchor" aria-label="anchor" href="#arg-assay-names"></a></dt>
+<dd><p>names of the assays in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries "counts", which uses the count assay in each SCE.</p></dd>
 
 
 <dt id="arg-n-randperms">N_randperms<a class="anchor" aria-label="anchor" href="#arg-n-randperms"></a></dt>

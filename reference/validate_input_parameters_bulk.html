@@ -76,6 +76,7 @@
 <span>  celltypeIDs <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  sampled <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  sampleIDs <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  assay_names <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  bulkDE <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  bulk_cutoff <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  pvalue <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
@@ -127,6 +128,10 @@
 
 <dt id="arg-sampleids">sampleIDs<a class="anchor" aria-label="anchor" href="#arg-sampleids"></a></dt>
 <dd><p>A character vector specifying the column name in each SCE that represents sample or donor IDs (in order of SCEs).</p></dd>
+
+
+<dt id="arg-assay-names">assay_names<a class="anchor" aria-label="anchor" href="#arg-assay-names"></a></dt>
+<dd><p>A character vector specifying the assay names in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries <code>"counts"</code>, which uses the count assay in each SCE.</p></dd>
 
 
 <dt id="arg-bulkde">bulkDE<a class="anchor" aria-label="anchor" href="#arg-bulkde"></a></dt>

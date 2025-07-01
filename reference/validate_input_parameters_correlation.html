@@ -74,6 +74,7 @@
 <span>  celltype_correspondence <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  pvalues <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  dataset_names <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  assay_names <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  corr_mats <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  num_real_datasets <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
 <span>  alphaval <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
@@ -120,6 +121,10 @@
 
 <dt id="arg-dataset-names">dataset_names<a class="anchor" aria-label="anchor" href="#arg-dataset-names"></a></dt>
 <dd><p>names of the datasets as they appear in the correlation plot (in order of SCEs)</p></dd>
+
+
+<dt id="arg-assay-names">assay_names<a class="anchor" aria-label="anchor" href="#arg-assay-names"></a></dt>
+<dd><p>names of the assays in each SCE that will be used for the analysis (in order of SCEs). Default is a vector with all entries "counts", which uses the count assay in each SCE.</p></dd>
 
 
 <dt id="arg-corr-mats">corr_mats<a class="anchor" aria-label="anchor" href="#arg-corr-mats"></a></dt>
