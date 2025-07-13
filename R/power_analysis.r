@@ -26,6 +26,9 @@ utils::globalVariables(c("dataset"))
 #' @param control  Optional. Character string specifying the control level in the response variable (`y`) to compare against. Only required if `y` contains more than two levels. Ignored for binary or continuous outcomes.
 #' @param pval_adjust_method Method used to adjust p-values for multiple testing. Default is "BH" (Benjamini–Hochberg). See `stats::p.adjust` for available options.
 #' @param rmv_zero_count_genes Logical. Whether to remove genes with zero counts across all cells. Default is `TRUE`.
+#' @param abs_effect_size_thresholds Optional. Numeric vector of effect size (absolute logFC) thresholds to use for power analysis. If not provided, defaults to 25th, 50th and 75h percentiles of the absolute logFCs. Must contain non-negative, increasing values.
+#' @param upreg_effect_size_thresholds  Optional. Numeric vector of effect size thresholds to use for power analysis (for up-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the positive logFCs. Must contain non-negative, increasing values.
+#' @param downreg_effect_size_thresholds Optional. Numeric vector of effect size thresholds to use for power analysis (for down-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the negative logFCs. Must contain negative (or zero), increasing values.
 
 #' Saves all plots and DGE analysis outputs in the appropriate directories
 #' @export
@@ -68,7 +71,10 @@ power_analysis <- function(SCE,
                            region="single_region",
                            control=NULL,
                            pval_adjust_method="BH",
-                           rmv_zero_count_genes=TRUE){
+                           rmv_zero_count_genes=TRUE,
+                           abs_effect_size_thresholds="placeholder",
+                           upreg_effect_size_thresholds="placeholder",
+                           downreg_effect_size_thresholds="placeholder") {
 
     # Comprehensive validation for all parameters used in the pipeline
     validate_input_parameters_power(SCE=SCE,
@@ -87,7 +93,10 @@ power_analysis <- function(SCE,
                                     region=region,
                                     control=control,
                                     pval_adjust_method=pval_adjust_method,
-                                    rmv_zero_count_genes=rmv_zero_count_genes)
+                                    rmv_zero_count_genes=rmv_zero_count_genes,
+                                    abs_effect_size_thresholds=abs_effect_size_thresholds,
+                                    upreg_effect_size_thresholds=upreg_effect_size_thresholds,
+                                    downreg_effect_size_thresholds=downreg_effect_size_thresholds)
 
     setwd(output_path)
 
@@ -145,7 +154,10 @@ power_analysis <- function(SCE,
                 assay_name=assay_name,
                 fdr=fdr,
                 nom_pval=nom_pval,
-                Nperms=Nperms)
+                Nperms=Nperms,
+                abs_effect_size_thresholds=abs_effect_size_thresholds,
+                upreg_effect_size_thresholds=upreg_effect_size_thresholds,
+                downreg_effect_size_thresholds=downreg_effect_size_thresholds)
     # down-sample cells and run DE analysis
     downsampling_DEanalysis(SCE=SCE,
                             range_downsampled=range_downsampled_cells,
@@ -175,7 +187,10 @@ power_analysis <- function(SCE,
                 assay_name=assay_name,
                 fdr=fdr,
                 nom_pval=nom_pval,
-                Nperms=Nperms)
+                Nperms=Nperms,
+                abs_effect_size_thresholds=abs_effect_size_thresholds,
+                upreg_effect_size_thresholds=upreg_effect_size_thresholds,
+                downreg_effect_size_thresholds=downreg_effect_size_thresholds)
     # create down-sampling correlation plots (individuals)
     downsampling_corrplots(SCE=SCE,
                            range_downsampled=range_downsampled_individuals,

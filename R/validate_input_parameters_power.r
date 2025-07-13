@@ -21,6 +21,9 @@
 #' @param control character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.
 #' @param pval_adjust_method the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
 #' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
+#' @param abs_effect_size_thresholds Optional. Numeric vector of effect size (absolute logFC) thresholds to use for power analysis. If not provided, defaults to 25th, 50th and 75h percentiles of the absolute logFCs. Must contain non-negative, increasing values.
+#' @param upreg_effect_size_thresholds  Optional. Numeric vector of effect size thresholds to use for power analysis (for up-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the positive logFCs. Must contain non-negative, increasing values.
+#' @param downreg_effect_size_thresholds Optional. Numeric vector of effect size thresholds to use for power analysis (for down-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the negative logFCs. Must contain negative (or zero), increasing values.
 
 #' Checks all power analysis parameters are specified correctly
 
@@ -44,7 +47,10 @@ validate_input_parameters_power <- function(SCE="placeholder",
                                             region="placeholder",
                                             control="placeholder",
                                             pval_adjust_method="placeholder",
-                                            rmv_zero_count_genes="placeholder"){
+                                            rmv_zero_count_genes="placeholder",
+                                            abs_effect_size_thresholds="placeholder",
+                                            upreg_effect_size_thresholds="placeholder",
+                                            downreg_effect_size_thresholds="placeholder") {
 
     # test each parameter to check if it works
     if(class(SCE)[1]!="SingleCellExperiment"){
@@ -222,6 +228,39 @@ validate_input_parameters_power <- function(SCE="placeholder",
     if(rmv_zero_count_genes!="placeholder"){
         if(!is.logical(rmv_zero_count_genes)){
             stop("Error: please input TRUE/FALSE for rmv_zero_count_genes")
+        }
+    }
+    if(!identical(abs_effect_size_thresholds, "placeholder")){
+        if(!is.numeric(abs_effect_size_thresholds)){
+            stop("Error: abs_effect_size_thresholds should be a numeric vector of effect size (logFC) thresholds.")
+        }
+        if(length(abs_effect_size_thresholds) != 3){
+            stop("Error: abs_effect_size_thresholds should contain exactly three values.")
+        }
+        if(!all(abs_effect_size_thresholds >= 0)){
+            stop("Error: abs_effect_size_thresholds should contain only non-negative values.")
+        }
+    }
+    if(!identical(upreg_effect_size_thresholds, "placeholder")){
+        if(!is.numeric(upreg_effect_size_thresholds)){
+            stop("Error: upreg_effect_size_thresholds should be a numeric vector of effect size (logFC) thresholds for up-regulated DEGs.")
+        }
+        if(length(upreg_effect_size_thresholds) != 3){
+            stop("Error: upreg_effect_size_thresholds should contain exactly three values.")
+        }
+        if(!all(upreg_effect_size_thresholds >= 0)){
+            stop("Error: upreg_effect_size_thresholds should contain only non-negative values.")
+        }
+    }
+    if(!identical(downreg_effect_size_thresholds, "placeholder")){
+        if(!is.numeric(downreg_effect_size_thresholds)){
+            stop("Error: downreg_effect_size_thresholds should be a numeric vector of effect size (logFC) thresholds for down-regulated DEGs.")
+        }
+        if(length(downreg_effect_size_thresholds) != 3){
+            stop("Error: downreg_effect_size_thresholds should contain exactly three values.")
+        }
+        if(!all(downreg_effect_size_thresholds <= 0)){
+            stop("Error: downreg_effect_size_thresholds should contain only negative values or zero.")
         }
     }
 }

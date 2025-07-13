@@ -29,6 +29,9 @@ utils::globalVariables(c("design","PValue","logFC","name","variable"))
 #' @param control character specifying which control level for the differential expression analysis e.g. in a case/control/other study use "control" in the y column to compare against. NOTE only need to specify if more than two groups in y, leave as default value for two groups or continuous y. Default is NULL.
 #' @param pval_adjust_method the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options
 #' @param rmv_zero_count_genes whether genes with no count values in any cell should be removed. Default is TRUE
+#' @param abs_effect_size_thresholds Optional. Numeric vector of effect size (absolute logFC) thresholds to use for power analysis. If not provided, defaults to 25th, 50th and 75h percentiles of the absolute logFCs. Must contain non-negative, increasing values.
+#' @param upreg_effect_size_thresholds  Optional. Numeric vector of effect size thresholds to use for power analysis (for up-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the positive logFCs. Must contain non-negative, increasing values.
+#' @param downreg_effect_size_thresholds Optional. Numeric vector of effect size thresholds to use for power analysis (for down-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the negative logFCs. Must contain negative (or zero), increasing values.
 
 #' Saves all plots in the appropriate directory
 
@@ -48,7 +51,10 @@ power_plots <- function(SCE,
                         region="single_region",
                         control=NULL,
                         pval_adjust_method="BH",
-                        rmv_zero_count_genes=TRUE){
+                        rmv_zero_count_genes=TRUE,
+                        abs_effect_size_thresholds="placeholder",
+                        upreg_effect_size_thresholds="placeholder",
+                        downreg_effect_size_thresholds="placeholder"){
 
     # alter range_downsampled
     if(identical(range_downsampled,"placeholder")){
@@ -91,15 +97,51 @@ power_plots <- function(SCE,
     quantiles_fdr_upreg <- quantile(upreg_fdr)
     quantiles_fdr_downreg <- quantile(downreg_fdr)
     # define quantiles_fdr
-    Q1_fdr <- round(quantiles_fdr[[2]],1)
-    Q2_fdr <- round(quantiles_fdr[[3]],1)
-    Q3_fdr <- round(quantiles_fdr[[4]],1)
-    Q1_fdr_upreg <- round(quantiles_fdr_upreg[[2]],1)
-    Q2_fdr_upreg <- round(quantiles_fdr_upreg[[3]],1)
-    Q3_fdr_upreg <- round(quantiles_fdr_upreg[[4]],1)
-    Q1_fdr_downreg <- round(quantiles_fdr_downreg[[2]],1)
-    Q2_fdr_downreg <- round(quantiles_fdr_downreg[[3]],1)
-    Q3_fdr_downreg <- round(quantiles_fdr_downreg[[4]],1)
+    if(!identical(abs_effect_size_thresholds,"placeholder")){
+        # use abs_effect_size_thresholds provided
+        if(!is.numeric(abs_effect_size_thresholds) || any(abs_effect_size_thresholds < 0) || length(abs_effect_size_thresholds) != 3){
+            stop("abs_effect_size_thresholds must be a numeric vector of non-negative, increasing values, of length 3.")
+        }
+        abs_effect_size_thresholds <- sort(abs_effect_size_thresholds)
+        Q1_fdr <- abs_effect_size_thresholds[1]
+        Q2_fdr <- abs_effect_size_thresholds[2]
+        Q3_fdr <- abs_effect_size_thresholds[3]
+    }else{
+        # use quantiles_fdr
+        Q1_fdr <- round(quantiles_fdr[[2]],1)
+        Q2_fdr <- round(quantiles_fdr[[3]],1)
+        Q3_fdr <- round(quantiles_fdr[[4]],1)
+    }
+    if(!identical(upreg_effect_size_thresholds,"placeholder")){
+        # use upreg_effect_size_thresholds provided
+        if(!is.numeric(upreg_effect_size_thresholds) || any(upreg_effect_size_thresholds < 0) || length(upreg_effect_size_thresholds) != 3){
+            stop("upreg_effect_size_thresholds must be a numeric vector of non-negative, increasing values, of length 3.")
+        }
+        upreg_effect_size_thresholds <- sort(upreg_effect_size_thresholds)
+        Q1_fdr_upreg <- upreg_effect_size_thresholds[1]
+        Q2_fdr_upreg <- upreg_effect_size_thresholds[2]
+        Q3_fdr_upreg <- upreg_effect_size_thresholds[3]
+    }else{
+        # use quantiles_fdr_upreg
+        Q1_fdr_upreg <- round(quantiles_fdr_upreg[[2]],1)
+        Q2_fdr_upreg <- round(quantiles_fdr_upreg[[3]],1)
+        Q3_fdr_upreg <- round(quantiles_fdr_upreg[[4]],1)
+    }
+    if(!identical(downreg_effect_size_thresholds,"placeholder")){
+        # use downreg_effect_size_thresholds provided
+        if(!is.numeric(downreg_effect_size_thresholds) || any(downreg_effect_size_thresholds > 0) || length(downreg_effect_size_thresholds) != 3){
+            stop("downreg_effect_size_thresholds must be a numeric vector of negative (or zero), increasing values, of length 3.")
+        }
+        downreg_effect_size_thresholds <- sort(downreg_effect_size_thresholds)
+        Q1_fdr_downreg <- downreg_effect_size_thresholds[1]
+        Q2_fdr_downreg <- downreg_effect_size_thresholds[2]
+        Q3_fdr_downreg <- downreg_effect_size_thresholds[3]
+    }else{
+        # use quantiles_fdr_downreg
+        Q1_fdr_downreg <- round(quantiles_fdr_downreg[[2]],1)
+        Q2_fdr_downreg <- round(quantiles_fdr_downreg[[3]],1)
+        Q3_fdr_downreg <- round(quantiles_fdr_downreg[[4]],1)
+    }
     # numbers of DEGs in each logFC range
     below_Q1_fdr <- length(eff_size_fdr[eff_size_fdr < Q1_fdr])
     below_Q1_Q2_fdr <- length(eff_size_fdr[eff_size_fdr >= Q1_fdr & eff_size_fdr < Q2_fdr])
@@ -147,15 +189,51 @@ power_plots <- function(SCE,
     quantiles_pval_upreg <- quantile(upreg_pval)
     quantiles_pval_downreg <- quantile(downreg_pval)
     # define quantiles_pval
-    Q1_pval <- round(quantiles_pval[[2]],1)
-    Q2_pval <- round(quantiles_pval[[3]],1)
-    Q3_pval <- round(quantiles_pval[[4]],1)
-    Q1_pval_upreg <- round(quantiles_pval_upreg[[2]],1)
-    Q2_pval_upreg <- round(quantiles_pval_upreg[[3]],1)
-    Q3_pval_upreg <- round(quantiles_pval_upreg[[4]],1)
-    Q1_pval_downreg <- round(quantiles_pval_downreg[[2]],1)
-    Q2_pval_downreg <- round(quantiles_pval_downreg[[3]],1)
-    Q3_pval_downreg <- round(quantiles_pval_downreg[[4]],1)
+    if(!identical(abs_effect_size_thresholds,"placeholder")){
+        # use abs_effect_size_thresholds provided
+        if(!is.numeric(abs_effect_size_thresholds) || any(abs_effect_size_thresholds < 0) || length(abs_effect_size_thresholds) != 3){
+            stop("abs_effect_size_thresholds must be a numeric vector of non-negative, increasing values, of length 3.")
+        }
+        abs_effect_size_thresholds <- sort(abs_effect_size_thresholds)
+        Q1_pval <- abs_effect_size_thresholds[1]
+        Q2_pval <- abs_effect_size_thresholds[2]
+        Q3_pval <- abs_effect_size_thresholds[3]
+    }else{
+        # use quantiles_pval
+        Q1_pval <- round(quantiles_pval[[2]],1)
+        Q2_pval <- round(quantiles_pval[[3]],1)
+        Q3_pval <- round(quantiles_pval[[4]],1)
+    }
+    if(!identical(upreg_effect_size_thresholds,"placeholder")){
+        # use upreg_effect_size_thresholds provided
+        if(!is.numeric(upreg_effect_size_thresholds) || any(upreg_effect_size_thresholds < 0) || length(upreg_effect_size_thresholds) != 3){
+            stop("upreg_effect_size_thresholds must be a numeric vector of non-negative, increasing values, of length 3.")
+        }
+        upreg_effect_size_thresholds <- sort(upreg_effect_size_thresholds)
+        Q1_pval_upreg <- upreg_effect_size_thresholds[1]
+        Q2_pval_upreg <- upreg_effect_size_thresholds[2]
+        Q3_pval_upreg <- upreg_effect_size_thresholds[3]
+    }else{
+        # use quantiles_pval_upreg
+        Q1_pval_upreg <- round(quantiles_pval_upreg[[2]],1)
+        Q2_pval_upreg <- round(quantiles_pval_upreg[[3]],1)
+        Q3_pval_upreg <- round(quantiles_pval_upreg[[4]],1)
+    }
+    if(!identical(downreg_effect_size_thresholds,"placeholder")){
+        # use downreg_effect_size_thresholds provided
+        if(!is.numeric(downreg_effect_size_thresholds) || any(downreg_effect_size_thresholds > 0) || length(downreg_effect_size_thresholds) != 3){
+            stop("downreg_effect_size_thresholds must be a numeric vector of negative (or zero), increasing values, of length 3.")
+        }
+        downreg_effect_size_thresholds <- sort(downreg_effect_size_thresholds)
+        Q1_pval_downreg <- downreg_effect_size_thresholds[1]
+        Q2_pval_downreg <- downreg_effect_size_thresholds[2]
+        Q3_pval_downreg <- downreg_effect_size_thresholds[3]
+    }else{
+        # use quantiles_pval_downreg
+        Q1_pval_downreg <- round(quantiles_pval_downreg[[2]],1)
+        Q2_pval_downreg <- round(quantiles_pval_downreg[[3]],1)
+        Q3_pval_downreg <- round(quantiles_pval_downreg[[4]],1)
+    }
     # numbers of DEGs in each logFC range
     below_Q1_pval <- length(eff_size_pval[eff_size_pval < Q1_pval])
     below_Q1_Q2_pval <- length(eff_size_pval[eff_size_pval >= Q1_pval & eff_size_pval < Q2_pval])
