@@ -83,7 +83,10 @@
 <span>  region <span class="op">=</span> <span class="st">"single_region"</span>,</span>
 <span>  control <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pval_adjust_method <span class="op">=</span> <span class="st">"BH"</span>,</span>
-<span>  rmv_zero_count_genes <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  rmv_zero_count_genes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  abs_effect_size_thresholds <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  upreg_effect_size_thresholds <span class="op">=</span> <span class="st">"placeholder"</span>,</span>
+<span>  downreg_effect_size_thresholds <span class="op">=</span> <span class="st">"placeholder"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -156,7 +159,19 @@
 
 
 <dt id="arg-rmv-zero-count-genes">rmv_zero_count_genes<a class="anchor" aria-label="anchor" href="#arg-rmv-zero-count-genes"></a></dt>
-<dd><p>whether genes with no count values in any cell should be removed. Default is TRUE
+<dd><p>whether genes with no count values in any cell should be removed. Default is TRUE</p></dd>
+
+
+<dt id="arg-abs-effect-size-thresholds">abs_effect_size_thresholds<a class="anchor" aria-label="anchor" href="#arg-abs-effect-size-thresholds"></a></dt>
+<dd><p>Optional. Numeric vector of effect size (absolute logFC) thresholds to use for power analysis. If not provided, defaults to 25th, 50th and 75h percentiles of the absolute logFCs. Must contain non-negative, increasing values.</p></dd>
+
+
+<dt id="arg-upreg-effect-size-thresholds">upreg_effect_size_thresholds<a class="anchor" aria-label="anchor" href="#arg-upreg-effect-size-thresholds"></a></dt>
+<dd><p>Optional. Numeric vector of effect size thresholds to use for power analysis (for up-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the positive logFCs. Must contain non-negative, increasing values.</p></dd>
+
+
+<dt id="arg-downreg-effect-size-thresholds">downreg_effect_size_thresholds<a class="anchor" aria-label="anchor" href="#arg-downreg-effect-size-thresholds"></a></dt>
+<dd><p>Optional. Numeric vector of effect size thresholds to use for power analysis (for down-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the negative logFCs. Must contain negative (or zero), increasing values.
 Saves all plots in the appropriate directory</p></dd>
 
 </dl></div>
