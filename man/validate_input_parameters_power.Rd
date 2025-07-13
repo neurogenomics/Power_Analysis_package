@@ -25,7 +25,10 @@ validate_input_parameters_power(
   region = "placeholder",
   control = "placeholder",
   pval_adjust_method = "placeholder",
-  rmv_zero_count_genes = "placeholder"
+  rmv_zero_count_genes = "placeholder",
+  abs_effect_size_thresholds = "placeholder",
+  upreg_effect_size_thresholds = "placeholder",
+  downreg_effect_size_thresholds = "placeholder"
 )
 }
 \arguments{
@@ -69,7 +72,13 @@ validate_input_parameters_power(
 
 \item{pval_adjust_method}{the adjustment method for the p-value in the differential expression analysis. Default is benjamini hochberg "BH". See  stats::p.adjust for available options}
 
-\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE
+\item{rmv_zero_count_genes}{whether genes with no count values in any cell should be removed. Default is TRUE}
+
+\item{abs_effect_size_thresholds}{Optional. Numeric vector of effect size (absolute logFC) thresholds to use for power analysis. If not provided, defaults to 25th, 50th and 75h percentiles of the absolute logFCs. Must contain non-negative, increasing values.}
+
+\item{upreg_effect_size_thresholds}{Optional. Numeric vector of effect size thresholds to use for power analysis (for up-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the positive logFCs. Must contain non-negative, increasing values.}
+
+\item{downreg_effect_size_thresholds}{Optional. Numeric vector of effect size thresholds to use for power analysis (for down-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the negative logFCs. Must contain negative (or zero), increasing values.
 Checks all power analysis parameters are specified correctly}
 }
 \description{

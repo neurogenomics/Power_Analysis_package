@@ -22,7 +22,10 @@ power_analysis(
   region = "single_region",
   control = NULL,
   pval_adjust_method = "BH",
-  rmv_zero_count_genes = TRUE
+  rmv_zero_count_genes = TRUE,
+  abs_effect_size_thresholds = "placeholder",
+  upreg_effect_size_thresholds = "placeholder",
+  downreg_effect_size_thresholds = "placeholder"
 )
 }
 \arguments{
@@ -60,7 +63,13 @@ power_analysis(
 
 \item{pval_adjust_method}{Method used to adjust p-values for multiple testing. Default is "BH" (Benjamini–Hochberg). See \code{stats::p.adjust} for available options.}
 
-\item{rmv_zero_count_genes}{Logical. Whether to remove genes with zero counts across all cells. Default is \code{TRUE}.
+\item{rmv_zero_count_genes}{Logical. Whether to remove genes with zero counts across all cells. Default is \code{TRUE}.}
+
+\item{abs_effect_size_thresholds}{Optional. Numeric vector of effect size (absolute logFC) thresholds to use for power analysis. If not provided, defaults to 25th, 50th and 75h percentiles of the absolute logFCs. Must contain non-negative, increasing values.}
+
+\item{upreg_effect_size_thresholds}{Optional. Numeric vector of effect size thresholds to use for power analysis (for up-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the positive logFCs. Must contain non-negative, increasing values.}
+
+\item{downreg_effect_size_thresholds}{Optional. Numeric vector of effect size thresholds to use for power analysis (for down-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the negative logFCs. Must contain negative (or zero), increasing values.
 Saves all plots and DGE analysis outputs in the appropriate directories}
 }
 \description{
