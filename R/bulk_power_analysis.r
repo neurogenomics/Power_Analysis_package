@@ -99,9 +99,15 @@ bulk_power_analysis <- function(SCEs,
 
     # Run prop_bulk_DEGs_sc
     prop_bulk_DEGs_sc(bulkDE = bulkDE,
-                      output_path = output_path,
                       bulk_cutoff = bulk_cutoff,
                       pvalue = pvalue,
-                      sampled = sampled)
+                      sampled = sampled,
+                      output_path = output_path,
+                      fontsize_axislabels=fontsize_axislabels,
+                      fontsize_axisticks=fontsize_axisticks,
+                      fontsize_title=fontsize_title,
+                      fontsize_legendlabels=fontsize_legendlabels,
+                      fontsize_legendtitle=fontsize_legendtitle,
+                      plot_title=plot_title)
 
 }

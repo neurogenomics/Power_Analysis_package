@@ -86,7 +86,7 @@ downsampling_corrplots <- function(SCE,
         
         # define path and folders
         path <- file.path(inpath,"DE_downsampling")
-        downsampled_folders <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"samples")
+        downsampled_folders <- paste0(as.character(range_downsampled),"samples")
         # get corr matrices for each permutation
         corrMats_1000 <- list()
         for(i in 1:Nperms){
@@ -111,8 +111,8 @@ downsampling_corrplots <- function(SCE,
                     setwd(newpath)
                 }
             }
-            allstudies <- mget(paste0("samples_", paste(range_downsampled, sep=" ", collapse=NULL)))
-            names(allstudies) <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"_samples")
+            allstudies <- mget(paste0("samples_", as.character(range_downsampled)))
+            names(allstudies) <- paste0(as.character(range_downsampled)," samples")
             # compute correlation for this permutation
             corrMats_1000[[i]] <- compute_downsampled_corr(allstudies)[[1]]
         }
@@ -158,8 +158,8 @@ downsampling_corrplots <- function(SCE,
                     setwd(newpath)
                 }
             }
-            allstudies <- mget(paste0("samples_", paste(range_downsampled, sep=" ", collapse=NULL)))
-            names(allstudies) <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"_samples")
+            allstudies <- mget(paste0("samples_", as.character(range_downsampled)))
+            names(allstudies) <- paste0(as.character(range_downsampled)," samples")
             # compute correlation for this permutation
             corrMats_500[[i]] <- compute_downsampled_corr(allstudies)[[1]]
         }
@@ -186,7 +186,7 @@ downsampling_corrplots <- function(SCE,
         ## if down-sampled cells
         # define path and folders
         path <- file.path(inpath,"DE_downsampling_cells")
-        downsampled_folders <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"cells_persample")
+        downsampled_folders <- paste0(as.character(range_downsampled),"cells_persample")
         # get corr matrices for each permutation
         corrMats_cells_1000 <- list()
         for(i in 1:Nperms){
@@ -211,8 +211,8 @@ downsampling_corrplots <- function(SCE,
                     setwd(newpath)
                 }
             }
-            allstudies <- mget(paste0("cells_", paste(range_downsampled, sep=" ", collapse=NULL)))
-            names(allstudies) <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"_cells/sample")
+            allstudies <- mget(paste0("cells_", as.character(range_downsampled)))
+            names(allstudies) <- paste0(as.character(range_downsampled)," cells/sample")
             # compute correlation for this permutation
             corrMats_cells_1000[[i]] <- compute_downsampled_corr(allstudies,"cells")[[1]]
         }
@@ -261,8 +261,8 @@ downsampling_corrplots <- function(SCE,
                     setwd(newpath)
                 }
             }
-            allstudies <- mget(paste0("cells_", paste(range_downsampled, sep=" ", collapse=NULL)))
-            names(allstudies) <- paste0(paste(range_downsampled, sep=" ", collapse=NULL),"_cells/sample")
+            allstudies <- mget(paste0("cells_", as.character(range_downsampled)))
+            names(allstudies) <- paste0(as.character(range_downsampled)," cells/sample")
             # compute correlation for this permutation
             corrMats_cells_500[[i]] <- compute_downsampled_corr(allstudies,"cells")[[1]]
         }
