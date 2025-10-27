@@ -1,3 +1,4 @@
+# Test
 #' Perform correlation analysis of DEG effect sizes between single-cell datasets
 #'
 #' Runs the correlation analysis pipeline by computing Spearman’s rank correlations of log₂ fold-changes for differentially expressed genes (DEGs) across and within multiple scRNA-seq datasets. Uses a user-specified reference dataset to define DEGs and compares effect sizes across studies, independently sampled subsets, and permuted controls.
