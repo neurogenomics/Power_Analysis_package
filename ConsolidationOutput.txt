@@ -1,0 +1,54 @@
+Starting consolidation...
+Source: /mnt/data/shared/poweranalysis/preprocessed_data
+Destination: /mnt/data/shared/poweranalysis/preprocessed_data_CONSOLIDATED
+
+--- Processing: Astrocyte ---
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/Astro
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/astrocyte_of_the_cerebral_cortex
+
+--- Processing: Excitatory_Neuron ---
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L2
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L2-3
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L2-4
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L3-4
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L3-5
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L4-5
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L4-6
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L5-6
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L5-6-I
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/EN-L5-6-II
+
+--- Processing: Inhibitory_Neuron ---
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/IN
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/IN-GAD1
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/IN-LAMP5
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/IN-PVALB
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/IN-SST
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/IN-SST-NMBR
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/IN-SST-NPY
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/IN-VIP
+
+--- Processing: Endothelial ---
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/Endo
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/cerebral_cortex_endothelial_cell
+
+--- Processing: Microglia_Immune ---
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/Immune
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/Micro
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/microglial_cell
+
+--- Processing: Oligodendrocyte ---
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/Oligo
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/oligodendrocyte
+
+--- Processing: OPC ---
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/OPC
+
+--- Processing: Mural ---
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/Mural
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/Pericyte
+Copying files from: /mnt/data/shared/poweranalysis/preprocessed_data/VSMC
+
+--- CONSOLIDATION COMPLETE ---
+All files have been merged into: /mnt/data/shared/poweranalysis/preprocessed_data_CONSOLIDATED

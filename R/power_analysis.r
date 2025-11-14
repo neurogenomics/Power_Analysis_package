@@ -1,210 +1,229 @@
-# Define global variables
-utils::globalVariables(c("dataset"))
+# SCRIPT 4: Run Single DE Analysis and Stratify Results
+#
+# REFACTORED into a reusable function.
+#
+# GOAL:
+# 1. Define a main function `run_de_analysis` that encapsulates
+#    all the logic (load, run DE, stratify).
+# 2. Call this function with a set of parameters to get a
+#    "ground truth" DEG list.
 
+# --- 1. SETUP ---
+library(SingleCellExperiment)
+library(qs)
+library(scuttle)     # For aggregateAcrossCells
+library(DESeq2)      # For the DE analysis
+library(dplyr)       # For easy data filtering
+library(tibble)      # For rownames_to_column
 
-#' Perform robust power analysis for differential gene expression in scRNA-seq dataset
+# --- 2. DEFINE THE REUSABLE DE ANALYSIS FUNCTION ---
+
+#' Run Pseudobulk DE Analysis and Stratify Results
 #'
-#' Run the complete power analysis pipeline by downsampling individuals and cells, performing differential expression analysis, and generating power plots.
-
-#' @importFrom stats as.formula
-
-#' @param SCE A `SingleCellExperiment` object containing the input scRNA-seq data. You may also provide a path to an `.R`, `.rds`, or `.qs` file. If using a file, ensure the `SCE` object inside is named `SCE`.
-#' @param range_downsampled_individuals A numeric vector specifying the number of individuals to include at each downsampling level, in ascending order (e.g., c(10, 20, 30)). By default, 12 evenly spaced values are generated from 0 to the total number of samples, each rounded up to the nearest multiple of 5.
-#' @param range_downsampled_cells A numeric vector specifying the number of cells per individual to include at each downsampling level, in ascending order (e.g., c(20, 40, 60)). By default, 11 evenly spaced values are generated from 0 to the 90th percentile of per-individual cell counts, each rounded to the nearest multiple of 5.
-#' @param output_path A directory path where DGE analysis outputs of down-sampled datasets and power plots will be saved.
-#' @param sampleID Name of the column in the `SCE` metadata that identifies biological replicates (e.g., patient ID). This column is used for grouping in the pseudobulk approach.
-#' @param celltypeID Name of the column in the `SCE` metadata indicating cell type labels. This is used to identify celltype specific DEGs.
-#' @param assay_name Name of the assay in the `SCE` object to use for analysis. Default is `"counts"`, which uses the count assay in each SCE.
-#' @param sexID Name of the column in the `SCE` metadata that encodes the sex of individuals. Default is `"sex"`.
-#' @param design  A model formula specifying covariates for differential expression analysis. It should be of class `formula` (e.g., `~ sex + pmi + disease`). This formula is used to fit a generalized linear model.
-#' @param y Name of the column in the `SCE` metadata representing the response variable (e.g., "diagnosis" - case or disease). If not specified, defaults to the last variable in the `design` formula. Accepts both categorical (logistic regression) and continuous (linear regression) variables.
-#' @param coef Character string indicating the level of the response variable (`y`) to test for in differential expression. For case-control studies, this would typically be "case" (e.g. "AD"). Typically used in binary comparisons. Not required for continuous outcomes.
-#' @param fdr Adjusted p-value (False Discovery Rate) threshold for selecting significantly differentially expressed genes (DEGs). Only genes with adjusted p-values below this value will be retained. Default is 0.05.
-#' @param nom_pval Nominal (unadjusted) p-value threshold for selecting DEGs. Used as an alternative to FDR when preferred. Only genes with p-values below this cutoff will be retained. Default is 0.05.
-#' @param Nperms Number of subsets (permutations) to generate at each downsampling level during power analysis. Each subset is analyzed independently to estimate variability. Default is 20.
-#' @param region Optional column in `SCE` metadata indicating the tissue or brain region. If present, differential expression is performed within each region separately. Defaults to "single_region" (i.e., no regional split).
-#' @param control  Optional. Character string specifying the control level in the response variable (`y`) to compare against. Only required if `y` contains more than two levels. Ignored for binary or continuous outcomes.
-#' @param pval_adjust_method Method used to adjust p-values for multiple testing. Default is "BH" (Benjamini–Hochberg). See `stats::p.adjust` for available options.
-#' @param rmv_zero_count_genes Logical. Whether to remove genes with zero counts across all cells. Default is `TRUE`.
-#' @param abs_effect_size_thresholds Optional. Numeric vector of effect size (absolute logFC) thresholds to use for power analysis. If not provided, defaults to 25th, 50th and 75h percentiles of the absolute logFCs. Must contain non-negative, increasing values.
-#' @param upreg_effect_size_thresholds  Optional. Numeric vector of effect size thresholds to use for power analysis (for up-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the positive logFCs. Must contain non-negative, increasing values.
-#' @param downreg_effect_size_thresholds Optional. Numeric vector of effect size thresholds to use for power analysis (for down-regulated DEGs). If not provided, defaults to 25th, 50th and 75h percentiles of the negative logFCs. Must contain negative (or zero), increasing values.
-
-#' Saves all plots and DGE analysis outputs in the appropriate directories
-#' @export
+#' Takes a single SCE object and performs a full DESeq2 analysis,
+#' returning stratified lists of DEGs.
 #'
-#' @examples
-#'\dontrun{
-#' # Too slow to run with check()
-#' # 1. Prepare SCE
-#' micro_tsai <- system.file("extdata", "Tsai_Micro.qs", package="poweranalysis")
-#' SCE_tsai <- qs::qread(micro_tsai)
+#' @param sce A loaded SingleCellExperiment object.
+#' @param sample_id_col The column name in colData for the sample/individual ID
+#'   (e.g., "donor_id").
+#' @param assay_name The string name of the assay to use (e.g., "counts" or "X").
+#' @param design_formula A formula for the DESeq2 design (e.g., `~ sex + age`).
+#'   All variables in the formula must exist in `colData(sce)`.
+#' @param contrast_name Optional. The specific contrast to extract.
+#'   If NULL (default), the function will attempt to auto-detect the
+#'   primary contrast from the last variable in `design_formula`.
 #'
-#' # 2. Run Power Analysis
-#' PA_tsai <- poweranalysis::power_analysis(
-#'     SCE_tsai,
-#'     sampleID = "sample_id",
-#'     celltypeID = "cluster_celltype",
-#'     design = ~ sex,
-#'     coef = "M",
-#'     output_path = tempdir()
-#' )
-#' PA_tsai
-#'}
+#' @return A list containing three sub-lists:
+#'   `user_method` (stratified by p-value and logFC),
+#'   `standard_method` (stratified by adjusted p-value and logFC),
+#'   `full_results` (the complete, non-stratified results data frame).
 #'
-#'
+run_de_analysis <- function(sce,
+                            sample_id_col,
+                            assay_name,
+                            design_formula,
+                            contrast_name = NULL) { # <-- PARAMETER IS NOW OPTIONAL
 
-power_analysis <- function(SCE,
-                           range_downsampled_individuals="placeholder",
-                           range_downsampled_cells="placeholder",
-                           output_path=getwd(),
-                           sampleID="donor_id",
-                           design="placeholder",
-                           sexID="sex",
-                           celltypeID="cell_type",
-                           assay_name="counts",
-                           coef="male",
-                           fdr=0.05,
-                           nom_pval=0.05,
-                           Nperms=20,
-                           y=NULL,
-                           region="single_region",
-                           control=NULL,
-                           pval_adjust_method="BH",
-                           rmv_zero_count_genes=TRUE,
-                           abs_effect_size_thresholds="placeholder",
-                           upreg_effect_size_thresholds="placeholder",
-                           downreg_effect_size_thresholds="placeholder") {
+    message("Starting pseudobulk DE analysis...")
 
-    # Comprehensive validation for all parameters used in the pipeline
-    validate_input_parameters_power(SCE=SCE,
-                                    range_downsampled=range_downsampled_individuals,
-                                    output_path=output_path,
-                                    sampleID=sampleID,
-                                    design=design,
-                                    sexID=sexID,
-                                    celltypeID=celltypeID,
-                                    assay_name=assay_name,
-                                    coef=coef,
-                                    fdr=fdr,
-                                    nom_pval=nom_pval,
-                                    Nperms=Nperms,
-                                    y=y,
-                                    region=region,
-                                    control=control,
-                                    pval_adjust_method=pval_adjust_method,
-                                    rmv_zero_count_genes=rmv_zero_count_genes,
-                                    abs_effect_size_thresholds=abs_effect_size_thresholds,
-                                    upreg_effect_size_thresholds=upreg_effect_size_thresholds,
-                                    downreg_effect_size_thresholds=downreg_effect_size_thresholds)
-
-    setwd(output_path)
-
-    # alter range_downsampled_individuals
-    if(identical(range_downsampled_individuals,"placeholder")){
-        range_downsampled_individuals <- downsampling_range(SCE, "individuals", sampleID)
-    }
-    # alter range_downsampled_cells
-    if(identical(range_downsampled_cells,"placeholder")){
-        range_downsampled_cells <- downsampling_range(SCE, "cells", sampleID)
-    }
-    # alter design
-    if(design=="placeholder"){
-        design=as.formula(paste0("~",sexID))
+    # Check that the specified assay exists
+    if (!assay_name %in% assayNames(sce)) {
+        stop(paste0("Error: Assay '", assay_name, "' not found in SCE object. ",
+                    "Available assays are: ", paste(assayNames(sce), collapse=", ")))
     }
 
-    # create preliminary plots
-    preliminary_plots(SCE=SCE,
-                      output_path=output_path,
-                      sampleID=sampleID,
-                      design=design,
-                      sexID=sexID,
-                      celltypeID=celltypeID,
-                      assay_name=assay_name,
-                      coef=coef,
-                      fdr=fdr)
+    # 1. Aggregate counts to pseudobulk level
+    message(paste("Aggregating by:", sample_id_col, "using assay:", assay_name))
+    pb.sce <- aggregateAcrossCells(
+        sce,
+        ids = sce[[sample_id_col]],
+        use.assay.type = assay_name # Pass the assay name here
+    )
 
-    ## create power plots for down-sampling individuals, cells
-    # down-sample individuals and run DE analysis
-    downsampling_DEanalysis(SCE=SCE,
-                            range_downsampled=range_downsampled_individuals,
-                            output_path=output_path,
-                            sampled="individuals",
-                            sampleID=sampleID,
-                            design=design,
-                            sexID=sexID,
-                            celltypeID=celltypeID,
-                            assay_name=assay_name,
-                            y=y,
-                            region=region,
-                            control=control,
-                            pval_adjust_method=pval_adjust_method,
-                            rmv_zero_count_genes=rmv_zero_count_genes,
-                            coef=coef,
-                            fdr=fdr,
-                            nom_pval=nom_pval,
-                            Nperms=Nperms)
-    # create power plots
-    power_plots(SCE=SCE,
-                range_downsampled=range_downsampled_individuals,
-                output_path=output_path,
-                sampled="individuals",
-                sampleID=sampleID,
-                celltypeID=celltypeID,
-                assay_name=assay_name,
-                fdr=fdr,
-                nom_pval=nom_pval,
-                Nperms=Nperms,
-                abs_effect_size_thresholds=abs_effect_size_thresholds,
-                upreg_effect_size_thresholds=upreg_effect_size_thresholds,
-                downreg_effect_size_thresholds=downreg_effect_size_thresholds)
-    # down-sample cells and run DE analysis
-    downsampling_DEanalysis(SCE=SCE,
-                            range_downsampled=range_downsampled_cells,
-                            output_path=output_path,
-                            sampled="cells",
-                            sampleID=sampleID,
-                            design=design,
-                            sexID=sexID,
-                            celltypeID=celltypeID,
-                            assay_name=assay_name,
-                            y=y,
-                            region=region,
-                            control=control,
-                            pval_adjust_method=pval_adjust_method,
-                            rmv_zero_count_genes=rmv_zero_count_genes,
-                            coef=coef,
-                            fdr=fdr,
-                            nom_pval=nom_pval,
-                            Nperms=Nperms)
-    # create power plots
-    power_plots(SCE=SCE,
-                range_downsampled=range_downsampled_cells,
-                output_path=output_path,
-                sampled="cells",
-                sampleID=sampleID,
-                celltypeID=celltypeID,
-                assay_name=assay_name,
-                fdr=fdr,
-                nom_pval=nom_pval,
-                Nperms=Nperms,
-                abs_effect_size_thresholds=abs_effect_size_thresholds,
-                upreg_effect_size_thresholds=upreg_effect_size_thresholds,
-                downreg_effect_size_thresholds=downreg_effect_size_thresholds)
-    # create down-sampling correlation plots (individuals)
-    downsampling_corrplots(SCE=SCE,
-                           range_downsampled=range_downsampled_individuals,
-                           output_path=output_path,
-                           sampled="individuals",
-                           celltypeID=celltypeID,
-                           assay_name=assay_name,
-                           Nperms=Nperms)
-    # create down-sampling correlation plots (cells)
-    downsampling_corrplots(SCE=SCE,
-                           range_downsampled=range_downsampled_cells,
-                           output_path=output_path,
-                           sampled="cells",
-                           celltypeID=celltypeID,
-                           assay_name=assay_name,
-                           Nperms=Nperms)
+    # 2. Extract colData for DESeq2.
+    pb.colData <- as.data.frame(colData(pb.sce))
+
+    # --- Robust Variable Checking ---
+    # Get all variables from the formula
+    all_vars <- all.vars(design_formula)
+
+    # Ensure all variables are in the colData and convert them to factors
+    # This is safer than hard-coding 'sex'
+    for (v in all_vars) {
+        if (!v %in% colnames(pb.colData)) {
+            stop(paste0("Error: Variable '", v, "' from design formula not in colData!"))
+        }
+        message(paste("Converting variable '", v, "' to factor for DE design."))
+        pb.colData[[v]] <- as.factor(pb.colData[[v]])
+    }
+    # --- End Variable Checking ---
+
+    # 3. Create the DESeqDataSet
+    # *** Use assay_name parameter here ***
+    dds <- DESeqDataSetFromMatrix(
+        countData = assay(pb.sce, assay_name),
+        colData = pb.colData,
+        design = design_formula
+    )
+
+    # 4. Run the DESeq2 analysis
+    message("Filtering low-count genes...")
+    dds <- dds[rowSums(counts(dds)) >= 10, ] # Filter
+
+    message("Running DESeq()...")
+    dds <- DESeq(dds)
+
+    # --- NEW: Automatic Contrast Detection ---
+
+    # Get all available results names
+    all_results_names <- resultsNames(dds)
+
+    if (is.null(contrast_name)) {
+        message("`contrast_name` not provided, attempting to auto-detect.")
+
+        # Get the last variable from the design formula
+        var_of_interest <- tail(all_vars, 1)
+
+        # Find the first contrast that starts with this variable
+        # This is the standard DESeq2 output for a factor
+        found_contrasts <- grep(paste0("^", var_of_interest), all_results_names, value = TRUE)
+
+        if (length(found_contrasts) == 0) {
+            stop(paste0("Auto-detection failed. Could not find a contrast for variable '", var_of_interest, "'. ",
+                        "Available contrasts are: ", paste(all_results_names, collapse=", "), ". ",
+                        "Please specify one manually using the `contrast_name` parameter."))
+        }
+
+        # Use the first one found
+        target_contrast <- found_contrasts[1]
+        message(paste("Auto-detected contrast:", target_contrast))
+
+    } else {
+        message(paste("Using user-specified contrast:", contrast_name))
+        target_contrast <- contrast_name
+    }
+    # --- END NEW SECTION ---
+
+
+    # 5. Get the results
+    message(paste("Extracting results for contrast:", target_contrast))
+
+    if (!target_contrast %in% all_results_names) {
+        warning(paste("Contrast '", target_contrast, "' not found. Available contrasts are: ",
+                      paste(all_results_names, collapse=", ")))
+        return(NULL)
+    }
+
+    res <- results(dds, name = target_contrast)
+    res_df <- as.data.frame(res) %>%
+        rownames_to_column("gene") %>%
+        na.omit() # Remove NAs
+
+    message("DE analysis complete. Stratifying results...")
+
+    # --- 6. STRATIFY RESULTS (Using Adjusted P-Value as requested) ---
+    # This section now implements the user's desired bins using 'padj'
+
+    degs_stratified <- list()
+
+    # Bin 1: padj < 0.05, |logFC| > 2
+    degs_stratified$padj05_fc_gt_2 <- res_df %>%
+        filter(padj < 0.05, abs(log2FoldChange) > 2) %>%
+        arrange(padj)
+
+    # Bin 2: padj < 0.05, 1 < |logFC| <= 2
+    degs_stratified$padj05_fc_1_to_2 <- res_df %>%
+        filter(padj < 0.05, abs(log2FoldChange) > 1, abs(log2FoldChange) <= 2) %>%
+        arrange(padj)
+
+    # Bin 3: padj < 0.05, 0 <= |logFC| <= 1
+    degs_stratified$padj05_fc_0_to_1 <- res_df %>%
+        filter(padj < 0.05, abs(log2FoldChange) >= 0, abs(log2FoldChange) <= 1) %>%
+        arrange(padj)
+
+    # Bin 4: "Buffer" list (using adjusted p-value)
+    degs_stratified$padj_buffer_05_to_10 <- res_df %>%
+        filter(padj >= 0.05, padj < 0.1) %>%
+        arrange(padj)
+
+    # Bin 5: All Significant (for a complete list, useful for power calculation)
+    degs_stratified$all_significant_padj05 <- res_df %>%
+        filter(padj < 0.05) %>%
+        arrange(padj)
+
+    # --- 8. RETURN ALL LISTS ---
+    return(list(
+        stratified_results = degs_stratified,
+        full_results = res_df
+    ))
 }
+
+
+# --- 3. EXAMPLE USAGE: GET "GROUND TRUTH" DEGS ---
+#
+# You can run this part of the script to get your baseline
+# list of DEGs from the full, un-downsampled dataset.
+#
+message("\n--- Running 'Ground Truth' DE Analysis ---")
+
+# --- Define Parameters ---
+CELL_TYPE_DIR <- "/mnt/data/shared/poweranalysis/preprocessed_data_CONSOLIDATED/Astrocyte"
+DATASET_FILE <- "Roussos_Combined.qs"
+SAMPLE_COL <- "donor_id"
+ASSAY_NAME <- "X" # *** ADDED THIS: Roussos data uses "X", not "counts" ***
+
+# Define the DE design
+# NOTE: Make sure the variables here (e.g., 'sex') exist in the colData!
+FORMULA <- ~ sex
+# CONTRAST <- "sex_M_vs_F" # <-- REMOVED to test auto-detection
+
+# --- Load Ground Truth Data ---
+message(paste("Loading:", file.path(CELL_TYPE_DIR, DATASET_FILE)))
+ground_truth_sce <- qs::qread(file.path(CELL_TYPE_DIR, DATASET_FILE))
+
+# --- Call the function ---
+ground_truth_degs <- run_de_analysis(
+    sce = ground_truth_sce,
+    sample_id_col = SAMPLE_COL,
+    assay_name = ASSAY_NAME,
+    design_formula = FORMULA
+    # contrast_name parameter is omitted, so auto-detection will run
+)
+
+# --- Print Summary of Ground Truth ---
+if (!is.null(ground_truth_degs)) {
+    message("\n--- Ground Truth Results (Adjusted P-Value Method) ---")
+    message(paste("FDR < 0.05 & |logFC| > 2:",    nrow(ground_truth_degs$stratified_results$padj05_fc_gt_2)))
+    message(paste("FDR < 0.05 & |logFC| 1-2:",  nrow(ground_truth_degs$stratified_results$padj05_fc_1_to_2)))
+    message(paste("FDR < 0.05 & |logFC| 0-1:",  nrow(ground_truth_degs$stratified_results$padj05_fc_0_to_1)))
+    message(paste("Buffer (0.05 < FDR < 0.1):",  nrow(ground_truth_degs$stratified_results$padj_buffer_05_to_10)))
+    message(paste("Total Significant (FDR < 0.05):", nrow(ground_truth_degs$stratified_results$all_significant_padj05)))
+
+    # You now have the 'ground_truth_degs' object.
+    # You can save this object and use it in your main power analysis script
+    # to compare against the results from downsampled datasets.
+
+    # qs::qsave(ground_truth_degs, "ground_truth_astro_sex_degs.qs")
+}
+
+message("\n--- Script Complete ---")
